@@ -14,5 +14,5 @@
 ## For DB used PostgreSQL
 
 - For migration use:
-    1. alembic revision --autogenerate -m "New Migration"
-    2. alembic upgrade head
+    1. `alembic revision --autogenerate -m "New Migration"`
+    2. `alembic upgrade head`
