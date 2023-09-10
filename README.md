@@ -78,6 +78,16 @@ apt-get update
 apt-get install postgresql-client
 ```
 
+Запустити базу данних ввівши пароль `postgres`, пеервірити вміст:
+```bash
+psql -h tch_postgres -U postgres -d postgres
+Password for user postgres:
+...
+postgres-# \dt
+Did not find any relations.
+postgres-# \q
+```
+
 Перебуваючи в середині контейнера провести міграцію бази даних виконавши наступні команди:
 
 ```bash
