@@ -74,6 +74,22 @@ docker exec -it tch_backend bash
 
 ```bash
 pip install --no-cache-dir --upgrade -r ./requirements.txt
+apt-get update
+apt-get install postgresql-client
+```
+
+Перебуваючи в середині контейнера провести міграцію бази даних виконавши наступні команди:
+
+```bash
+cd app
+alembic upgrade head
+alembic revision --autogenerate -m "New Migration"
+alembic upgrade head
+```
+-- за замовчування посилання на базу данних визначено в `app/main.py` як:
+
+```python3
+db_url="postgresql://postgres:postgres@tch_postgres:5432/store
 ```
 
 Для запуску застосунку, виконати команду в середині контейнера:

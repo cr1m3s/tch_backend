@@ -31,7 +31,8 @@ app.add_middleware(
 )
 
 # to avoid csrftokenError
-app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
+#app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
+app.add_middleware(DBSessionMiddleware, db_url="postgresql://postgres:postgres@tch_postgres:5432/store")
 
 
 @app.get("/")
