@@ -89,7 +89,7 @@ alembic upgrade head
 -- за замовчування посилання на базу данних визначено в `app/main.py` як:
 
 ```python3
-db_url="postgresql://postgres:postgres@tch_postgres:5432/store
+db_url="postgresql://postgres:postgres@tch_postgres:5432/store"
 ```
 
 Для запуску застосунку, виконати команду в середині контейнера:
