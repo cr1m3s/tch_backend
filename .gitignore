@@ -1,2 +1,5 @@
 __pychache__/
 app/__pycache__/
+app/__pycache__
+app/alembic/__pycache__
+app/alembic/versions/__pycache__
