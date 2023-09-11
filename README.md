@@ -78,13 +78,18 @@ apt-get update
 apt-get install postgresql-client
 ```
 
-Запустити базу данних ввівши пароль `postgres`, пеервірити вміст:
+Запустити базу данних ввівши пароль `postgres`, перевірити вміст:
 ```bash
-psql -h tch_postgres -U postgres -d postgres
+psql "postgresql://postgres:postgres@tch_postgres:5432/store"
 Password for user postgres:
 ...
 postgres-# \dt
-Did not find any relations.
+              List of relations
+ Schema |      Name       | Type  |  Owner
+--------+-----------------+-------+----------
+ public | alembic_version | table | postgres
+ public | author          | table | postgres
+ public | comments        | table | postgres
 postgres-# \q
 ```
 
