@@ -97,9 +97,9 @@ postgres-# \q
 
 ```bash
 cd app
-alembic upgrade head
-alembic revision --autogenerate -m "New Migration"
-alembic upgrade head
+alembic upgrade head -- для початкової міграції, якщо бд пуста
+alembic revision --autogenerate -m "New Migration"   -- для подальших
+alembic upgrade head                                 --
 ```
 -- за замовчування посилання на базу данних визначено в `app/main.py` як:
 
