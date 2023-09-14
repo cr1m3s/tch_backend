@@ -3,11 +3,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-Base  = declarative_base()
+Base = declarative_base()
+
 
 class Comment(Base):
     __tablename__ = 'comments'
-    id  = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     rating = Column(Float)
     time_created = Column(DateTime(timezone=True), server_default=func.now())

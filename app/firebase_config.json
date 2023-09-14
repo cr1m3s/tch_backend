@@ -1,0 +1,9 @@
+{
+  "apiKey": "AIzaSyAAU01dFLJrAhruwRZ95-n3_rfBZ9A-KtQ",
+  "authDomain": "tch-auth.firebaseapp.com",
+  "projectId": "tch-auth",
+  "storageBucket": "tch-auth.appspot.com",
+  "messagingSenderId": "298275933015",
+  "appId": "1:298275933015:web:199b1cc8193c430456cc12",
+  "databaseURL":"postgresql://postgres:postgres@tch_postgres:5432/store"
+}

@@ -5,8 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# My code
-import os,sys
+import os, sys
 from dotenv import load_dotenv
 
 BASE_DIR= os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -14,24 +13,26 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 sys.path.append(BASE_DIR)
 
 
-# This is the Alembic Config object, which provides
-# Access to the values within the .ini file in use.
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
 config = context.config
-
-#  Making a connection
 config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
 
+from app.models import models
+from app.models import base
+
+target_metadata = models.Base.metadata
+base.validate_database()
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
-fileConfig(config.config_file_name)
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
 
-
-import models
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = models.Base.metadata
+#target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -39,7 +40,7 @@ target_metadata = models.Base.metadata
 # ... etc.
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -63,7 +64,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-def run_migrations_online():
+def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
@@ -71,7 +72,7 @@ def run_migrations_online():
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -89,4 +90,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-

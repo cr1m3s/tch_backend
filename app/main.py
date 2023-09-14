@@ -1,83 +1,70 @@
-import uvicorn
 import os
-from fastapi import FastAPI, HTTPException
-from fastapi_sqlalchemy import DBSessionMiddleware, db 
+import uvicorn
+import firebase_admin
+import pyrebase
+import json
+from dotenv import load_dotenv
+from firebase_admin import credentials, auth
 
-from app.schema import Comment as SchemaComment
-from app.schema import Author as SchemaAuthor
-
-from app.schema import Comment
-from app.schema import Author
-
-from app.models import Comment as ModelComment
-from app.models import Author as ModelAuthor
-
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException
 
+from fastapi_sqlalchemy import DBSessionMiddleware
+
+from app.routes.authors import router as authors_router
+from app.routes.comments import router as comments_router
+from app.routes.auth import router as auth_router
+
+load_dotenv()
+
+fire_config = {
+  "apiKey": "AIzaSyAAU01dFLJrAhruwRZ95-n3_rfBZ9A-KtQ",
+  "authDomain": "tch-auth.firebaseapp.com",
+  "projectId": "tch-auth",
+  "storageBucket": "tch-auth.appspot.com",
+  "messagingSenderId": "298275933015",
+  "appId": "1:298275933015:web:199b1cc8193c430456cc12",
+  "databaseURL":"postgresql://postgres:postgres@tch_postgres:5432/store"
+}
+
+
+keys = os.path.join(os.path.dirname(os.path.abspath(__file__)), './', 'tch_firefbase_account_keys.json')
+config = os.path.join(os.path.dirname(os.path.abspath(__file__)), './', 'firebase_config.json')
+cred = credentials.Certificate(keys)
+firebase = firebase_admin.initialize_app(cred)
+pb = pyrebase.initialize_app(fire_config)
 app = FastAPI()
 
-#origins = [
-#    "http://localhost:3000",
-#    "http://localhost:3080",
-#    "https://react-x1x9.onrender.com/",
-#]
+allow_all = ['*']
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=allow_all,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=allow_all,
+    allow_headers=allow_all,
 )
 
 # to avoid csrftokenError
-#app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
-app.add_middleware(DBSessionMiddleware, db_url="postgresql://postgres:postgres@tch_postgres:5432/store")
+app.add_middleware(DBSessionMiddleware, db_url=os.environ['DATABASE_URL'])
 
 
 @app.get("/")
 async def root():
-    return {"message": "hello world"}
+    return {"message": "Hello, world!"}
 
 
-@app.post('/comment/', response_model=SchemaComment)
-async def comment(comment: SchemaComment):
-    db_comment = ModelComment(title=comment.title, rating=comment.rating, author_id = comment.author_id)
-    db.session.add(db_comment)
-    db.session.commit()
-    return db_comment
+@app.post("/ping")
+async def validate(request: Request):
+    headers = request.headers
+    jwt = headers.get('authorization')
+    print(f"jwt:{jwt}")
+    user = auth.verify_id_token(jwt)
+    return user["uid"]
 
 
-@app.get('/comment/')
-async def comment():
-    comment = db.session.query(ModelComment).all()
-    return comment
-
-@app.get('/comment/{id}')
-async def comment(id: int):
-    comment = db.session.query(ModelComment).get({"id": id})
-    return comment
-
-
-@app.delete('/comment/{id}')
-async def comment(id: int):
-    comment = db.session.query(ModelComment).filter(ModelComment.id == id).first()
-    result = {"status": "not found"}
-    if comment:
-        db.session.delete(comment)
-        db.session.commit()
-        result["status"] = "deleted"
-    return result
-
- 
-@app.post('/author/', response_model=SchemaAuthor)
-async def author(author: SchemaAuthor):
-    db_author = ModelAuthor(name=author.name, age=author.age)
-    db.session.add(db_author)
-    db.session.commit()
-    return db_author
-
-@app.get('/author/')
-async def author():
-    author = db.session.query(ModelAuthor).all()
-    return author
+app.include_router(authors_router)
+app.include_router(comments_router)
+app.include_router(auth_router)
