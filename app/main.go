@@ -26,7 +26,8 @@ import (
 // @schemes http
 
 func main() {
-	
+
+	// DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE	
 	db_url := os.Getenv("DATABASE_URL")
 	fmt.Println(db_url)
 
