@@ -73,7 +73,7 @@ docker exec -it tch_backend bash
 Перебуваючи в середині контейнера запустити наступні команди:
 
 ```bash
-pip install --no-cache-dir --upgrade -r ./requirements.txt
+go mod download
 apt-get update
 apt-get install postgresql-client
 ```
@@ -96,23 +96,19 @@ postgres-# \q
 Перебуваючи в середині контейнера провести міграцію бази даних виконавши наступні команди:
 
 ```bash
-cd app
-alembic upgrade head -- для початкової міграції, якщо бд пуста
-alembic revision --autogenerate -m "New Migration"   -- для подальших
-alembic upgrade head                                 --
+[TODO]
 ```
-- за замовчування посилання на базу данних визначено в `app/main.py` як:
-
-Для регістрації і входу використовується firebase, скопіюйьте tch_firefbase_account_keys.json в app/.
-
-```python3
+- за замовчування посилання на базу данних визначено в 
+``` 
 db_url="postgresql://postgres:postgres@tch_postgres:5432/store"
 ```
 
 Для запуску застосунку, виконати команду в середині контейнера:
 
 ```bash
-uvicorn "app.main:app" --host "0.0.0.0" --port "8000"
+go run app/main.go
 ```
 
 В випадку успішного запуску ви зможете мати доступ до застосунку через ваш браузре за адресою http://localhost:8000
+
+Документація знаходиться за адресою http://localhost:8000/swagger/index.html
