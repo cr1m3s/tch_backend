@@ -9,11 +9,25 @@
 - Hosted at [render](https://hello-backend-7125.onrender.com/).
 - Requires DATABASE_URL set as sys env to deploy.
 - Docs can befound at [{URL}/docs](https://hello-backend-7125.onrender.com/swagger/index.html)
+- To updated swagger after changing controllers run from the repo root:
+`swag init -g app/main.go --output docs/ginsimple`
 
-## For DB used PostgreSQL
+# For migrations from docker install migrate:
+```
+curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh |  bash
+apt-get update
+apt-get install migrate
+```
+- run migrations:
+```
+migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/golang_postgres?sslmode=disable" -verbose up
+```
+- migration using files from:
+```
+/app/db/migrations/000001_init_schema.{up/down}.sql -- up used for upstream migration
+                                                    -- down for downstream migration
+```
 
-- For migration use:
-[TODO]
 ## Локальний запуск
 
 Для того аби запустити проект локально потрібно спочатку встановити собі docker та docker-compose. Актуальні інструкції по встановленню можна знайти по наведеним посиланням, для кожної операційної системи як то linux, windows, mac.
@@ -77,7 +91,7 @@ apt-get install postgresql-client
 
 Запустити базу данних ввівши пароль `postgres`, перевірити вміст:
 ```bash
-psql "postgresql://postgres:postgres@tch_postgres:5432/store"
+psql "postgresql://postgres:postgres@tch_postgres:5432/golang_postgres"
 Password for user postgres:
 ...
 postgres-# \dt

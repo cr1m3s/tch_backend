@@ -2,24 +2,28 @@ package main
 
 import (
 	"net/http"
-	"fmt"
-	"os"
-	"github.com/gin-gonic/gin"
+
 	_ "github.com/cr1m3s/tch_backend/docs/ginsimple"
+//	"github.com/cr1m3s/tch_backend/app/controllers"
+	"github.com/cr1m3s/tch_backend/app/models"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
 // @title Study marketplace API
 // @version 0.0.1
 // @description Marketplace to connect students and teachers
 // @termsOfService [TODO]
 
 // @contact.name API Support
-// @contact.url [TODO] 
-// @contact.email [TODO] 
+// @contact.url [TODO]
+// @contact.email [TODO]
 
-// @license.name [TODO] 
-// @license.url [TODO] 
+// @license.name [TODO]
+// @license.url [TODO]
 
 // @host localhost:8000
 // @BasePath /
@@ -27,18 +31,22 @@ import (
 
 func main() {
 
-	// DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE	
-	db_url := os.Getenv("DATABASE_URL")
-	fmt.Println(db_url)
+	// DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+	models.ConnectDataBase()
 
-	router := gin.New()
-	
-	url := ginSwagger.URL("http://localhost:8000/swagger/doc.json")
-        
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	router := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	router.Use(cors.New(config))
+
+	url := ginSwagger.URL("http://0.0.0.0:8000/docs/doc.json")
+
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.GET("/", HealthCheck)
 	
-	router.Run("localhost:8000")
+//	router.POST("/register", controllers.Register)
+
+	router.Run("0.0.0.0:8000")
 }
 
 // HealthCheck godoc

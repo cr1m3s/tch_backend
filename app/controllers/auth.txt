@@ -1,0 +1,46 @@
+//package controllers
+//
+//import (
+//	"net/http"
+//	"github.com/gin-gonic/gin"
+//	"github.com/cr1m3s/tch_backend/app/models"
+//)
+//
+//type RegisterInput struct {
+//	Username string `json:"username" binding:"required"`
+//	Password string `json:"password" binding:"required"`
+//}
+
+// Registraction godoc
+// @Summary POST request for registration
+// @Description requires username and password for registration 
+// @Tags /register
+// @Accept	json
+// @Produce json
+// @Param username query string true "The username for authentication"
+// @Param password query string true "Password for authentication"
+// @Success 200 {object} map[string]interface{}
+// @Router	/register [post]
+//func Register(c *gin.Context) {
+//
+//	var input RegisterInput
+//
+//	if err := c.ShouldBindJSON(&input); err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//	
+//	u := models.User{}
+//
+//	u.Username = input.Username
+//	u.Password = input.Password
+//
+//	_, err := u.SaveUser()
+//
+//	if err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, gin.H{"message": "validated!"})
+//}
