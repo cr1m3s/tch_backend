@@ -8,7 +8,7 @@
   `go run app/main.go` -- by default localhost:8000
 - Hosted at [render](https://hello-backend-7125.onrender.com/).
 - Requires DATABASE_URL set as sys env to deploy.
-- Docs can befound at [{URL}/docs](https://hello-backend-7125.onrender.com/swagger/index.html)
+- Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
 - To updated swagger after changing controllers run from the repo root:
 `swag init -g app/main.go --output docs/ginsimple`
 
