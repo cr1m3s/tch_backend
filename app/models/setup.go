@@ -10,9 +10,8 @@ import (
 	_ "github.com/lib/pq" 
 )
 
-var DB *sql.DB
 
-func ConnectDataBase() {
+func ConnectDataBase() *sql.DB {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -77,4 +76,5 @@ func ConnectDataBase() {
 	} else {
 		fmt.Println("Extension 'uuid-ossp' already exists")
 	}
+	return DB
 }

@@ -1,8 +1,8 @@
 # Backend for teamchallange project
 
-## Used FastAPI
+## Used Golang Gin Requires Go version 1.21+
 
-- To run install all packages from requirements.txt:
+- To run install all packages from go.mod:
 `go mod download`
 - From root:
   `go run app/main.go` -- by default localhost:8000
@@ -11,6 +11,10 @@
 - Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
 - To updated swagger after changing controllers run from the repo root:
 `swag init -g app/main.go --output docs/ginsimple`
+- To update router interfaces for queries:
+  1. Create rules in `./app/db/query/{model_name}.sql` 
+  2. In `./app/db/` folder with present `sqlc.yaml` file run: `sqlc generate`
+  3. Results will be in `./app/db/sqlc/`
 
 # For migrations from docker install migrate:
 ```
@@ -27,7 +31,10 @@ migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgr
 /app/db/migrations/000001_init_schema.{up/down}.sql -- up used for upstream migration
                                                     -- down for downstream migration
 ```
-
+- in case of failure and 'dirty database' connect to db with psql and run:
+```
+update schema_migrations set dirty=false;
+```
 ## Локальний запуск
 
 Для того аби запустити проект локально потрібно спочатку встановити собі docker та docker-compose. Актуальні інструкції по встановленню можна знайти по наведеним посиланням, для кожної операційної системи як то linux, windows, mac.
@@ -121,5 +128,7 @@ go run app/main.go
 ```
 
 В випадку успішного запуску ви зможете мати доступ до застосунку через ваш браузре за адресою http://localhost:8000
+
+Для тесту роботи серверу і підключення бд можна виконати запит наведений в req.txt
 
 Документація знаходиться за адресою http://localhost:8000/swagger/index.html

@@ -13,7 +13,7 @@ info:
   title: Study marketplace API
   version: 0.0.1
 paths:
-  /:
+  /api/:
     get:
       consumes:
       - '*/*'
@@ -29,6 +29,38 @@ paths:
       summary: Show the status of server.
       tags:
       - root
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: requires username and password for registration
+      parameters:
+      - description: Email for authentication
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Username for authentication
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: Password for authentication
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request for registration
+      tags:
+      - register
 schemes:
 - http
 swagger: "2.0"

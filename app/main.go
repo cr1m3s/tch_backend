@@ -1,16 +1,21 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	_ "github.com/cr1m3s/tch_backend/docs/ginsimple"
-//	"github.com/cr1m3s/tch_backend/app/controllers"
+	"github.com/cr1m3s/tch_backend/app/controllers"
 	"github.com/cr1m3s/tch_backend/app/models"
+	dbConn "github.com/cr1m3s/tch_backend/app/db/sqlc"
+
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/lib/pq"
 )
 
 // @title Study marketplace API
@@ -29,24 +34,36 @@ import (
 // @BasePath /
 // @schemes http
 
+var (
+	server *gin.Engine
+	db     *dbConn.Queries
+
+	AuthController controllers.AuthController
+)
+
 func main() {
-
 	// DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
-	models.ConnectDataBase()
-
-	router := gin.Default()
+	conn := models.ConnectDataBase()
+	db = dbConn.New(conn)
+	server := gin.Default()
 	// cors.Default() allows all origins
-	router.Use(cors.Default())
-
-	url := ginSwagger.URL("http://localhost:8000/docs/doc.json")
-
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-	router.GET("/", HealthCheck)
+	server.Use(cors.Default())
 	
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
-	router.Run(":8000")
+	AuthController = *controllers.NewAuthController(db)
+
+	router := server.Group("/api")
+
+	router.GET("/", HealthCheck)
+	url := ginSwagger.URL("http://localhost:8000/api/docs/doc.json")
+
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))	
+	router.POST("/auth/register", AuthController.SignUpUser) 
+	
+	log.Fatal(server.Run(":8000"))
 }
+
 
 // HealthCheck godoc
 // @Summary Show the status of server.
@@ -55,7 +72,7 @@ func main() {
 // @Accept */*
 // @Produce json
 // @Success 200 {object} map[string]interface{}
-// @Router / [get]
+// @Router /api/ [get]
 func HealthCheck(c *gin.Context) {
 	res := map[string]interface{}{
 		"data": "Server is up and runing",

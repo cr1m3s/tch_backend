@@ -1,0 +1,1 @@
+curl -v  POST http://localhost:8000/api/auth/register -H "Content-type: application/json" -d '{"email": "helios@gmail.com", "name":"Druk", "password":"12345"}'
