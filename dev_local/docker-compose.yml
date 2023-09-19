@@ -2,14 +2,14 @@ version: '3'
 services:
   tch_backend:
     build:
-      context: ./python
+      context: ./go
       dockerfile: Dockerfile
     container_name: tch_backend
     hostname: tch_backend
     environment:
       DATABASE_URL: ${DATABASE_URL}
     volumes:
-      - ../:/var/www/app
+      - ../:/var/www
     ports:
       - "8000:8000"
     command: "bash"
