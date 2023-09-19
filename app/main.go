@@ -35,18 +35,17 @@ func main() {
 	models.ConnectDataBase()
 
 	router := gin.Default()
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	router.Use(cors.New(config))
+	// cors.Default() allows all origins
+	router.Use(cors.Default())
 
-	url := ginSwagger.URL("http://0.0.0.0:8000/docs/doc.json")
+	url := ginSwagger.URL("http://localhost:8000/docs/doc.json")
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.GET("/", HealthCheck)
 	
-//	router.POST("/register", controllers.Register)
-
-	router.Run("0.0.0.0:8000")
+	// router.POST("/register", controllers.Register)
+	// localhost gonna be used by default
+	router.Run(":8000")
 }
 
 // HealthCheck godoc
