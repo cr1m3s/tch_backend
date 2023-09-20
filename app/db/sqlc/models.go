@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/golang-jwt/jwt"
 )
 
 type User struct {
@@ -20,4 +21,10 @@ type User struct {
 	Role      string    `json:"role"       form:"role"		 `
 	CreatedAt time.Time `json:"created_at" form:"created_at" `
 	UpdatedAt time.Time `json:"updated_at" form:"updated_at" `
+}
+
+type Claims struct {
+    UserID   uuid.UUID `json:"user_id"`
+    Username string    `json:"username"`
+    jwt.StandardClaims
 }

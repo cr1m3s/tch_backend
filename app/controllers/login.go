@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	db "github.com/cr1m3s/tch_backend/app/db/sqlc"
+	"github.com/cr1m3s/tch_backend/app/middleware"
 	"github.com/cr1m3s/tch_backend/app/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -31,16 +32,17 @@ func (ac *AuthController) LoginUser(ctx *gin.Context) {
 	}
 
 	cmpPassword := utils.ComparePassword(user.Password, password)
-	
-	if cmpPassword != nil{
+
+	if cmpPassword != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 		return
-	}	
- 
-    if err != nil {
-	ctx.JSON(http.StatusBadRequest, gin.H{ "error": gin.H{"info": "Invalid email or password"}})
-        return
-    }
+	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": "loged in"})
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": gin.H{"info": "Invalid email or password"}})
+		return
+	}
+	token, err := middleware.GenerateToken(user)
+
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }

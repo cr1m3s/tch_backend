@@ -88,6 +88,24 @@ paths:
       summary: POST request for registration
       tags:
       - register
+  /protected/userinfo:
+    get:
+      consumes:
+      - '*/*'
+      description: requires valid token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get request to see user info
+      tags:
+      - user_info
 schemes:
 - http
 swagger: "2.0"
