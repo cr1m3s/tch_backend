@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	db "github.com/cr1m3s/tch_backend/app/db/sqlc"
 	"github.com/cr1m3s/tch_backend/app/utils"
+	"github.com/gin-gonic/gin"
 )
 
 type AuthController struct {
@@ -30,10 +30,13 @@ func NewAuthController(db *db.Queries) *AuthController {
 // @Router	/api/auth/register [post]
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var credentials *db.User
+	
 
-	if err := ctx.ShouldBindJSON(&credentials); err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-		return
+	if err := ctx.ShouldBindQuery(&credentials); err != nil {
+		if err := ctx.ShouldBindJSON(&credentials); err != nil {
+			ctx.JSON(http.StatusBadRequest, err.Error())
+			return
+		}
 	}
 	hashedPassword := utils.HashPassword(credentials.Password)
 

@@ -11,13 +11,13 @@ import (
 )
 
 type User struct {
-	ID        uuid.UUID `json:"id"`
-	Name      string    `json:"name"`
-	Email     string    `json:"email"`
-	Photo     string    `json:"photo"`
-	Verified  bool      `json:"verified"`
-	Password  string    `json:"password"`
-	Role      string    `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        uuid.UUID `json:"id"         form:"id"		 `
+	Name      string    `json:"name"       form:"name"		 binding:"required"`
+	Email     string    `json:"email"      form:"email"		 binding:"required"`
+	Photo     string    `json:"photo"      form:"photo"		 `
+	Verified  bool      `json:"verified"   form:"verified"   `
+	Password  string    `json:"password"   form:"password"	 binding:"required"`
+	Role      string    `json:"role"       form:"role"		 `
+	CreatedAt time.Time `json:"created_at" form:"created_at" `
+	UpdatedAt time.Time `json:"updated_at" form:"updated_at" `
 }
