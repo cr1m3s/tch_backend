@@ -30,11 +30,10 @@ func NewAuthController(db *db.Queries) *AuthController {
 // @Router	/api/auth/register [post]
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	var credentials *db.User
-	
 
 	if err := ctx.ShouldBindQuery(&credentials); err != nil {
 		if err := ctx.ShouldBindJSON(&credentials); err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
+			ctx.JSON(http.StatusBadRequest, gin.H{"status": "failed", "data": gin.H{"info": "Not enough data provided for user creation"}})
 			return
 		}
 	}
@@ -52,7 +51,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 	
 	user, err := ac.db.CreateUser(ctx, *args)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, err.Error())
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "failed", "data": gin.H{"info": "Cannot create user"}})
 		return
 	}
 	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "data": gin.H{"user": user}})

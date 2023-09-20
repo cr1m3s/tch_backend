@@ -29,6 +29,33 @@ paths:
       summary: Show the status of server.
       tags:
       - root
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: requires username, password and valid JWT token
+      parameters:
+      - description: Email for authentication
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Password for authentication
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request for login
+      tags:
+      - login
   /api/auth/register:
     post:
       consumes:

@@ -6,7 +6,7 @@ import (
 
 	_ "github.com/cr1m3s/tch_backend/docs/ginsimple"
 	"github.com/cr1m3s/tch_backend/app/controllers"
-	"github.com/cr1m3s/tch_backend/app/models"
+	"github.com/cr1m3s/tch_backend/app/db"
 	dbConn "github.com/cr1m3s/tch_backend/app/db/sqlc"
 
 
@@ -60,7 +60,8 @@ func main() {
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))	
 	router.POST("/auth/register", AuthController.SignUpUser) 
-	
+	router.POST("/auth/login", AuthController.LoginUser) 
+
 	log.Fatal(server.Run(":8000"))
 }
 
