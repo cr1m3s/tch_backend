@@ -1,22 +1,40 @@
 # Backend for teamchallange project
 
-## Used FastAPI
+## Used Golang Gin Requires Go version 1.21+
 
-- To run install all packages from requirements.txt:
-  `pip install requirements.txt` -- used pip 22.0.2, python 3.10
+- To run install all packages from go.mod:
+`go mod download`
 - From root:
-  `uvicorn app.main:app` -- by default localhost:8000
-- Hosted at [render](https://hello-backend-7125.onrender.com/docs#/).
-- Docker image [cr1m3s/fastapi](https://hub.docker.com/repository/registry-1.docker.io/cr1m3s/fastapi/general) (outdated).
+  `go run app/main.go` -- by default localhost:8000
+- Hosted at [render](https://hello-backend-7125.onrender.com/).
 - Requires DATABASE_URL set as sys env to deploy.
-- Docs can befound at [{URL}/docs](https://hello-backend-7125.onrender.com/docs)
+- Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
+- To updated swagger after changing controllers run from the repo root:
+`swag init -g app/main.go --output docs/ginsimple`
+- To update router interfaces for queries:
+  1. Create rules in `./app/db/query/{model_name}.sql` 
+  2. In `./app/db/` folder with present `sqlc.yaml` file run: `sqlc generate`
+  3. Results will be in `./app/db/sqlc/`
 
-## For DB used PostgreSQL
-
-- For migration use:
-  1. `alembic revision --autogenerate -m "New Migration"`
-  2. `alembic upgrade head`
-
+# For migrations from docker install migrate:
+```
+curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh |  bash
+apt-get update
+apt-get install migrate
+```
+- run migrations:
+```
+migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/golang_postgres?sslmode=disable" -verbose up
+```
+- migration using files from:
+```
+/app/db/migrations/000001_init_schema.{up/down}.sql -- up used for upstream migration
+                                                    -- down for downstream migration
+```
+- in case of failure and 'dirty database' connect to db with psql and run:
+```
+update schema_migrations set dirty=false;
+```
 ## Локальний запуск
 
 Для того аби запустити проект локально потрібно спочатку встановити собі docker та docker-compose. Актуальні інструкції по встановленню можна знайти по наведеним посиланням, для кожної операційної системи як то linux, windows, mac.
@@ -73,14 +91,14 @@ docker exec -it tch_backend bash
 Перебуваючи в середині контейнера запустити наступні команди:
 
 ```bash
-pip install --no-cache-dir --upgrade -r ./requirements.txt
+go mod download
 apt-get update
 apt-get install postgresql-client
 ```
 
 Запустити базу данних ввівши пароль `postgres`, перевірити вміст:
 ```bash
-psql "postgresql://postgres:postgres@tch_postgres:5432/store"
+psql "postgresql://postgres:postgres@tch_postgres:5432/golang_postgres"
 Password for user postgres:
 ...
 postgres-# \dt
@@ -96,23 +114,21 @@ postgres-# \q
 Перебуваючи в середині контейнера провести міграцію бази даних виконавши наступні команди:
 
 ```bash
-cd app
-alembic upgrade head -- для початкової міграції, якщо бд пуста
-alembic revision --autogenerate -m "New Migration"   -- для подальших
-alembic upgrade head                                 --
+[TODO]
 ```
-- за замовчування посилання на базу данних визначено в `app/main.py` як:
-
-Для регістрації і входу використовується firebase, скопіюйьте tch_firefbase_account_keys.json в app/.
-
-```python3
+- за замовчування посилання на базу данних визначено в 
+``` 
 db_url="postgresql://postgres:postgres@tch_postgres:5432/store"
 ```
 
 Для запуску застосунку, виконати команду в середині контейнера:
 
 ```bash
-uvicorn "app.main:app" --host "0.0.0.0" --port "8000"
+go run app/main.go
 ```
 
 В випадку успішного запуску ви зможете мати доступ до застосунку через ваш браузре за адресою http://localhost:8000
+
+Для тесту роботи серверу і підключення бд можна виконати запит наведений в req.txt
+
+Документація знаходиться за адресою http://localhost:8000/swagger/index.html
