@@ -29,14 +29,13 @@ func NewAuthController(db *db.Queries) *AuthController {
 // @Success 200 {object} map[string]interface{}
 // @Router	/api/auth/register [post]
 func (ac *AuthController) SignUpUser(ctx *gin.Context) {
-	var credentials *db.User
+	var credentials db.user
 
-	if err := ctx.ShouldBindQuery(&credentials); err != nil {
-		if err := ctx.ShouldBindJSON(&credentials); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"status": "failed", "data": gin.H{"info": "Not enough data provided for user creation"}})
-			return
-		}
+	if err := ctx.ShouldBindJSON(&credentials); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"status": "failed", "data": gin.H{"info": "Not enough data provided for user creation"}})
+		return
 	}
+	
 	hashedPassword := utils.HashPassword(credentials.Password)
 
 	args := &db.CreateUserParams{
