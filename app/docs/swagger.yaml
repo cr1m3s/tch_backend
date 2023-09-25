@@ -1,4 +1,33 @@
 basePath: /
+definitions:
+  controllers.login_request:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  db.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      photo:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+      verified:
+        type: boolean
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -33,18 +62,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: requires username, password and valid JWT token
+      description: requires email and password
       parameters:
-      - description: Email for authentication
-        in: query
-        name: email
+      - description: request info
+        in: body
+        name: request
         required: true
-        type: string
-      - description: Password for authentication
-        in: query
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/controllers.login_request'
       produces:
       - application/json
       responses:
@@ -62,21 +87,12 @@ paths:
       - application/json
       description: requires username and password for registration
       parameters:
-      - description: Email for authentication
-        in: query
-        name: email
+      - description: user info for sign in
+        in: body
+        name: user_info
         required: true
-        type: string
-      - description: Username for authentication
-        in: query
-        name: name
-        required: true
-        type: string
-      - description: Password for authentication
-        in: query
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/db.User'
       produces:
       - application/json
       responses:
@@ -90,9 +106,13 @@ paths:
       - register
   /protected/userinfo:
     get:
-      consumes:
-      - '*/*'
       description: requires valid token
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -102,10 +122,15 @@ paths:
             additionalProperties: true
             type: object
       security:
-      - BearerAuth: []
+      - JWT: []
       summary: Get request to see user info
       tags:
       - user_info
 schemes:
 - http
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

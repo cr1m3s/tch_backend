@@ -12,13 +12,18 @@
 # Documentation
 - Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
 - To updated swagger after changing controllers run from the repo root:
-`swag init -g app/main.go --output docs/ginsimple`
+1. Install swaggo:
+`go install github.com/swaggo/swag/cmd/swag@latest`
+2. Generate docs:
+`swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
+!! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
+
+# DB communication
 - To update router interfaces for queries:
   1. Install with `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
   2. Create rules in `./app/db/query/{model_name}.sql` 
   3. In `./app/db/` folder with present `sqlc.yaml` file run: `sqlc generate`
   4. Results will be in `./app/db/sqlc/`
-
 
 # For migrations from docker install migrate:
 ```

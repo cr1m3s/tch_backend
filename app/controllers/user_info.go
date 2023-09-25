@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-// @User_info godoc
-// @Summary Get request to see user info
-// @Description requires valid token
-// @Tags user_info
-// @Security JWT
-// @Param Authorization header string true "Insert your access token"
-// @Produce json
-// @Success 200 {object} User
-// @Router	/protected/userinfo [get]
+//	@User_info		godoc
+//	@Summary		Get request to see user info
+//	@Description	requires valid token
+//	@Tags			user_info
+//	@Security		JWT
+//	@Param			Authorization	header	string	true	"Insert your access token"
+//	@Produce		json
+//	@Success		200	{object}	map[string]interface{}
+//	@Router			/protected/userinfo [get]
 func (ac *AuthController) GetUserInfo(ctx *gin.Context) {
 	userID := ctx.MustGet("user_id").(uuid.UUID)
 

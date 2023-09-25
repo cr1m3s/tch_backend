@@ -14,16 +14,15 @@ type login_request struct {
 	Password  string    `json:"password"   form:"password"	 binding:"required"`
 }
 
-// @Login godoc
-// @Summary POST request for login
-// @Description requires username, password and valid JWT token
-// @Tags login
-// @Accept	json
-// @Produce json
-// @Param email	 json string true   "Email for authentication"
-// @Param password json string true "Password for authentication"
-// @Success 200 {object} map[string]interface{}
-// @Router	/api/auth/login [post]
+//	@Login			godoc
+//	@Summary		POST request for login
+//	@Description	requires email and password
+//	@Tags			login
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		login_request	true	"request info"
+//	@Success		200		{object}	map[string]interface{}
+//	@Router			/api/auth/login [post]
 func (ac *AuthController) LoginUser(ctx *gin.Context) {
 	var user db.User
 	var req login_request
@@ -32,7 +31,7 @@ func (ac *AuthController) LoginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "failed", "data": gin.H{"info": "Not enough data provided for log in"}})
 		return
 	}
-	
+
 	user, err := ac.db.GetUserByEmail(ctx, req.Email)
 
 	if err != nil {
