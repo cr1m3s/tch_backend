@@ -1,5 +1,2 @@
-FROM golang:1.21
+FROM golang:1.21-bookworm
 WORKDIR /var/www/app
-
-# RUN apt-get update
-# RUN apt-get install postgresql-client
