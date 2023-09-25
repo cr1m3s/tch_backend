@@ -3,15 +3,17 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/cr1m3s/tch_backend/controllers"
+	_ "github.com/cr1m3s/tch_backend/docs"
+	"github.com/cr1m3s/tch_backend/middlewares"
 	"github.com/cr1m3s/tch_backend/models"
 	dbConn "github.com/cr1m3s/tch_backend/queries"
-	"github.com/cr1m3s/tch_backend/middlewares"
-	_ "github.com/cr1m3s/tch_backend/docs"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
@@ -41,7 +43,9 @@ var (
 //	@in							header
 //	@name						Authorization
 func main() {
-	// DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+	godotenv.Load()
+	server_host := os.Getenv("SERVER_HOSTNAME")
+
 	conn := models.ConnectDataBase()
 	db = dbConn.New(conn)
 	server := gin.Default()
@@ -55,7 +59,7 @@ func main() {
 	router := server.Group("/api")
 
 	router.GET("/", HealthCheck)
-	url := ginSwagger.URL("http://localhost:8000/api/docs/doc.json")
+	url := ginSwagger.URL("http://"+ server_host + "/api/docs/doc.json")
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.POST("/auth/register", AuthController.SignUpUser)

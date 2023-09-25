@@ -11,6 +11,7 @@
 
 ## Documentation
 - Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
+- Swagger requires env variable 'SERVER_HOSTNAME' defined in .env file.
 - To updated swagger after changing controllers run from the repo root:
 1. Install swaggo:
   `go install github.com/swaggo/swag/cmd/swag@latest`
