@@ -1,7 +1,7 @@
 # Backend for teamchallange project
 
 ## Used Golang Gin Requires Go version 1.21+
-
+- Before build project requires presence of .env file (example can be found in .env.example).
 - To run install all packages from go.mod:
 `go mod download`
 - From root:
@@ -9,7 +9,7 @@
 - Hosted at [render](https://hello-backend-7125.onrender.com/).
 - Requires DATABASE_URL set as sys env to deploy.
 
-# Documentation
+## Documentation
 - Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
 - To updated swagger after changing controllers run from the repo root:
 1. Install swaggo:
@@ -18,14 +18,14 @@
 `swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
 !! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
 
-# DB communication
+## DB communication
 - To update router interfaces for queries:
   1. Install with `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
   2. Create rules in `./app/db/query/{model_name}.sql` 
   3. In `./app/db/` folder with present `sqlc.yaml` file run: `sqlc generate`
   4. Results will be in `./app/db/sqlc/`
 
-# For migrations from docker install migrate:
+## For migrations from docker install migrate:
 ```
 curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh |  bash
 apt-get update
@@ -45,7 +45,7 @@ migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgr
 update schema_migrations set dirty=false;
 ```
 
-# database connection
+## Database examination
 
 1. From project folder:
     `docker exec -it tch_postgres bash`
