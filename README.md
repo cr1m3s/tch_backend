@@ -22,10 +22,10 @@
 - To update router interfaces for queries:
   1. Install with:
     `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
-  2. Create rules in  `./app/db/query/{model_name}.sql` 
+  2. Create rules in  `./query/{model_name}.sql` 
   3. In root folder with present `sqlc.yaml` file run: 
     `sqlc generate`
-  4. Results will be in `./app/db/sqlc/`
+  4. Results will be in `./queries/`
 
 ## For migrations from docker install migrate:
 ```
