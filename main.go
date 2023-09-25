@@ -69,7 +69,7 @@ func main() {
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.GetUserInfo)
 
-	log.Fatal(server.Run(":8000"))
+	log.Fatal(server.Run(server_host))
 }
 
 //  HealthCheck godoc
