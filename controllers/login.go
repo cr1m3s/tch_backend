@@ -3,9 +3,10 @@ package controllers
 import (
 	"net/http"
 
-	db "github.com/cr1m3s/tch_backend/app/db/sqlc"
-	"github.com/cr1m3s/tch_backend/app/middleware"
-	"github.com/cr1m3s/tch_backend/app/utils"
+	db "github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/middlewares"
+	"github.com/cr1m3s/tch_backend/services"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,7 +40,7 @@ func (ac *AuthController) LoginUser(ctx *gin.Context) {
 		return
 	}
 
-	cmpPassword := utils.ComparePassword(user.Password, req.Password)
+	cmpPassword := services.ComparePassword(user.Password, req.Password)
 
 	if cmpPassword != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())

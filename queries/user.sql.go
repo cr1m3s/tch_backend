@@ -3,7 +3,7 @@
 //   sqlc v1.21.0
 // source: user.sql
 
-package db
+package models
 
 import (
 	"context"
@@ -59,7 +59,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
-	return i, err 
+	return i, err
 }
 
 const deleteUser = `-- name: DeleteUser :exec

@@ -4,8 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	db "github.com/cr1m3s/tch_backend/app/db/sqlc"
-	"github.com/cr1m3s/tch_backend/app/utils"
+	db "github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/services"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +35,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	hashedPassword := utils.HashPassword(credentials.Password)
+	hashedPassword := services.HashPassword(credentials.Password)
 
 	args := &db.CreateUserParams{
 		Name:      credentials.Name,

@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cr1m3s/tch_backend/app/controllers"
-	"github.com/cr1m3s/tch_backend/app/db"
-	dbConn "github.com/cr1m3s/tch_backend/app/db/sqlc"
-	"github.com/cr1m3s/tch_backend/app/middleware"
-	_ "github.com/cr1m3s/tch_backend/app/docs"
+	"github.com/cr1m3s/tch_backend/controllers"
+	"github.com/cr1m3s/tch_backend/models"
+	dbConn "github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/middlewares"
+	_ "github.com/cr1m3s/tch_backend/docs"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

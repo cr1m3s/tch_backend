@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	db "github.com/cr1m3s/tch_backend/app/db/sqlc"
+	db "github.com/cr1m3s/tch_backend/queries"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
