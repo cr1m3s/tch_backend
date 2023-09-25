@@ -35,7 +35,7 @@ apt-get install migrate
 ```
 - run migrations:
 ```
-migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/golang_postgres?sslmode=disable" -verbose up
+migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
 ```
 - migration using files from:
 ```
