@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	db "github.com/cr1m3s/tch_backend/queries"
-	"github.com/cr1m3s/tch_backend/middlewares"
 	"github.com/cr1m3s/tch_backend/services"
 
 	"github.com/gin-gonic/gin"
@@ -51,7 +50,7 @@ func (ac *AuthController) LoginUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": gin.H{"info": "Invalid email or password"}})
 		return
 	}
-	token, err := middleware.GenerateToken(user)
+	token, err := services.GenerateToken(user)
 
 	ctx.JSON(http.StatusOK, gin.H{"token": token})
 }
