@@ -27,7 +27,7 @@ func NewUsersController(db *queries.Queries) *UsersController {
 // @Tags		login
 // @Accept		json
 // @Produce		json
-// @Param		request	body login_request true "request info"
+// @Param		request	body models.InLogin true "request info"
 // @Success		200 {object} map[string]interface{}
 // @Router		/api/auth/login [post]
 func (t *UsersController) LoginUser(ctx *gin.Context) {
@@ -36,7 +36,7 @@ func (t *UsersController) LoginUser(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
-			"data":   "bad request",
+			"data":   err.Error(),
 		})
 		return
 	}
@@ -45,7 +45,7 @@ func (t *UsersController) LoginUser(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"data":   "users service error",
+			"data":   err.Error(),
 		})
 		return
 	}
@@ -62,7 +62,7 @@ func (t *UsersController) LoginUser(ctx *gin.Context) {
 // @Tags		register
 // @Accept		json
 // @Produce		json
-// @Param		user_info body db.User true "user info for sign in"
+// @Param		user_info body queries.User true "user info for sign in"
 // @Success		200	{object} map[string]interface{}
 // @Router		/api/auth/register [post]
 func (t *UsersController) SignUpUser(ctx *gin.Context) {
@@ -70,7 +70,7 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
-			"data":   "bad request",
+			"data":   err.Error(),
 		})
 		return
 	}
@@ -79,7 +79,7 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"data":   "users service error",
+			"data":   err.Error(),
 		})
 		return
 	}
@@ -105,7 +105,7 @@ func (t *UsersController) GetUserInfo(ctx *gin.Context) {
 	if err := ctx.BindUri(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
-			"data":   "params error",
+			"data":   err.Error(),
 		})
 		return
 	}
@@ -114,7 +114,7 @@ func (t *UsersController) GetUserInfo(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
-			"data":   "users service error",
+			"data":   err.Error(),
 		})
 		return
 	}

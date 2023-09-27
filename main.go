@@ -28,17 +28,17 @@ var (
 )
 
 // @title						Study marketplace API
-// @version					0.0.1
-// @description				Marketplace to connect students and teachers
+// @version						0.0.1
+// @description					Marketplace to connect students and teachers
 // @termsOfService				[TODO]
 // @contact.name				API Support
-// @contact.url				[TODO]
+// @contact.url					[TODO]
 // @contact.email				[TODO]
 // @license.name				[TODO]
-// @license.url				[TODO]
+// @license.url					[TODO]
 // @host						localhost:8000
 // @BasePath					/
-// @schemes					http
+// @schemes						http
 // @securityDefinitions.apiKey	JWT
 // @in							header
 // @name						Authorization
@@ -78,14 +78,14 @@ func main() {
 	log.Fatal(server.Run(server_host))
 }
 
-//	 HealthCheck godoc
-//		@Summary		Show the status of server.
-//		@Description	get the status of server.
-//		@Tags			root
-//		@Accept			*/*
-//		@Produce		json
-//		@Success		200	{object}	map[string]interface{}
-//		@Router			/api/ [get]
+// HealthCheck godoc
+// @Summary		Show the status of server.
+// @Description	get the status of server.
+// @Tags			root
+// @Accept			*/*
+// @Produce		json
+// @Success		200	{object}	map[string]interface{}
+// @Router			/api/ [get]
 func HealthCheck(c *gin.Context) {
 	res := map[string]interface{}{
 		"data": "Server is up and runing",
