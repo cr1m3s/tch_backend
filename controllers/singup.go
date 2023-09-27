@@ -49,7 +49,7 @@ func (ac *AuthController) SignUpUser(ctx *gin.Context) {
 
 	user, err := ac.db.CreateUser(ctx, *args)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"status": "failed", "data": gin.H{"info": "Cannot create user"}})
+		ctx.JSON(http.StatusBadGateway, gin.H{"status": "failed", "data": gin.H{"info": "Cannot create user", "err": err}})
 		return
 	}
 	ctx.JSON(http.StatusCreated, gin.H{"status": "success", "data": gin.H{"user": user}})

@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-    "id" UUID NOT NULL DEFAULT (uuid_generate_v4()),
+    "id" SERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "email" VARCHAR NOT NULL,
     "photo" VARCHAR NOT NULL,

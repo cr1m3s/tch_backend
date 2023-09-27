@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 //	@User_info		godoc
@@ -17,7 +16,7 @@ import (
 //	@Success		200	{object}	map[string]interface{}
 //	@Router			/protected/userinfo [get]
 func (ac *AuthController) GetUserInfo(ctx *gin.Context) {
-	userID := ctx.MustGet("user_id").(uuid.UUID)
+	userID := ctx.MustGet("user_id").(int32)
 
 	user, err := ac.db.GetUserById(ctx, userID)
 
