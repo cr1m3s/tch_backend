@@ -6,8 +6,6 @@ package queries
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type User struct {
