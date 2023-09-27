@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "name" VARCHAR NOT NULL,
     "email" VARCHAR NOT NULL,
     "photo" VARCHAR NOT NULL,

@@ -62,8 +62,8 @@ func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (qu
 	return user, nil
 }
 
-func (t *ServiceUsers) GetUserInfo(ctx *gin.Context, inputModel models.InUserInfo) (queries.User, error) {
-	user, err := t.db.GetUserById(ctx, inputModel.Id)
+func (t *ServiceUsers) GetUserInfo(ctx *gin.Context, userId uint64) (queries.User, error) {
+	user, err := t.db.GetUserById(ctx, userId)
 	if err != nil {
 		return queries.User{}, err
 	}

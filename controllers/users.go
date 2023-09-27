@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/cr1m3s/tch_backend/models"
@@ -100,17 +101,16 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/userinfo [get]
 func (t *UsersController) GetUserInfo(ctx *gin.Context) {
-
-	var inputModel models.InUserInfo
-	if err := ctx.BindUri(&inputModel); err != nil {
+	userID := ctx.GetUint64("user_id")
+	if userID == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
-			"data":   err.Error(),
+			"data":   "user id error",
 		})
 		return
 	}
 
-	user, err := t.userService.GetUserInfo(ctx, inputModel)
+	user, err := t.userService.GetUserInfo(ctx, userID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status": "failed",
