@@ -3,6 +3,7 @@ package services
 import (
 	"time"
 
+	"github.com/cr1m3s/tch_backend/models"
 	db "github.com/cr1m3s/tch_backend/queries"
 	"github.com/golang-jwt/jwt"
 )
@@ -10,7 +11,7 @@ import (
 var SecretKey = []byte("your-secret-key")
 
 func GenerateToken(user db.User) (string, error) {
-	claims := &db.Claims{
+	claims := &models.Claims{
 		UserID:   user.ID,
 		Username: user.Name,
 		StandardClaims: jwt.StandardClaims{

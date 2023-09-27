@@ -7,13 +7,13 @@ import (
 
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
-	"github.com/cr1m3s/tch_backend/middlewares"
-	"github.com/cr1m3s/tch_backend/models"
+	middleware "github.com/cr1m3s/tch_backend/middlewares"
 	dbConn "github.com/cr1m3s/tch_backend/queries"
-
+	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
@@ -27,28 +27,33 @@ var (
 	AuthController controllers.AuthController
 )
 
-//	@title						Study marketplace API
-//	@version					0.0.1
-//	@description				Marketplace to connect students and teachers
-//	@termsOfService				[TODO]
-//	@contact.name				API Support
-//	@contact.url				[TODO]
-//	@contact.email				[TODO]
-//	@license.name				[TODO]
-//	@license.url				[TODO]
-//	@host						localhost:8000
-//	@BasePath					/
-//	@schemes					http
-//	@securityDefinitions.apiKey	JWT
-//	@in							header
-//	@name						Authorization
+// @title						Study marketplace API
+// @version					0.0.1
+// @description				Marketplace to connect students and teachers
+// @termsOfService				[TODO]
+// @contact.name				API Support
+// @contact.url				[TODO]
+// @contact.email				[TODO]
+// @license.name				[TODO]
+// @license.url				[TODO]
+// @host						localhost:8000
+// @BasePath					/
+// @schemes					http
+// @securityDefinitions.apiKey	JWT
+// @in							header
+// @name						Authorization
 func main() {
-	godotenv.Load()
+
 	server_host := os.Getenv("SERVER_HOSTNAME")
+	if server_host == "" {
+		log.Fatal("env SERVER_HOSTNAME is empty")
+	}
 	docs_host := os.Getenv("DOCS_HOSTNAME")
-		
-	conn := models.ConnectDataBase()
-	db = dbConn.New(conn)
+	if docs_host == "" {
+		log.Fatal("env DOCS_HOSTNAME is empty")
+	}
+
+	db := repositories.NewAppRepository()
 	server := gin.Default()
 	// cors.Default() allows all origins
 	server.Use(cors.Default())
@@ -73,14 +78,14 @@ func main() {
 	log.Fatal(server.Run(server_host))
 }
 
-//  HealthCheck godoc
-//	@Summary		Show the status of server.
-//	@Description	get the status of server.
-//	@Tags			root
-//	@Accept			*/*
-//	@Produce		json
-//	@Success		200	{object}	map[string]interface{}
-//	@Router			/api/ [get]
+//	 HealthCheck godoc
+//		@Summary		Show the status of server.
+//		@Description	get the status of server.
+//		@Tags			root
+//		@Accept			*/*
+//		@Produce		json
+//		@Success		200	{object}	map[string]interface{}
+//		@Router			/api/ [get]
 func HealthCheck(c *gin.Context) {
 	res := map[string]interface{}{
 		"data": "Server is up and runing",

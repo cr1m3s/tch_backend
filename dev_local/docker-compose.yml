@@ -8,6 +8,8 @@ services:
     hostname: tch_backend
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      SERVER_HOSTNAME: ${SERVER_HOSTNAME}
+      DOCS_HOSTNAME: ${DOCS_HOSTNAME}
     volumes:
       - ../:/var/www/app
     ports:

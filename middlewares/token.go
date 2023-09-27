@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/services"
-	db "github.com/cr1m3s/tch_backend/queries"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
@@ -20,7 +20,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		token, err := jwt.ParseWithClaims(tokenString, &db.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenString, &models.Claims{}, func(token *jwt.Token) (interface{}, error) {
 			return services.SecretKey, nil
 		})
 
@@ -30,7 +30,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		claims, ok := token.Claims.(*db.Claims)
+		claims, ok := token.Claims.(*models.Claims)
 		if !ok {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 			c.Abort()
