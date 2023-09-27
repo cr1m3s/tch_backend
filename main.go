@@ -24,7 +24,7 @@ var (
 	server *gin.Engine
 	db     *dbConn.Queries
 
-	AuthController controllers.AuthController
+	AuthController controllers.UsersController
 )
 
 // @title						Study marketplace API
@@ -60,7 +60,7 @@ func main() {
 
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
-	AuthController = *controllers.NewAuthController(db)
+	AuthController = *controllers.NewUsersController(db)
 
 	router := server.Group("/api")
 
