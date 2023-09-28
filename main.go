@@ -60,6 +60,7 @@ func main() {
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
 	AuthController = *controllers.NewUsersController(db)
+	AuthGoogleController := controllers.NewAuthGoogleController()
 
 	router := server.Group("/api")
 
@@ -69,6 +70,8 @@ func main() {
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.POST("/auth/register", AuthController.SignUpUser)
 	router.POST("/auth/login", AuthController.LoginUser)
+	router.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
+	router.GET("/auth/login-google-info", AuthGoogleController.LoginGoogleInfo)
 
 	protected := server.Group("/protected")
 	protected.Use(middleware.AuthMiddleware())
