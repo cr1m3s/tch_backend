@@ -36,7 +36,6 @@ var (
 // @contact.email				[TODO]
 // @license.name				[TODO]
 // @license.url					[TODO]
-// @host						localhost:8000
 // @BasePath					/
 // @schemes						http
 // @securityDefinitions.apiKey	JWT
