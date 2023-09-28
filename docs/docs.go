@@ -68,7 +68,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/controllers.login_request"
+                            "$ref": "#/definitions/models.InLogin"
                         }
                     }
                 ],
@@ -103,7 +103,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/db.User"
+                            "$ref": "#/definitions/queries.User"
                         }
                     }
                 ],
@@ -155,7 +155,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.login_request": {
+        "models.InLogin": {
             "type": "object",
             "properties": {
                 "email": {
@@ -166,7 +166,7 @@ const docTemplate = `{
                 }
             }
         },
-        "db.User": {
+        "queries.User": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -176,7 +176,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -211,7 +211,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "0.0.1",
-	Host:             "localhost:8000",
+	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
 	Title:            "Study marketplace API",
