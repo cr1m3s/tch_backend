@@ -1,11 +1,13 @@
 package services
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
+	db "github.com/cr1m3s/tch_backend/queries"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,8 +44,8 @@ func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (s
 
 func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
 
-	_, err := t.db.GetUserByEmail(ctx, inputModel.Email)
-	if err == nil {
+	registred, err := t.db.GetUserByEmail(ctx, inputModel.Email)
+	if (registred != db.User{}) && (err != sql.ErrNoRows) {
 		err = fmt.Errorf("User with such email already registred.")
 		return queries.User{}, err
 	}
