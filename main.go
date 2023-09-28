@@ -37,7 +37,7 @@ var (
 // @license.name				[TODO]
 // @license.url					[TODO]
 // @BasePath					/
-// @schemes						http
+// @schemes						http https
 // @securityDefinitions.apiKey	JWT
 // @in							header
 // @name						Authorization

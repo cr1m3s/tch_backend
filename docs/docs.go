@@ -213,7 +213,7 @@ var SwaggerInfo = &swag.Spec{
 	Version:          "0.0.1",
 	Host:             "",
 	BasePath:         "/",
-	Schemes:          []string{"http"},
+	Schemes:          []string{"http", "https"},
 	Title:            "Study marketplace API",
 	Description:      "Marketplace to connect students and teachers",
 	InfoInstanceName: "swagger",

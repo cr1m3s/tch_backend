@@ -127,6 +127,7 @@ paths:
       - user_info
 schemes:
 - http
+- https
 securityDefinitions:
   JWT:
     in: header
