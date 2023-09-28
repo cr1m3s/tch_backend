@@ -42,6 +42,12 @@ func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (s
 
 func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
 
+	_, err := t.db.GetUserByEmail(ctx, inputModel.Email)
+	if err == nil {
+		err = fmt.Errorf("User with such email already registred.")
+		return queries.User{}, err
+	}
+
 	hashedPassword := HashPassword(inputModel.Password)
 
 	args := &queries.CreateUserParams{

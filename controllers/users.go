@@ -75,15 +75,6 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 		return
 	}
 
-	_, err := t.db.GetUserByEmail(ctx, inputModel.Email)
-	if err == nil {
-		ctx.JSON(http.StatusConflict, gin.H{
-			"status": "failed",
-			"data":   "User with such email already registred.",
-		})
-		return
-	}
-
 	user, err := t.userService.SignUpUser(ctx, inputModel)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
