@@ -1,6 +1,7 @@
 package services
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -41,6 +42,17 @@ func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (s
 }
 
 func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
+
+	registred, err := t.db.GetUserByEmail(ctx, inputModel.Email)
+
+	if (err != nil) && (err != sql.ErrNoRows) {
+		err = fmt.Errorf("DB search error.")
+		return queries.User{}, err
+	}
+	if registred.Email == inputModel.Email {
+		err = fmt.Errorf("User with such email already registred.")
+		return queries.User{}, err
+	}
 
 	hashedPassword := HashPassword(inputModel.Password)
 
