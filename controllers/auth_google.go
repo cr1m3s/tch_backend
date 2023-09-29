@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -86,10 +87,8 @@ func (t *AuthGoogleController) LoginGoogleInfo(ctx *gin.Context) {
 	}
 
 	// TODO: add JWT token
-	ctx.JSON(http.StatusTemporaryRedirect, gin.H{
-		"status": "success",
-		"data":   string(userInfo),
-	})
-
-	ctx.Redirect(http.StatusTemporaryRedirect, RedirectDestinationPage)
+	q := url.Values{}
+	q.Set("token", string(userInfo))
+	location := url.URL{Path: RedirectDestinationPage, RawQuery: q.Encode()}
+	ctx.Redirect(http.StatusPermanentRedirect, location.RequestURI())
 }
