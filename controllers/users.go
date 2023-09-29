@@ -100,7 +100,7 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/userinfo [get]
 func (t *UsersController) GetUserInfo(ctx *gin.Context) {
-	userID := ctx.GetUint64("user_id")
+	userID := ctx.GetInt64("user_id")
 	if userID == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status": "failed",
