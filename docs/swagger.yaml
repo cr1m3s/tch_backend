@@ -1,0 +1,136 @@
+basePath: /
+definitions:
+  models.InLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  queries.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      photo:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+      verified:
+        type: boolean
+    type: object
+info:
+  contact:
+    email: '[TODO]'
+    name: API Support
+    url: '[TODO]'
+  description: Marketplace to connect students and teachers
+  license:
+    name: '[TODO]'
+    url: '[TODO]'
+  termsOfService: '[TODO]'
+  title: Study marketplace API
+  version: 0.0.1
+paths:
+  /api/:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status of server.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Show the status of server.
+      tags:
+      - root
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: requires email and password
+      parameters:
+      - description: request info
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.InLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request for login
+      tags:
+      - login
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: requires username and password for registration
+      parameters:
+      - description: user info for sign in
+        in: body
+        name: user_info
+        required: true
+        schema:
+          $ref: '#/definitions/queries.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request for registration
+      tags:
+      - register
+  /protected/userinfo:
+    get:
+      description: requires valid token
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: Get request to see user info
+      tags:
+      - user_info
+schemes:
+- http
+- https
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
