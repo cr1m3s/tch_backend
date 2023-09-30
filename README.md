@@ -180,4 +180,4 @@ Response body:
     "updated_at": "2023-09-25T08:28:42.3Z"
   }
 }
-![API Diagram](api.drawio.svg)
+![API Diagram](./api.drawio.svg)
