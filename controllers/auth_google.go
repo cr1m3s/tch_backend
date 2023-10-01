@@ -95,7 +95,7 @@ func (t *AuthGoogleController) GetUser(ctx context.Context, userInfo GoogleRespo
 		args := queries.CreateUserParams{
 			Name:      userInfo.Name,
 			Email:     userInfo.Email,
-			Password:  userInfo.Email,
+			Password:  "",
 			Photo:     "default.jpeg",
 			Verified:  false,
 			Role:      "user",
