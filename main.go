@@ -52,7 +52,7 @@ func main() {
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
 	AuthController := *controllers.NewUsersController(db)
-	AuthGoogleController := controllers.NewAuthGoogleController()
+	AuthGoogleController := controllers.NewAuthGoogleController(db)
 
 	router := server.Group("/api")
 	router.GET("/", HealthCheck)
@@ -61,7 +61,7 @@ func main() {
 	router.POST("/auth/register", AuthController.SignUpUser)
 	router.POST("/auth/login", AuthController.LoginUser)
 	router.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
-	router.GET("/auth/login-google-info", AuthGoogleController.LoginGoogleInfo)
+	router.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleInfo)
 	protected := server.Group("/protected")
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.GetUserInfo)
