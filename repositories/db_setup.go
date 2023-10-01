@@ -1,22 +1,18 @@
 package repositories
 
 import (
-	"database/sql"
+	"context"
 	"log"
 	"os"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func ConnectDataBase() *sql.DB {
-	databaseUrl := os.Getenv("DATABASE_URL")
-	if databaseUrl == "" {
-		log.Fatal("env DATABASE_URL is empty")
-	}
+func ConnectDataBase() *pgxpool.Pool {
 
-	dbpool, err := sql.Open("pgx/v5", os.Getenv("DATABASE_URL"))
+	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
-		log.Fatal("unable to create connection pool:" + err.Error())
+		log.Fatal("create database conection error:" + err.Error())
 	}
 
 	return dbpool

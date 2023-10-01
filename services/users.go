@@ -1,7 +1,6 @@
 package services
 
 import (
-	"database/sql"
 	"fmt"
 	"time"
 
@@ -42,15 +41,13 @@ func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (s
 }
 
 func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
-
-	registred, err := t.db.GetUserByEmail(ctx, inputModel.Email)
-
-	if (err != nil) && (err != sql.ErrNoRows) {
-		err = fmt.Errorf("DB search error.")
+	isEmailExist, err := t.db.IsUserEmailExist(ctx, inputModel.Email)
+	if err != nil {
+		err = fmt.Errorf("db search error")
 		return queries.User{}, err
 	}
-	if registred.Email == inputModel.Email {
-		err = fmt.Errorf("User with such email already registred.")
+	if isEmailExist {
+		err = fmt.Errorf("user with such email already registred")
 		return queries.User{}, err
 	}
 
@@ -74,7 +71,7 @@ func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (qu
 	return user, nil
 }
 
-func (t *ServiceUsers) GetUserInfo(ctx *gin.Context, userId uint64) (queries.User, error) {
+func (t *ServiceUsers) GetUserInfo(ctx *gin.Context, userId int64) (queries.User, error) {
 	user, err := t.db.GetUserById(ctx, userId)
 	if err != nil {
 		return queries.User{}, err

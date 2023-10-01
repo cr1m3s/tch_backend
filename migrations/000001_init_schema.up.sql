@@ -6,8 +6,8 @@ CREATE TABLE "users" (
     "verified" BOOLEAN NOT NULL,
     "password" VARCHAR NOT NULL,
     "role" VARCHAR NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
