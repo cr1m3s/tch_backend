@@ -11,13 +11,13 @@ import (
 
 type UsersController struct {
 	db          *queries.Queries
-	userService *services.ServiceUsers
+	userService *services.UserService
 }
 
 func NewUsersController(db *queries.Queries) *UsersController {
 	return &UsersController{
 		db:          db,
-		userService: services.NewServiceUsers(db),
+		userService: services.NewUserService(db),
 	}
 }
 

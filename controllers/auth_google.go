@@ -10,9 +10,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
-	"github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/services"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
@@ -29,10 +28,10 @@ const RedirectDestinationPage = "/api/"
 
 type AuthGoogleController struct {
 	googleOauthConfig *oauth2.Config
-	serv              *queries.Queries
+	userService       *services.UserService
 }
 
-func NewAuthGoogleController(db *queries.Queries) *AuthGoogleController {
+func NewAuthGoogleController(userService *services.UserService) *AuthGoogleController {
 
 	url := ProtocolPrefix + "://" + os.Getenv("GOOGLE_CALLBACK_DOMAIN") + GoogleCallbackUrl
 
@@ -47,7 +46,7 @@ func NewAuthGoogleController(db *queries.Queries) *AuthGoogleController {
 			},
 			Endpoint: google.Endpoint,
 		},
-		serv: db,
+		userService: userService,
 	}
 }
 
@@ -67,50 +66,7 @@ func (t *AuthGoogleController) LoginGoogle(ctx *gin.Context) {
 	ctx.Redirect(http.StatusTemporaryRedirect, authURL)
 }
 
-type GoogleResponse struct {
-	Name  string `json: "name"`
-	Email string `json: "email"`
-	Data  string `json: "-"`
-}
-
-type ServiceUsers struct {
-	db *queries.Queries
-}
-
-func (t *AuthGoogleController) GetUser(ctx context.Context, userInfo GoogleResponse) (queries.User, error) {
-	isEmailExist, err := t.serv.IsUserEmailExist(ctx, userInfo.Email)
-	if err != nil {
-		fmt.Println("Failed to find email in db")
-	}
-
-	var user queries.User
-
-	if isEmailExist {
-		user, err = t.serv.GetUserByEmail(ctx, userInfo.Email)
-		if err != nil {
-			fmt.Println("failed to find user")
-		}
-	} else {
-		fmt.Println("Creating")
-		args := queries.CreateUserParams{
-			Name:      userInfo.Name,
-			Email:     userInfo.Email,
-			Password:  "",
-			Photo:     "default.jpeg",
-			Verified:  false,
-			Role:      "user",
-			UpdatedAt: time.Now(),
-		}
-		fmt.Println("Hello")
-		user, err = t.serv.CreateUser(ctx, args)
-		if err != nil {
-			fmt.Println("Faield to create user")
-		}
-	}
-	return user, nil
-}
-
-func (t *AuthGoogleController) LoginGoogleInfo(ctx *gin.Context) {
+func (t *AuthGoogleController) LoginGoogleCallback(ctx *gin.Context) {
 	googleCookieValue, _ := ctx.Cookie(GoogleCookieName)
 	googleQueryNameState := ctx.Query(GoogleQueryNameState)
 	if googleCookieValue != googleQueryNameState {
@@ -134,12 +90,12 @@ func (t *AuthGoogleController) LoginGoogleInfo(ctx *gin.Context) {
 		fmt.Println("failed read user info", err.Error())
 	}
 
-	var userInfo GoogleResponse
+	var userInfo models.GoogleResponse
 	err = json.Unmarshal(body, &userInfo)
 	if err != nil {
 		fmt.Println("failed parse response body")
 	}
-	user, err := t.GetUser(ctx, userInfo)
+	user, err := t.userService.GetOrCreateUser(ctx, userInfo)
 
 	if err != nil {
 		fmt.Println("Failed to get user by email.")

@@ -9,17 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ServiceUsers struct {
+type UserService struct {
 	db *queries.Queries
 }
 
-func NewServiceUsers(db *queries.Queries) *ServiceUsers {
-	return &ServiceUsers{
+func NewUserService(db *queries.Queries) *UserService {
+	return &UserService{
 		db: db,
 	}
 }
 
-func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (string, error) {
+func (t *UserService) LoginUser(ctx *gin.Context, inputModel models.InLogin) (string, error) {
 
 	user, err := t.db.GetUserByEmail(ctx, inputModel.Email)
 	if err != nil {
@@ -40,7 +40,7 @@ func (t *ServiceUsers) LoginUser(ctx *gin.Context, inputModel models.InLogin) (s
 	return token, nil
 }
 
-func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
+func (t *UserService) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
 	isEmailExist, err := t.db.IsUserEmailExist(ctx, inputModel.Email)
 	if err != nil {
 		err = fmt.Errorf("db search error")
@@ -71,11 +71,43 @@ func (t *ServiceUsers) SignUpUser(ctx *gin.Context, inputModel queries.User) (qu
 	return user, nil
 }
 
-func (t *ServiceUsers) GetUserInfo(ctx *gin.Context, userId int64) (queries.User, error) {
+func (t *UserService) GetUserInfo(ctx *gin.Context, userId int64) (queries.User, error) {
 	user, err := t.db.GetUserById(ctx, userId)
 	if err != nil {
 		return queries.User{}, err
 	}
 
+	return user, nil
+}
+
+func (t *UserService) GetOrCreateUser(ctx *gin.Context, userInfo models.GoogleResponse) (queries.User, error) {
+	isEmailExist, err := t.db.IsUserEmailExist(ctx, userInfo.Email)
+	if err != nil {
+		fmt.Println("email search query failed")
+	}
+
+	var user queries.User
+
+	if isEmailExist {
+		user, err = t.db.GetUserByEmail(ctx, userInfo.Email)
+		if err != nil {
+			fmt.Println("failed to find user")
+		}
+	} else {
+		args := &queries.CreateUserParams{
+			Name:      userInfo.Name,
+			Email:     userInfo.Email,
+			Password:  "",
+			Photo:     "default.jpeg",
+			Verified:  false,
+			Role:      "user",
+			UpdatedAt: time.Now(),
+		}
+
+		user, err = t.db.CreateUser(ctx, *args)
+		if err != nil {
+			fmt.Println("Faield to create user")
+		}
+	}
 	return user, nil
 }
