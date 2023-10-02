@@ -19,7 +19,7 @@ func NewUserService(db *queries.Queries) *UserService {
 	}
 }
 
-func (t *UserService) LoginUser(ctx *gin.Context, inputModel models.InLogin) (string, error) {
+func (t *UserService) UserLogin(ctx *gin.Context, inputModel models.InLogin) (string, error) {
 
 	user, err := t.db.GetUserByEmail(ctx, inputModel.Email)
 	if err != nil {
@@ -40,7 +40,7 @@ func (t *UserService) LoginUser(ctx *gin.Context, inputModel models.InLogin) (st
 	return token, nil
 }
 
-func (t *UserService) SignUpUser(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
+func (t *UserService) UserRegister(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
 	isEmailExist, err := t.db.IsUserEmailExist(ctx, inputModel.Email)
 	if err != nil {
 		err = fmt.Errorf("db search error")
@@ -71,7 +71,7 @@ func (t *UserService) SignUpUser(ctx *gin.Context, inputModel queries.User) (que
 	return user, nil
 }
 
-func (t *UserService) GetUserInfo(ctx *gin.Context, userId int64) (queries.User, error) {
+func (t *UserService) UserInfo(ctx *gin.Context, userId int64) (queries.User, error) {
 	user, err := t.db.GetUserById(ctx, userId)
 	if err != nil {
 		return queries.User{}, err

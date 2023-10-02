@@ -138,7 +138,7 @@ go run main.go
 Response body:
 ```
 {
-  "data": {
+  Data: {
     "user": {
       "id": "143a5c7a-8e4b-4081-9da8-8005ee7b2e6f",
       "name": "world",
@@ -151,7 +151,7 @@ Response body:
       "updated_at": "2023-09-25T07:42:26.804Z"
     }
   },
-  "status": "success"
+  Status: "success"
 }
 ```
 

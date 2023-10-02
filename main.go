@@ -8,6 +8,7 @@ import (
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
 	middleware "github.com/cr1m3s/tch_backend/middlewares"
+	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/cr1m3s/tch_backend/services"
 	"github.com/gin-contrib/cors"
@@ -60,13 +61,13 @@ func main() {
 	router.GET("/", HealthCheck)
 	url := ginSwagger.URL(docs_host + "/api/docs/doc.json")
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-	router.POST("/auth/register", AuthController.SignUpUser)
-	router.POST("/auth/login", AuthController.LoginUser)
+	router.POST("/auth/register", AuthController.UserRegister)
+	router.POST("/auth/login", AuthController.UserLogin)
 	router.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
 	router.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
 	protected := server.Group("/protected")
 	protected.Use(middleware.AuthMiddleware())
-	protected.GET("/userinfo", AuthController.GetUserInfo)
+	protected.GET("/userinfo", AuthController.UserInfo)
 
 	log.Fatal(server.Run(server_host))
 }
@@ -80,9 +81,5 @@ func main() {
 // @Success		200	{object}	map[string]interface{}
 // @Router			/api/ [get]
 func HealthCheck(c *gin.Context) {
-	res := map[string]interface{}{
-		"data": "Server is up and runing",
-	}
-
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, models.Response{Status: "succes", Data: "Server up and running."})
 }
