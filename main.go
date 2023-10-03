@@ -8,8 +8,6 @@ import (
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
 	middleware "github.com/cr1m3s/tch_backend/middlewares"
-	"github.com/cr1m3s/tch_backend/repositories"
-	"github.com/cr1m3s/tch_backend/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -45,16 +43,14 @@ func main() {
 		log.Fatal("env DOCS_HOSTNAME is empty")
 	}
 
-	db := repositories.NewAppRepository()
 	server := gin.Default()
 	// cors.Default() allows all origins
 	server.Use(cors.Default())
 
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
-	AuthController := controllers.NewUsersController(db)
-	UserService := services.NewUserService(db)
-	AuthGoogleController := controllers.NewAuthGoogleController(UserService)
+	AuthController := controllers.NewUsersController()
+	AuthGoogleController := controllers.NewAuthGoogleController()
 
 	router := server.Group("/api")
 	router.GET("/", HealthCheck)

@@ -10,14 +10,12 @@ import (
 )
 
 type UsersController struct {
-	db          *queries.Queries
 	userService *services.UserService
 }
 
-func NewUsersController(db *queries.Queries) *UsersController {
+func NewUsersController() *UsersController {
 	return &UsersController{
-		db:          db,
-		userService: services.NewUserService(db),
+		userService: services.NewUserService(),
 	}
 }
 
