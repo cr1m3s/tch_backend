@@ -81,5 +81,5 @@ func main() {
 // @Success		200	{object}	map[string]interface{}
 // @Router			/api/ [get]
 func HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, models.Response{Status: "succes", Data: "Server up and running."})
+	c.JSON(http.StatusOK, models.NewResponseSuccess("Server up and running."))
 }

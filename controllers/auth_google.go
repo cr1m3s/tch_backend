@@ -106,6 +106,6 @@ func (t *AuthGoogleController) LoginGoogleCallback(ctx *gin.Context) {
 		fmt.Println("Failed to generate token")
 	}
 
-	ctx.JSON(http.StatusTemporaryRedirect, models.Response{Status: "succes", Data: tokenJWT})
+	ctx.JSON(http.StatusTemporaryRedirect, models.NewResponseSuccess(tokenJWT))
 	ctx.Redirect(http.StatusTemporaryRedirect, RedirectDestinationPage)
 }

@@ -34,26 +34,17 @@ func (t *UsersController) UserLogin(ctx *gin.Context) {
 
 	var inputModel models.InLogin
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
-		ctx.JSON(http.StatusBadRequest, models.Response{
-			Status: "failed",
-			Data:   err.Error(),
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
 	token, err := t.userService.UserLogin(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Response{
-			Status: "failed",
-			Data:   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, models.Response{
-		Status: "successs",
-		Data:   token,
-	})
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(token))
 }
 
 // @Registraction godoc
@@ -68,26 +59,17 @@ func (t *UsersController) UserLogin(ctx *gin.Context) {
 func (t *UsersController) UserRegister(ctx *gin.Context) {
 	var inputModel queries.User
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
-		ctx.JSON(http.StatusBadRequest, models.Response{
-			Status: "failed",
-			Data:   err.Error(),
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
 	user, err := t.userService.UserRegister(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Response{
-			Status: "failed",
-			Data:   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, models.Response{
-		Status: "success",
-		Data:   user,
-	})
+	ctx.JSON(http.StatusCreated, models.NewResponseSuccess(user))
 }
 
 // @User_info	godoc
@@ -102,25 +84,16 @@ func (t *UsersController) UserRegister(ctx *gin.Context) {
 func (t *UsersController) UserInfo(ctx *gin.Context) {
 	userID := ctx.GetInt64("user_id")
 	if userID == 0 {
-		ctx.JSON(http.StatusBadRequest, models.Response{
-			Status: "failed",
-			Data:   "user id error",
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
 		return
 	}
 
 	user, err := t.userService.UserInfo(ctx, userID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.Response{
-			Status: "failed",
-			Data:   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, models.Response{
-		Status: "success",
-		Data:   user,
-	})
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 
 }
