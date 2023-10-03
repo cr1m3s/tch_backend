@@ -125,16 +125,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "failed",
+                                Status: "failed",
                                 <br/>
-                                "Data": error
+                                Data: error
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="994" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "failed",...
+                    Status: "failed",...
                 </text>
             </switch>
         </g>
@@ -146,16 +146,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "success",
+                                Status: "success",
                                 <br/>
-                                "Data": "token"
+                                Data: "token"
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="1094" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "success",...
+                    Status: "success",...
                 </text>
             </switch>
         </g>
@@ -302,16 +302,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "success",
+                                Status: "success",
                                 <br/>
-                                "Data": "token"
+                                Data: "token"
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="2074" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "success",...
+                    Status: "success",...
                 </text>
             </switch>
         </g>
@@ -586,16 +586,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "failed",
+                                Status: "failed",
                                 <br/>
-                                "Data": "user already registred"
+                                Data: "user already registred"
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="434" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "failed",...
+                    Status: "failed",...
                 </text>
             </switch>
         </g>
@@ -607,16 +607,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "success",
+                                Status: "success",
                                 <br/>
-                                "Data": user
+                                Data: user
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="534" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "success",...
+                    Status: "success",...
                 </text>
             </switch>
         </g>
@@ -674,16 +674,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "failed",
+                                Status: "failed",
                                 <br/>
-                                "Data": err
+                                Data: err
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="234" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "failed",...
+                    Status: "failed",...
                 </text>
             </switch>
         </g>
@@ -851,16 +851,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "status": "failed",
+                                Status: "failed",
                                 <br/>
-                                "data": "Unautorized"
+                                Data: "Unautorized"
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="2484" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "status": "failed",...
+                    Status: "failed",...
                 </text>
             </switch>
         </g>
@@ -872,16 +872,16 @@
                         <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
                             <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
                                 <br/>
-                                "Status": "success",
+                                Status: "success",
                                 <br/>
-                                "Data": user
+                                Data: user
                                 <br/>
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="2584" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
-                    "Status": "success",...
+                    Status: "success",...
                 </text>
             </switch>
         </g>
