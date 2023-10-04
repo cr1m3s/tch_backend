@@ -10,14 +10,12 @@ import (
 )
 
 type UsersController struct {
-	db          *queries.Queries
-	userService *services.ServiceUsers
+	userService *services.UserService
 }
 
-func NewUsersController(db *queries.Queries) *UsersController {
+func NewUsersController() *UsersController {
 	return &UsersController{
-		db:          db,
-		userService: services.NewServiceUsers(db),
+		userService: services.NewUserService(),
 	}
 }
 
@@ -30,30 +28,21 @@ func NewUsersController(db *queries.Queries) *UsersController {
 // @Param		request	body models.InLogin true "request info"
 // @Success		200 {object} map[string]interface{}
 // @Router		/api/auth/login [post]
-func (t *UsersController) LoginUser(ctx *gin.Context) {
+func (t *UsersController) UserLogin(ctx *gin.Context) {
 
 	var inputModel models.InLogin
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": "failed",
-			"data":   err.Error(),
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	token, err := t.userService.LoginUser(ctx, inputModel)
+	token, err := t.userService.UserLogin(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": "failed",
-			"data":   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "successs",
-		"data":   token,
-	})
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(token))
 }
 
 // @Registraction godoc
@@ -65,29 +54,20 @@ func (t *UsersController) LoginUser(ctx *gin.Context) {
 // @Param		user_info body queries.User true "user info for sign in"
 // @Success		200	{object} map[string]interface{}
 // @Router		/api/auth/register [post]
-func (t *UsersController) SignUpUser(ctx *gin.Context) {
+func (t *UsersController) UserRegister(ctx *gin.Context) {
 	var inputModel queries.User
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": "failed",
-			"data":   err.Error(),
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	user, err := t.userService.SignUpUser(ctx, inputModel)
+	user, err := t.userService.UserRegister(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": "failed",
-			"data":   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{
-		"status": "success",
-		"data":   user,
-	})
+	ctx.JSON(http.StatusCreated, models.NewResponseSuccess(user))
 }
 
 // @User_info	godoc
@@ -99,28 +79,19 @@ func (t *UsersController) SignUpUser(ctx *gin.Context) {
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/userinfo [get]
-func (t *UsersController) GetUserInfo(ctx *gin.Context) {
-	userID := ctx.GetUint64("user_id")
+func (t *UsersController) UserInfo(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
 	if userID == 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status": "failed",
-			"data":   "user id error",
-		})
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
 		return
 	}
 
-	user, err := t.userService.GetUserInfo(ctx, userID)
+	user, err := t.userService.UserInfo(ctx, userID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status": "failed",
-			"data":   err.Error(),
-		})
+		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		"data":   user,
-	})
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 
 }

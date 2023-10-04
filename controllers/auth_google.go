@@ -4,20 +4,22 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 
+	"github.com/cr1m3s/tch_backend/models"
+	"github.com/cr1m3s/tch_backend/services"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
 const ProtocolPrefix = "https"
-const GoogleCallbackUrl = "/api/auth/login-google-info"
+const GoogleCallbackUrl = "/api/auth/login-google-callback"
 const GoogleCookieName = "oauthstate"
 const GoogleQueryNameState = "state"
 const GoogleQueryNameCode = "code"
@@ -26,6 +28,7 @@ const RedirectDestinationPage = "/api/"
 
 type AuthGoogleController struct {
 	googleOauthConfig *oauth2.Config
+	userService       *services.UserService
 }
 
 func NewAuthGoogleController() *AuthGoogleController {
@@ -43,6 +46,7 @@ func NewAuthGoogleController() *AuthGoogleController {
 			},
 			Endpoint: google.Endpoint,
 		},
+		userService: services.NewUserService(),
 	}
 }
 
@@ -62,7 +66,7 @@ func (t *AuthGoogleController) LoginGoogle(ctx *gin.Context) {
 	ctx.Redirect(http.StatusTemporaryRedirect, authURL)
 }
 
-func (t *AuthGoogleController) LoginGoogleInfo(ctx *gin.Context) {
+func (t *AuthGoogleController) LoginGoogleCallback(ctx *gin.Context) {
 	googleCookieValue, _ := ctx.Cookie(GoogleCookieName)
 	googleQueryNameState := ctx.Query(GoogleQueryNameState)
 	if googleCookieValue != googleQueryNameState {
@@ -81,14 +85,27 @@ func (t *AuthGoogleController) LoginGoogleInfo(ctx *gin.Context) {
 	}
 	defer response.Body.Close()
 
-	userInfo, err := io.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		fmt.Println("failed read user info", err.Error())
 	}
 
-	// TODO: add JWT token
-	q := url.Values{}
-	q.Set("token", string(userInfo))
-	location := url.URL{Path: RedirectDestinationPage, RawQuery: q.Encode()}
-	ctx.Redirect(http.StatusPermanentRedirect, location.RequestURI())
+	var userInfo models.GoogleResponse
+	err = json.Unmarshal(body, &userInfo)
+	if err != nil {
+		fmt.Println("failed parse response body")
+	}
+	user, err := t.userService.GetOrCreateUser(ctx, userInfo)
+
+	if err != nil {
+		fmt.Println("Failed to get user by email.")
+	}
+
+	tokenJWT, err := services.GenerateToken(user)
+	if err != nil {
+		fmt.Println("Failed to generate token")
+	}
+
+	ctx.JSON(http.StatusTemporaryRedirect, models.NewResponseSuccess(tokenJWT))
+	ctx.Redirect(http.StatusTemporaryRedirect, RedirectDestinationPage)
 }

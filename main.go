@@ -8,23 +8,11 @@ import (
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
 	middleware "github.com/cr1m3s/tch_backend/middlewares"
-	dbConn "github.com/cr1m3s/tch_backend/queries"
-	"github.com/cr1m3s/tch_backend/repositories"
+	"github.com/cr1m3s/tch_backend/models"
 	"github.com/gin-contrib/cors"
-
 	"github.com/gin-gonic/gin"
-
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	_ "github.com/lib/pq"
-)
-
-var (
-	server *gin.Engine
-	db     *dbConn.Queries
-
-	AuthController controllers.UsersController
 )
 
 // @title						Study marketplace API
@@ -42,40 +30,49 @@ var (
 // @in							header
 // @name						Authorization
 func main() {
+	if os.Getenv("DATABASE_URL") == "" {
+		log.Fatal("env DATABASE_URL is empty")
+	}
 
 	server_host := os.Getenv("SERVER_HOSTNAME")
 	if server_host == "" {
 		log.Fatal("env SERVER_HOSTNAME is empty")
 	}
+
 	docs_host := os.Getenv("DOCS_HOSTNAME")
 	if docs_host == "" {
 		log.Fatal("env DOCS_HOSTNAME is empty")
 	}
 
-	db := repositories.NewAppRepository()
 	server := gin.Default()
-	// cors.Default() allows all origins
-	server.Use(cors.Default())
+	sorsConfig := cors.DefaultConfig()
+	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
+	sorsConfig.AddAllowHeaders("Access-Control-Request-Method")
+	sorsConfig.AddAllowHeaders("Access-Control-Request-Headers")
+	sorsConfig.AddAllowHeaders("X-Requested-With")
+	sorsConfig.AddAllowHeaders("Accept")
+	sorsConfig.AddAllowHeaders("Authorization")
+	sorsConfig.AllowAllOrigins = true
+	sorsConfig.AllowCredentials = true
+	c := cors.New(sorsConfig)
+	server.Use(c)
 
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
-	AuthController = *controllers.NewUsersController(db)
+	AuthController := controllers.NewUsersController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
 
 	router := server.Group("/api")
-
 	router.GET("/", HealthCheck)
 	url := ginSwagger.URL(docs_host + "/api/docs/doc.json")
-
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-	router.POST("/auth/register", AuthController.SignUpUser)
-	router.POST("/auth/login", AuthController.LoginUser)
+	router.POST("/auth/register", AuthController.UserRegister)
+	router.POST("/auth/login", AuthController.UserLogin)
 	router.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
-	router.GET("/auth/login-google-info", AuthGoogleController.LoginGoogleInfo)
-
+	router.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
 	protected := server.Group("/protected")
 	protected.Use(middleware.AuthMiddleware())
-	protected.GET("/userinfo", AuthController.GetUserInfo)
+	protected.GET("/userinfo", AuthController.UserInfo)
 
 	log.Fatal(server.Run(server_host))
 }
@@ -89,9 +86,5 @@ func main() {
 // @Success		200	{object}	map[string]interface{}
 // @Router			/api/ [get]
 func HealthCheck(c *gin.Context) {
-	res := map[string]interface{}{
-		"data": "Server is up and runing",
-	}
-
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, models.NewResponseSuccess("Server up and running."))
 }
