@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/controllers"
-	"github.com/cr1m3s/tch_backend/config"
 	_ "github.com/cr1m3s/tch_backend/docs"
 	middleware "github.com/cr1m3s/tch_backend/middlewares"
 	"github.com/cr1m3s/tch_backend/models"
@@ -30,7 +30,7 @@ import (
 // @in							header
 // @name						Authorization
 func main() {
-	
+	configs.LoadAndCheck()
 	server := gin.Default()
 	// cors.Default() allows all origins
 	server.Use(cors.Default())
@@ -42,7 +42,7 @@ func main() {
 
 	router := server.Group("/api")
 	router.GET("/", HealthCheck)
-	url := ginSwagger.URL(config.GetConfig().DOCS_HOSTNAME + "/api/docs/doc.json")
+	url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.POST("/auth/register", AuthController.UserRegister)
 	router.POST("/auth/login", AuthController.UserLogin)
@@ -52,7 +52,7 @@ func main() {
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
 
-	log.Fatal(server.Run(config.GetConfig().SERVER_HOSTNAME))
+	log.Fatal(server.Run(configs.SERVER_HOSTNAME))
 }
 
 // HealthCheck godoc
