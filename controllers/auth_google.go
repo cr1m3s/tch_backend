@@ -31,7 +31,7 @@ type AuthGoogleController struct {
 	userService       *services.UserService
 }
 
-func NewAuthGoogleController(userService *services.UserService) *AuthGoogleController {
+func NewAuthGoogleController() *AuthGoogleController {
 
 	url := ProtocolPrefix + "://" + os.Getenv("GOOGLE_CALLBACK_DOMAIN") + GoogleCallbackUrl
 
@@ -46,7 +46,7 @@ func NewAuthGoogleController(userService *services.UserService) *AuthGoogleContr
 			},
 			Endpoint: google.Endpoint,
 		},
-		userService: userService,
+		userService: services.NewUserService(),
 	}
 }
 

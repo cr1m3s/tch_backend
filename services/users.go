@@ -6,6 +6,7 @@ import (
 
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +14,9 @@ type UserService struct {
 	db *queries.Queries
 }
 
-func NewUserService(db *queries.Queries) *UserService {
+func NewUserService() *UserService {
 	return &UserService{
-		db: db,
+		db: repositories.NewAppRepository(),
 	}
 }
 
