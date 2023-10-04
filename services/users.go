@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cr1m3s/tch_backend/di"
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
 	"github.com/cr1m3s/tch_backend/repositories"
@@ -11,12 +12,12 @@ import (
 )
 
 type UserService struct {
-	db *queries.Queries
+	db repositories.UsersRepositoryInterface
 }
 
 func NewUserService() *UserService {
 	return &UserService{
-		db: repositories.NewAppRepository(),
+		db: di.NewUsersRepository(),
 	}
 }
 
