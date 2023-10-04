@@ -45,8 +45,17 @@ func main() {
 	}
 
 	server := gin.Default()
-	// cors.Default() allows all origins
-	server.Use(cors.Default())
+	sorsConfig := cors.DefaultConfig()
+	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
+	sorsConfig.AddAllowHeaders("Access-Control-Request-Method")
+	sorsConfig.AddAllowHeaders("Access-Control-Request-Headers")
+	sorsConfig.AddAllowHeaders("X-Requested-With")
+	sorsConfig.AddAllowHeaders("Accept")
+	sorsConfig.AddAllowHeaders("Authorization")
+	sorsConfig.AllowAllOrigins = true
+	sorsConfig.AllowCredentials = true
+	c := cors.New(sorsConfig)
+	server.Use(c)
 
 	// router.POST("/register", controllers.Register)
 	// localhost gonna be used by default
