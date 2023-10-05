@@ -48,11 +48,9 @@ func main() {
 	// localhost gonna be used by default
 	AuthController := controllers.NewUsersController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
-
 	router := server.Group("/api")
 	router.GET("/", HealthCheck)
-	url := ginSwagger.URL(docs_host + "/api/docs/doc.json")
-
+	url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.POST("/auth/register", AuthController.UserRegister)
 	router.POST("/auth/login", AuthController.UserLogin)
