@@ -36,7 +36,7 @@ func SetupRouter() *gin.Engine {
 	return server
 }
 
-func SetupCORS(r *gin.Engine) {
+func SetupCORS(server *gin.Engine) {
 
 	sorsConfig := cors.DefaultConfig()
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
@@ -49,5 +49,5 @@ func SetupCORS(r *gin.Engine) {
 	sorsConfig.AllowCredentials = true
 	c := cors.New(sorsConfig)
 	
-	r.Use(c)
+	server.Use(c)
 }
