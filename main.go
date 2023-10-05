@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 
+	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
 	middleware "github.com/cr1m3s/tch_backend/middlewares"
@@ -30,20 +30,7 @@ import (
 // @in							header
 // @name						Authorization
 func main() {
-	if os.Getenv("DATABASE_URL") == "" {
-		log.Fatal("env DATABASE_URL is empty")
-	}
-
-	server_host := os.Getenv("SERVER_HOSTNAME")
-	if server_host == "" {
-		log.Fatal("env SERVER_HOSTNAME is empty")
-	}
-
-	docs_host := os.Getenv("DOCS_HOSTNAME")
-	if docs_host == "" {
-		log.Fatal("env DOCS_HOSTNAME is empty")
-	}
-
+	configs.LoadAndCheck()
 	server := gin.Default()
 	sorsConfig := cors.DefaultConfig()
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
@@ -64,7 +51,7 @@ func main() {
 
 	router := server.Group("/api")
 	router.GET("/", HealthCheck)
-	url := ginSwagger.URL(docs_host + "/api/docs/doc.json")
+	url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	router.POST("/auth/register", AuthController.UserRegister)
 	router.POST("/auth/login", AuthController.UserLogin)
@@ -74,7 +61,7 @@ func main() {
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
 
-	log.Fatal(server.Run(server_host))
+	log.Fatal(server.Run(configs.SERVER_HOSTNAME))
 }
 
 // HealthCheck godoc

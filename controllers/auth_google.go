@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/services"
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,6 @@ const GoogleCookieName = "oauthstate"
 const GoogleQueryNameState = "state"
 const GoogleQueryNameCode = "code"
 const oauthGoogleUrlAPI = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="
-const RedirectDestinationPage = "/api/"
 
 type AuthGoogleController struct {
 	googleOauthConfig *oauth2.Config
@@ -105,7 +105,6 @@ func (t *AuthGoogleController) LoginGoogleCallback(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println("Failed to generate token")
 	}
-
-	ctx.JSON(http.StatusTemporaryRedirect, models.NewResponseSuccess(tokenJWT))
-	ctx.Redirect(http.StatusTemporaryRedirect, RedirectDestinationPage)
+	redirectPage := configs.GOOGLE_OAUTH_REDIRECT_PAGE + "?token=" + tokenJWT
+	ctx.Redirect(http.StatusMovedPermanently, redirectPage)
 }

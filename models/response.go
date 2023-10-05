@@ -6,8 +6,8 @@ const (
 )
 
 type response struct {
-	Data   interface{}
-	Status string
+	Data   interface{} `json:"data"`
+	Status string      `json:"status"`
 }
 
 func NewResponseFailed(data interface{}) (r response) {
