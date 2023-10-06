@@ -43,7 +43,6 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Method")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Headers")
-	sorsConfig.AddAllowHeaders("Access-Control-Allow-Origin")
 	sorsConfig.AddAllowHeaders("X-Requested-With")
 	sorsConfig.AddAllowHeaders("Accept")
 	sorsConfig.AddAllowHeaders("Authorization")
