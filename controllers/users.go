@@ -95,3 +95,33 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 
 }
+
+// @User_update godoc
+// @Summary		POST request to update user
+// @Description	requires valid token
+// @Tags		user_update
+// @Security	JWT
+// @Param		Authorization header string true "Insert your access token"
+// @Param		user_info body queries.User true "user info for update"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/user-patch [patch]
+func (t *UsersController) UserPatch(ctx *gin.Context) {
+	userId := ctx.GetInt64("user_id")
+
+	var inputModel queries.User
+	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+	inputModel.ID = userId
+
+	user, err := t.userService.UserPatch(ctx, inputModel)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
+}

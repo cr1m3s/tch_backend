@@ -1,7 +1,6 @@
 package routers
 
 import (
-
 	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/controllers"
 	_ "github.com/cr1m3s/tch_backend/docs"
@@ -17,11 +16,12 @@ func SetupRouter() *gin.Engine {
 	AuthController := controllers.NewUsersController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
-	
+
 	server := gin.Default()
 	api := server.Group("/api")
 
 	api.GET("/", controllers.HealthCheck)
+
 	api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, docs_url))
 	api.POST("/auth/register", AuthController.UserRegister)
 	api.POST("/auth/login", AuthController.UserLogin)
@@ -29,9 +29,10 @@ func SetupRouter() *gin.Engine {
 	api.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
 
 	protected := server.Group("/protected")
-	
+
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
+	protected.PATCH("/user-patch", AuthController.UserPatch)
 
 	return server
 }
@@ -48,6 +49,6 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AllowAllOrigins = true
 	sorsConfig.AllowCredentials = true
 	c := cors.New(sorsConfig)
-	
+
 	server.Use(c)
 }

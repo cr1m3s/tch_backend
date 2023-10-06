@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/cr1m3s/tch_backend/configs"
@@ -105,6 +106,9 @@ func (t *AuthGoogleController) LoginGoogleCallback(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println("Failed to generate token")
 	}
-	redirectPage := configs.GOOGLE_OAUTH_REDIRECT_PAGE + "?token=" + tokenJWT
-	ctx.Redirect(http.StatusMovedPermanently, redirectPage)
+
+	q := url.Values{}
+	q.Set("token", string(tokenJWT))
+	location := url.URL{Path: configs.GOOGLE_OAUTH_REDIRECT_PAGE, RawQuery: q.Encode()}
+	ctx.Redirect(http.StatusPermanentRedirect, location.RequestURI())
 }
