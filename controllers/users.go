@@ -95,3 +95,44 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 
 }
+
+
+// @User_update godoc
+// @Summary		POST request to update user
+// @Description	requires valid token
+// @Tags		user_update
+// @Security	JWT
+// @Param		Authorization header string true "Insert your access token"
+// @Param		user_info body queries.User true "user info for update"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/user-update [post]
+func (t *UsersController) UserUpdate(ctx *gin.Context){
+	userId := ctx.GetInt64("user_id")
+
+	var inputModel queries.User
+	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+	inputModel.ID = userId
+//	user_fields := reflect.ValueOf(user).Elem()
+//	input_fields := reflect.ValueOf(inputModel).Elem()
+//
+//	for i := 0; i < input_fields.NumField(); i++ {
+//		user_v := user_fields.Field(i)
+//		input_v := reflect.Value(input_fields(i))
+//		if ! input_v.isNil() {
+//			user_v.Set(input_v)
+//		}
+//	}
+
+	user, err := t.userService.UserUpdate(ctx, inputModel)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return                                                                	
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
+}

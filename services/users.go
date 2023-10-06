@@ -113,3 +113,27 @@ func (t *UserService) GetOrCreateUser(ctx *gin.Context, userInfo models.GoogleRe
 	}
 	return user, nil
 }
+
+
+func (t *UserService) UserUpdate(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
+
+	var user queries.User
+	
+	args := &queries.UpdateUserParams{
+		ID:		   inputModel.ID,
+		Name:      inputModel.Name,
+		Email:     inputModel.Email,
+		Password:  HashPassword(inputModel.Password),
+		Photo:     inputModel.Photo,
+		Verified:  inputModel.Verified,
+		Role:      inputModel.Role,
+		UpdatedAt: time.Now(),
+	}
+
+	user, err := t.db.UpdateUser(ctx, *args)
+	if err != nil {
+		fmt.Println("Faield to create user")
+	}
+	
+	return user, nil
+}

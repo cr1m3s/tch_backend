@@ -118,6 +118,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/protected/user-update": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "requires valid token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user_update"
+                ],
+                "summary": "POST request to update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "user info for update",
+                        "name": "user_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/queries.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/userinfo": {
             "get": {
                 "security": [

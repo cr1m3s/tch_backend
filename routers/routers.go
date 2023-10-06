@@ -22,6 +22,7 @@ func SetupRouter() *gin.Engine {
 	api := server.Group("/api")
 
 	api.GET("/", controllers.HealthCheck)
+
 	api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, docs_url))
 	api.POST("/auth/register", AuthController.UserRegister)
 	api.POST("/auth/login", AuthController.UserLogin)
@@ -32,6 +33,7 @@ func SetupRouter() *gin.Engine {
 	
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
+	protected.POST("/user-update", AuthController.UserUpdate)
 
 	return server
 }
