@@ -47,6 +47,9 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AddAllowHeaders("Accept")
 	sorsConfig.AddAllowHeaders("Authorization")
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Origin", "https://hello-front-2nyw.onrender.com/")
+	sorsConfig.AddAllowMethods("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
 	sorsConfig.AllowWildcard = true
 	sorsConfig.AllowOrigins = []string{"*"}
 	sorsConfig.AllowCredentials = true
