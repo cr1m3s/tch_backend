@@ -118,8 +118,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/protected/user-update": {
-            "post": {
+        "/protected/user-patch": {
+            "patch": {
                 "security": [
                     {
                         "JWT": []

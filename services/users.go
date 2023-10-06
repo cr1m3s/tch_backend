@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/cr1m3s/tch_backend/di"
@@ -114,26 +115,42 @@ func (t *UserService) GetOrCreateUser(ctx *gin.Context, userInfo models.GoogleRe
 	return user, nil
 }
 
+func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.User, error) {
 
-func (t *UserService) UserUpdate(ctx *gin.Context, inputModel queries.User) (queries.User, error) {
+	user, err := t.db.GetUserById(ctx, patch.ID)
 
-	var user queries.User
-	
-	args := &queries.UpdateUserParams{
-		ID:		   inputModel.ID,
-		Name:      inputModel.Name,
-		Email:     inputModel.Email,
-		Password:  HashPassword(inputModel.Password),
-		Photo:     inputModel.Photo,
-		Verified:  inputModel.Verified,
-		Role:      inputModel.Role,
-		UpdatedAt: time.Now(),
+	user_tmp := &queries.UpdateUserParams{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Photo:     user.Photo,
+		Verified:  user.Verified,
+		Password:  user.Password,
+		Role:      user.Role,
+		UpdatedAt: user.UpdatedAt,
 	}
 
-	user, err := t.db.UpdateUser(ctx, *args)
+	if patch.Password != "" {
+		patch.Password = HashPassword(patch.Password)
+	}
+
+	userValue := reflect.ValueOf(user_tmp).Elem()
+	patchValue := reflect.ValueOf(patch)
+	for i := 0; i < userValue.NumField(); i++ {
+		field := userValue.Field(i)
+		updateField := patchValue.Field(i)
+
+		if updateField.IsValid() && !updateField.IsZero() {
+			field.Set(updateField)
+		}
+	}
+
+	user_tmp.UpdatedAt = time.Now()
+
+	patched_user, err := t.db.UpdateUser(ctx, *user_tmp)
 	if err != nil {
 		fmt.Println("Faield to create user")
 	}
-	
-	return user, nil
+
+	return patched_user, nil
 }

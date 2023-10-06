@@ -103,8 +103,8 @@ paths:
       summary: POST request for registration
       tags:
       - register
-  /protected/user-update:
-    post:
+  /protected/user-patch:
+    patch:
       description: requires valid token
       parameters:
       - description: Insert your access token
