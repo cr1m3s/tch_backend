@@ -40,6 +40,8 @@ func SetupRouter() *gin.Engine {
 func SetupCORS(server *gin.Engine) {
 
 	sorsConfig := cors.DefaultConfig()
+	sorsConfig.AllowAllOrigins = true
+	sorsConfig.AllowCredentials = true
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Method")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Headers")
@@ -49,10 +51,9 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Origin", "https://hello-front-2nyw.onrender.com/")
 	sorsConfig.AddAllowMethods("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
 	//sorsConfig.AllowWildcard = true
 	//sorsConfig.AllowOrigins = []string{"*"}
-	sorsConfig.AllowCredentials = true
+
 	c := cors.New(sorsConfig)
 
 	server.Use(c)
