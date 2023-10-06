@@ -47,6 +47,8 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AddAllowHeaders("X-Requested-With")
 	sorsConfig.AddAllowHeaders("Accept")
 	sorsConfig.AddAllowHeaders("Authorization")
+	sorsConfig.AllowWildcard = true
+	sorsConfig.AllowOrigins = []string{"*"}
 	sorsConfig.AllowAllOrigins = true
 	sorsConfig.AllowCredentials = true
 	c := cors.New(sorsConfig)
