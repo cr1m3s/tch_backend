@@ -11,13 +11,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter() *gin.Engine {
+func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	AuthController := controllers.NewUsersController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 
-	server := gin.Default()
 	api := server.Group("/api")
 
 	api.GET("/", controllers.HealthCheck)
@@ -37,7 +36,7 @@ func SetupRouter() *gin.Engine {
 	return server
 }
 
-func SetupCORS(server *gin.Engine) {
+func SetupCORS(server *gin.Engine) *gin.Engine {
 
 	sorsConfig := cors.DefaultConfig()
 	sorsConfig.AllowAllOrigins = true
@@ -45,16 +44,12 @@ func SetupCORS(server *gin.Engine) {
 	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Method")
 	sorsConfig.AddAllowHeaders("Access-Control-Request-Headers")
+	sorsConfig.AddAllowHeaders("Access-Control-Allow-Origin")
 	sorsConfig.AddAllowHeaders("X-Requested-With")
 	sorsConfig.AddAllowHeaders("Accept")
 	sorsConfig.AddAllowHeaders("Authorization")
-	sorsConfig.AddAllowHeaders("Access-Control-Allow-Origin", "https://hello-front-2nyw.onrender.com/")
-	sorsConfig.AddAllowMethods("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-	sorsConfig.AddAllowHeaders("Access-Control-Allow-Headers", "Content-Type, Authorization")
-	//sorsConfig.AllowWildcard = true
-	//sorsConfig.AllowOrigins = []string{"*"}
-
 	c := cors.New(sorsConfig)
-
 	server.Use(c)
+
+	return server
 }

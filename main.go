@@ -5,6 +5,7 @@ import (
 
 	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/routers"
+	"github.com/gin-gonic/gin"
 )
 
 // @title						Study marketplace API
@@ -23,8 +24,9 @@ import (
 // @name						Authorization
 func main() {
 	configs.LoadAndCheck()
-	server := routers.SetupRouter()
-	routers.SetupCORS(server)
+	server := gin.Default()
+	server = routers.SetupCORS(server)
+	server = routers.SetupRouter(server)
 
 	log.Fatal(server.Run(configs.SERVER_HOSTNAME))
 }
