@@ -5,11 +5,13 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/di"
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
 	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/gin-gonic/gin"
+	gomail "gopkg.in/gomail.v2"
 )
 
 type UserService struct {
@@ -153,4 +155,52 @@ func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.U
 	}
 
 	return patched_user, nil
+}
+
+func (t *UserService) PasswordReset(ctx *gin.Context, email models.EmailRequest) (bool, error) {
+	valid_email, _ := t.db.IsUserEmailExist(ctx, email.Email)
+
+	if !valid_email {
+		fmt.Println("Email not found")
+		return valid_email, fmt.Errorf("Email not found")
+	}
+
+	user, err := t.db.GetUserByEmail(ctx, email.Email)
+	if err != nil {
+		return valid_email, fmt.Errorf("Failed request to DB.")
+	}
+
+	_, err = t.EmailSend(email.Email, user)
+	if err != nil {
+		return false, fmt.Errorf("Failed to send email")
+	}
+
+	return valid_email, nil
+}
+
+func (t *UserService) EmailSend(user_email string, user queries.User) (bool, error) {
+	from := configs.GOOGLE_EMAIL_ADDRESS
+	google_app := configs.GOOGLE_EMAIL_SECRET
+
+	msg := gomail.NewMessage()
+	msg.SetHeader("From", from)
+	msg.SetHeader("To", user_email)
+	msg.SetHeader("Subject", "Password reset")
+
+	token, err := GenerateToken(user)
+	if err != nil {
+		return false, fmt.Errorf("Failed to generate token.")
+	}
+	response := configs.GOOGLE_OAUTH_REDIRECT_PAGE + "?token=" + token
+	msg.SetBody("text/html", response)
+	//msg.Attach("/home/User/cat.jpg")
+
+	n := gomail.NewDialer("smtp.gmail.com", 587, from, google_app)
+
+	// Send the email
+	if err := n.DialAndSend(msg); err != nil {
+		return false, fmt.Errorf("Failed to send email.")
+	}
+
+	return true, nil
 }

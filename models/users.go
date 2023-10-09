@@ -6,5 +6,9 @@ type InLogin struct {
 }
 
 type InUserInfo struct {
-	Id int32 `uri:"id" binding:"required"`
+	Id int64 `uri:"id" binding:"required"`
+}
+
+type EmailRequest struct {
+	Email string `json:"email"	form:"email" 	binding:"required,email"`
 }

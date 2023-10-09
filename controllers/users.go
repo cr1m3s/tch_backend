@@ -125,3 +125,29 @@ func (t *UsersController) UserPatch(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 }
+
+// @Password_reset godoc
+// @Summary		POST request to update password
+// @Description	requires registred email address
+// @Tags		password_reset
+// @Param		password_reset body models.EmailRequest true "user email for update"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/api/auth/password-reset [post]
+func (t *UsersController) PasswordReset(ctx *gin.Context) {
+	var user_email models.EmailRequest
+
+	if err := ctx.ShouldBindJSON(&user_email); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Can't read email."))
+		return
+	}
+
+	_, err := t.userService.PasswordReset(ctx, user_email)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed("Email not found."))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password Reset Email Has Been Sent"))
+}
