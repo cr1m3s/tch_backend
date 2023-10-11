@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  models.EmailRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
   models.InLogin:
     properties:
       email:
@@ -80,6 +87,27 @@ paths:
       summary: POST request for login
       tags:
       - login
+  /api/auth/password-reset:
+    post:
+      description: requires registred email address
+      parameters:
+      - description: user email for update
+        in: body
+        name: password_reset
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request to update password
+      tags:
+      - password_reset
   /api/auth/register:
     post:
       consumes:

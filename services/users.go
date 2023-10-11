@@ -5,11 +5,13 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/cr1m3s/tch_backend/configs"
 	"github.com/cr1m3s/tch_backend/di"
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
 	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/gin-gonic/gin"
+	gomail "gopkg.in/gomail.v2"
 )
 
 type UserService struct {
@@ -119,7 +121,7 @@ func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.U
 
 	user, err := t.db.GetUserById(ctx, patch.ID)
 
-	user_tmp := &queries.UpdateUserParams{
+	userTmp := &queries.UpdateUserParams{
 		ID:        user.ID,
 		Name:      user.Name,
 		Email:     user.Email,
@@ -134,7 +136,7 @@ func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.U
 		patch.Password = HashPassword(patch.Password)
 	}
 
-	userValue := reflect.ValueOf(user_tmp).Elem()
+	userValue := reflect.ValueOf(userTmp).Elem()
 	patchValue := reflect.ValueOf(patch)
 	for i := 0; i < userValue.NumField(); i++ {
 		field := userValue.Field(i)
@@ -145,12 +147,57 @@ func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.U
 		}
 	}
 
-	user_tmp.UpdatedAt = time.Now()
+	userTmp.UpdatedAt = time.Now()
 
-	patched_user, err := t.db.UpdateUser(ctx, *user_tmp)
+	patchedUser, err := t.db.UpdateUser(ctx, *userTmp)
 	if err != nil {
 		fmt.Println("Faield to create user")
 	}
 
-	return patched_user, nil
+	return patchedUser, nil
+}
+
+func (t *UserService) PasswordReset(ctx *gin.Context, email models.EmailRequest) (bool, error) {
+	validEmail, _ := t.db.IsUserEmailExist(ctx, email.Email)
+
+	if !validEmail {
+		fmt.Println("Email not found")
+		return validEmail, fmt.Errorf("Email not found")
+	}
+
+	user, err := t.db.GetUserByEmail(ctx, email.Email)
+	if err != nil {
+		return validEmail, fmt.Errorf("Failed request to DB.")
+	}
+
+	_, err = t.EmailSend(email.Email, user)
+	if err != nil {
+		return false, err
+	}
+
+	return validEmail, nil
+}
+
+func (t *UserService) EmailSend(userEmail string, user queries.User) (bool, error) {
+	token, err := GenerateToken(user)
+	if err != nil {
+		return false, fmt.Errorf("Failed to generate token.")
+	}
+
+	from := configs.GOOGLE_EMAIL_ADDRESS
+	response := configs.GOOGLE_OAUTH_REDIRECT_PAGE + "?token=" + token
+	msg := gomail.NewMessage()
+
+	msg.SetHeader("From", from)
+	msg.SetHeader("To", userEmail)
+	msg.SetHeader("Subject", "Password reset")
+	msg.SetBody("text/html", response)
+
+	postman := gomail.NewDialer("smtp.gmail.com", 587, from, configs.GOOGLE_EMAIL_SECRET)
+
+	if err := postman.DialAndSend(msg); err != nil {
+		return false, fmt.Errorf("Failed to send email.")
+	}
+
+	return true, nil
 }

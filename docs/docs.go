@@ -83,6 +83,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/auth/password-reset": {
+            "post": {
+                "description": "requires registred email address",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "password_reset"
+                ],
+                "summary": "POST request to update password",
+                "parameters": [
+                    {
+                        "description": "user email for update",
+                        "name": "password_reset",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/register": {
             "post": {
                 "description": "requires username and password for registration",
@@ -199,6 +231,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.EmailRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "models.InLogin": {
             "type": "object",
             "properties": {
