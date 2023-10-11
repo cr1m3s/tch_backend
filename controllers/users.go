@@ -135,14 +135,14 @@ func (t *UsersController) UserPatch(ctx *gin.Context) {
 // @Success		200 {object} map[string]interface{}
 // @Router		/api/auth/password-reset [post]
 func (t *UsersController) PasswordReset(ctx *gin.Context) {
-	var user_email models.EmailRequest
+	var userEmail models.EmailRequest
 
-	if err := ctx.ShouldBindJSON(&user_email); err != nil {
+	if err := ctx.ShouldBindJSON(&userEmail); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Can't read email."))
 		return
 	}
 
-	_, err := t.userService.PasswordReset(ctx, user_email)
+	_, err := t.userService.PasswordReset(ctx, userEmail)
 
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed("Email not found."))
