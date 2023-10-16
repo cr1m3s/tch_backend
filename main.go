@@ -25,6 +25,7 @@ import (
 func main() {
 	configs.LoadAndCheck()
 	server := gin.Default()
+
 	server = routers.SetupCORS(server)
 	server = routers.SetupRouter(server)
 
