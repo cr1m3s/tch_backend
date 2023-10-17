@@ -185,7 +185,7 @@ func (t *UserService) EmailSend(userEmail string, user queries.User) (bool, erro
 	}
 
 	from := configs.GOOGLE_EMAIL_ADDRESS
-	response := configs.GOOGLE_OAUTH_REDIRECT_PAGE + "?token=" + token
+	response := NewEmail(user.Name, token).message
 	msg := gomail.NewMessage()
 
 	msg.SetHeader("From", from)
