@@ -1,144 +1,202 @@
 # Backend for teamchallange project
 
-## Used Golang Gin Requires Go version 1.21+
-- Before build project requires presence of .env file (example can be found in .env.example).
-- To run install all packages from go.mod:
-`go mod download`
-- From root:
-  `go run main.go` -- by default localhost:8000
-- Hosted at [render](https://hello-backend-7125.onrender.com/).
-- Requires DATABASE_URL set as sys env to deploy.
+Backend can be available at:
 
-## Documentation
-- Docs can befound at [{URL}/docs/index.html](https://hello-backend-7125.onrender.com/swagger/index.html)
-- Swagger requires env variable 'SERVER_HOSTNAME' defined in .env file.
-- To updated swagger after changing controllers run from the repo root:
-1. Install swaggo:
-  `go install github.com/swaggo/swag/cmd/swag@latest`
-2. Generate docs:
-  `swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
-!! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
+- https://dev-backend-b4vo.onrender.com/
+- https://hello-backend-7125.onrender.com/
 
-## DB communication
-- To update router interfaces for queries:
-  1. Install with:
-    `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
-  2. Create rules in  `./query/{model_name}.sql` 
-  3. In root folder with present `sqlc.yaml` file run: 
-    `sqlc generate`
-  4. Results will be in `./queries/`
+## Local run in Docker
 
-## For migrations from docker install migrate:
-```
-curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh |  bash
-apt-get update
-apt-get install migrate
-```
-- run migrations:
-```
-migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
-```
-- migration using files from:
-```
-/app/db/migrations/000001_init_schema.{up/down}.sql -- up used for upstream migration
-                                                    -- down for downstream migration
-```
-- in case of failure and 'dirty database' connect to db with psql and run:
-```
-  update schema_migrations set dirty=false;
-```
-
-## Database examination
-
-1. From project folder:
-    `docker exec -it tch_postgres bash`
-2. `psql -U postgres golang_postgres`
-3. `\dt`
-4.  If table 'users' not present run migrations, else:
-    `SELECT * FROM users;`
-
-## Локальний запуск
-
-Для того аби запустити проект локально потрібно спочатку встановити собі docker та docker-compose. Актуальні інструкції по встановленню можна знайти по наведеним посиланням, для кожної операційної системи як то linux, windows, mac.
+First of all, install "Doker" and "Docker compose".
+These URLs have instructions for installing "Doker" on any operating system like Linux, Windows, and Mac.
 
 - https://docs.docker.com/engine/install/
 - https://docs.docker.com/compose/install/
 
-### Запуск docker-compose
+### docker-compose
 
-Після встановлення вище наведених залежностей, потрібно викачати собі на локальну машину репозиторій з кодом і перейти в гілку dev.
+Download the git repository with the code and switch to the branch named "dev".
 
-Cтворити docker мережу tch_network за допомогою команди:
+Create a new network inside docker and named it as tch_network:
 
 ```bash
 docker network create tch_network
 ```
 
-Перевірити чи була створена docker мережа tch_network за допомогою команди:
+Check whether the docker network has been created using the command:
 
 ```bash
 docker network ls
 ```
 
-Створити постійний docker volume за допомогою команди:
+Create a permanent volume inside docker and named it as tch_postgres_pg_data:
 
 ```bash
 docker volume create tch_postgres_pg_data
 ```
 
-Перевірити чи був створений docker volume з назвою tch_postgres_pg_data за допомогою команди:
+Check whether the docker volume has been created using the command:
 
 ```bash
 docker volume ls
 ```
 
-Використовуючи консоль зайти в директорію dev_local яка містить файл docker-compose.yml і скориставшись наведеною комадною запустити контейнери для локальної розробки фронтенд застосунку.
+Change the directory to dev_local, this directory should contain the docker-compose.yml file, then you can run local containers with the command:
 
 ```bash
 docker-compose up -d
 ```
 
-Дочекатися поки будуть завантажені усі необхідні образи з інтернету і перевірити стан роботи за допомогою наведеної команди в середині директорії dev_local
+Check whether the docker containers have been created using the command:
 
 ```bash
 docker-compose ps
 ```
 
-Якщо контейнери запущені тоді потрібно зайти в середину виконавши таку команду:
+If the containers are running, you need to enter inside the container using the command:
 
 ```bash
 docker exec -it tch_backend bash
 ```
 
-- за замовчування посилання на базу данних визначено в .env:
-`
-DB_HOST=tch_postgres
-DB_PORT=5432
-DB_USER=postgres
-DB_NAME=golang_postgres
-DB_PASSWORD=postgres
-DB_DRIVER=postgres
-`
-
-Для запуску застосунку, виконати команду в середині контейнера:
+Before building project requires the presence of a .env file (example can be found in .env.example)
 
 ```bash
+DATABASE_URL=postgresql://postgres:postgres@tch_postgres:5432/store
+SERVER_HOSTNAME=":8000"
+DOCS_HOSTNAME=":8000"
+GOOGLE_CALLBACK_DOMAIN='your-own'
+GOOGLE_OAUTH_CLIENT_ID='your-own'
+GOOGLE_OAUTH_CLIENT_SECRET='your-own'
+GOOGLE_OAUTH_REDIRECT_PAGE='your-own'
+GOOGLE_EMAIL_ADDRESS='your-own'
+GOOGLE_EMAIL_SECRET='your-own'
+PASSWORD_RESET_REDIRECT_PAGE='your-own'
+```
+
+Run the application inside the container.
+
+```bash
+go mod download
 go run main.go
 ```
 
-В випадку успішного запуску ви зможете мати доступ до застосунку через ваш браузр за адресою http://localhost:8000
+If everything is OK, you can use the application with any browser by this URL: http://localhost:8000
 
-Для тесту роботи серверу і підключення бд можна виконати запит наведений в req.txt
+## Documentation
 
-Документація знаходиться за адресою http://localhost:8000/api/docs/index.html
+Swagger requires env variable **SERVER_HOSTNAME** defined in .env file
 
-# Request examples
-- User creation request example:
-`curl -v  POST http://localhost:8000/api/auth/register -H "Content-type: application/json" -d '{"email": "hello@world", "name":"world", "password":"hello"}'`
-Response body:
+Documentation is available at:
+
+- http://localhost:8000/api/docs/index.html
+- https://dev-backend-b4vo.onrender.com/api/docs/index.html  
+
+To updated swagger after changing the code run from the repo root:
+
+1. Install swaggo:
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest`
 ```
+
+2. Generate docs:
+
+```bash
+swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
+   !! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
+```
+
+## DB code generation
+
+For code generation from SQL to golang we use **sqlc**. Documentation https://docs.sqlc.dev/en/latest/
+
+Install sqlc
+
+```bash
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
+```
+
+Create SQL queries in:
+
+```bash
+./queries/{entity_name}.sql`
+```
+
+In root folder with present `sqlc.yaml` file run:
+
+```bash
+sqlc generate
+```
+
+Generated code will be in `./queries/`
+
+## Migrations
+
+Database migrations written in Go. https://github.com/golang-migrate/migrate
+
+Use it as CLI:
+
+```bash
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.16.2
+```
+
+Run migrations:
+
+```bash
+migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
+```
+
+Migration using files from:
+
+```bash
+/app/db/migrations/000001_init_schema.{up/down}.sql -- up used for upstream migration
+                                                    -- down for downstream migration
+```
+
+In case of failure and 'dirty database' connect to db with psql and run:
+
+```bash
+update schema_migrations set dirty=false;
+```
+
+## Database examination
+
+From host machine, not from docker container, run:
+
+```bash
+docker exec -it tch_postgres bash
+```
+
+Inside of the docker container named tch_postgres, run:
+
+```bash
+psql -U postgres golang_postgres
+```
+
+```bash
+\dt
+```
+
+If table 'users' not present run migrations, else:
+
+```bash
+SELECT * FROM users;
+```
+
+## Request examples
+
+User creation request example:
+
+```bash
+curl -v  POST http://localhost:8000/api/auth/register -H "Content-type: application/json" -d '{"email": "hello@world", "name":"world", "password":"hello"}'
+```
+
+Response body:
+
+```json
 {
-  Data: {
+  "Data": {
     "user": {
       "id": "143a5c7a-8e4b-4081-9da8-8005ee7b2e6f",
       "name": "world",
@@ -151,25 +209,33 @@ Response body:
       "updated_at": "2023-09-25T07:42:26.804Z"
     }
   },
-  Status: "success"
+  "Status": "success"
 }
 ```
 
-- User login request example:
-`curl -v  POST http://localhost:8000/api/auth/login -H "Content-type: application/json" -d '{"email": "hello@world", "password":"hello"}'`
+User login request example:
+
+```bash
+curl -v  POST http://localhost:8000/api/auth/login -H "Content-type: application/json" -d '{"email": "hello@world", "password":"hello"}'
+```
 
 Response body:
-```
+
+```json
 {
-  "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZkNTU1MTUtZjYxMS00MTgyLTgwOGUtZjgwY2E1MjNkM2MzIiwidXNlcm5hbWUiOiJ3b3JsZCIsImV4cCI6MTY5NTcxNjk0MCwiaWF0IjoxNjk1NjMwNTQwfQ.JEJkT1vQs_WWFZ_fAPe2i1ScZavD0LgQOGzVJH-coXo"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWZkNTU1MTUtZjYxMS00MTgyLTgwOGUtZjgwY2E1MjNkM2MzIiwidXNlcm5hbWUiOiJ3b3JsZCIsImV4cCI6MTY5NTcxNjk0MCwiaWF0IjoxNjk1NjMwNTQwfQ.JEJkT1vQs_WWFZ_fAPe2i1ScZavD0LgQOGzVJH-coXo"
 }
 ```
 
 Token usage for protected endpoint:
-`curl -X GET "http://localhost:8000/protected/userinfo" -H "Authorization: Bearer <token generated by login endpoint>"`
+
+```bash
+curl -X GET "http://localhost:8000/protected/userinfo" -H "Authorization: Bearer <token generated by login endpoint>"
+```
 
 Response body:
-```
+
+```json
 {
   "user": {
     "id": "5fd55515-f611-4182-808e-f80ca523d3c3",
@@ -184,4 +250,7 @@ Response body:
   }
 }
 ```
+
+## API diagrams
+
 ![API Diagram](./api.drawio.svg)
