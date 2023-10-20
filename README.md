@@ -90,7 +90,7 @@ Swagger requires env variable **SERVER_HOSTNAME** defined in .env file
 Documentation is available at:
 
 - http://localhost:8000/api/docs/index.html
-- https://hello-backend-7125.onrender.com/swagger/index.html
+- https://dev-backend-b4vo.onrender.com/api/docs/index.html  
 
 To updated swagger after changing the code run from the repo root:
 
