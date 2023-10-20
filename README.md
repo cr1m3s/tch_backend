@@ -2,7 +2,7 @@
 
 Backend can be available at:
 
-- https://hello-backend-7125.onrender.com/
+- https://dev-backend-b4vo.onrender.com/
 
 ## Local run in Docker
 
