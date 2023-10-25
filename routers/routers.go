@@ -32,6 +32,8 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
+
+	protected.Use(middleware.PasswordMiddleware(AuthController))
 	protected.PATCH("/user-patch", AuthController.UserPatch)
 
 	return server

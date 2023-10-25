@@ -97,7 +97,7 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 }
 
 // @User_update godoc
-// @Summary		POST request to update user
+// @Summary		PATCH request to update user
 // @Description	requires valid token
 // @Tags		user_update
 // @Security	JWT
@@ -150,4 +150,16 @@ func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password Reset Email Has Been Sent"))
+}
+
+func (t *UsersController) GetPassword(ctx *gin.Context) string {
+	userID := ctx.GetInt64("user_id")
+	user, err := t.userService.UserInfo(ctx, userID)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed("No user found."))
+		return ""
+	}
+
+	return user.Password
 }

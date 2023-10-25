@@ -4,8 +4,6 @@ definitions:
     properties:
       email:
         type: string
-    required:
-    - email
     type: object
   models.InLogin:
     properties:
@@ -156,7 +154,7 @@ paths:
             type: object
       security:
       - JWT: []
-      summary: POST request to update user
+      summary: PATCH request to update user
       tags:
       - user_update
   /protected/userinfo:
