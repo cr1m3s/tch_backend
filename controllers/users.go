@@ -92,8 +92,18 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
+	userResponse := models.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Photo:     user.Photo,
+		Verified:  user.Verified,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
 
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(userResponse))
 }
 
 // @User_update godoc
@@ -152,6 +162,8 @@ func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password Reset Email Has Been Sent"))
 }
 
+// method used for password-middleware
+// won't be publick endpoint
 func (t *UsersController) GetPassword(ctx *gin.Context) string {
 	userID := ctx.GetInt64("user_id")
 	user, err := t.userService.UserInfo(ctx, userID)
