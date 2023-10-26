@@ -15,6 +15,7 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	AuthController := controllers.NewUsersController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
+	AuthFacebookController := controllers.NewAuthFacebookController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 
 	api := server.Group("/api")
@@ -26,6 +27,7 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	api.POST("/auth/login", AuthController.UserLogin)
 	api.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
 	api.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
+	api.GET("/auth/login-facebook", AuthFacebookController.LoginFacebook)
 	api.POST("/auth/password-reset", AuthController.PasswordReset)
 
 	protected := server.Group("/protected")
