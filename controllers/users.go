@@ -38,7 +38,7 @@ func (t *UsersController) UserLogin(ctx *gin.Context) {
 
 	token, err := t.userService.UserLogin(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed(err.Error()))
 		return
 	}
 
