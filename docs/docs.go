@@ -164,7 +164,7 @@ const docTemplate = `{
                 "tags": [
                     "user_update"
                 ],
-                "summary": "POST request to update user",
+                "summary": "PATCH request to update user",
                 "parameters": [
                     {
                         "type": "string",
@@ -233,9 +233,6 @@ const docTemplate = `{
     "definitions": {
         "models.EmailRequest": {
             "type": "object",
-            "required": [
-                "email"
-            ],
             "properties": {
                 "email": {
                     "type": "string"
