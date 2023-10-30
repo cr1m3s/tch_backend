@@ -63,7 +63,7 @@ func (t *UsersController) UserRegister(ctx *gin.Context) {
 
 	user, err := t.userService.UserRegister(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed(err.Error()))
 		return
 	}
 
@@ -88,7 +88,7 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 
 	user, err := t.userService.UserInfo(ctx, userID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusNotFound, models.NewResponseFailed(err.Error()))
 		return
 	}
 
