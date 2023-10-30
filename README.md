@@ -77,6 +77,7 @@ Run the application inside the container.
 
 ```bash
 go mod download
+go mod vendor
 go run main.go
 ```
 
