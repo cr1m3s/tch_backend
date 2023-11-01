@@ -13,3 +13,23 @@ CREATE TABLE "users" (
 );
 
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+CREATE TABLE "advertisements" (
+    "id" BIGSERIAL NOT NULL,
+    "title" VARCHAR NOT NULL,
+    "provider" VARCHAR NOT NULL,
+    "attachment" VARCHAR NOT NULL,
+    "experience"  VARCHAR NOT NULL, 
+    "category" VARCHAR NOT NULL,
+    "time" VARCHAR NOT NULL,
+    "price" SERIAL NOT NULL,
+    "format" VARCHAR NOT NULL,
+    "language" VARCHAR NOT NULL,
+    "description" VARCHAR NOT NULL,
+    "mobile_phone" VARCHAR NOT NULL,
+    "email" VARCHAR NOT NULL,
+    "telegram" VARCHAR NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "advertisement_pkey" PRIMARY KEY ("id")
+);

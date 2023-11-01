@@ -5,11 +5,51 @@ definitions:
       email:
         type: string
     type: object
+  models.Id:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   models.InLogin:
     properties:
       email:
         type: string
       password:
+        type: string
+    type: object
+  queries.Advertisement:
+    properties:
+      attachment:
+        type: string
+      category:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      experience:
+        type: string
+      format:
+        type: string
+      id:
+        type: integer
+      language:
+        type: string
+      mobile_phone:
+        type: string
+      price:
+        type: integer
+      provider:
+        type: string
+      telegram:
+        type: string
+      time:
+        type: string
+      title:
         type: string
     type: object
   queries.User:
@@ -91,7 +131,7 @@ paths:
       parameters:
       - description: user email for update
         in: body
-        name: password_reset
+        name: password-reset
         required: true
         schema:
           $ref: '#/definitions/models.EmailRequest'
@@ -105,7 +145,7 @@ paths:
             type: object
       summary: POST request to update password
       tags:
-      - password_reset
+      - password-reset
   /api/auth/register:
     post:
       consumes:
@@ -129,6 +169,69 @@ paths:
       summary: POST request for registration
       tags:
       - register
+  /api/protected/advertisement-create:
+    post:
+      description: endpoint for advertisement creation
+      parameters:
+      - description: advertisement information
+        in: body
+        name: advertisement-create
+        required: true
+        schema:
+          $ref: '#/definitions/queries.Advertisement'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request to create advertisement
+      tags:
+      - advertisement-create
+  /api/protected/advertisement-delete:
+    delete:
+      description: endpoint for advertisement deletion by id
+      parameters:
+      - description: advertisement id
+        in: body
+        name: advertisement-delete
+        required: true
+        schema:
+          $ref: '#/definitions/models.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: PATCH request to delete advertisement
+      tags:
+      - advertisement-delete
+  /api/protected/advertisement-patch:
+    patch:
+      description: endpoint for advertisement update
+      parameters:
+      - description: advertisement information
+        in: body
+        name: advertisement-patch
+        required: true
+        schema:
+          $ref: '#/definitions/queries.Advertisement'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: PATCH request to update advertisement
+      tags:
+      - advertisement-patch
   /protected/user-patch:
     patch:
       description: requires valid token
@@ -140,7 +243,7 @@ paths:
         type: string
       - description: user info for update
         in: body
-        name: user_info
+        name: userinfo
         required: true
         schema:
           $ref: '#/definitions/queries.User'
@@ -156,7 +259,7 @@ paths:
       - JWT: []
       summary: PATCH request to update user
       tags:
-      - user_update
+      - user-patch
   /protected/userinfo:
     get:
       description: requires valid token
@@ -178,7 +281,7 @@ paths:
       - JWT: []
       summary: Get request to see user info
       tags:
-      - user_info
+      - userinfo
 schemes:
 - http
 - https

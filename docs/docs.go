@@ -90,13 +90,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "password_reset"
+                    "password-reset"
                 ],
                 "summary": "POST request to update password",
                 "parameters": [
                     {
                         "description": "user email for update",
-                        "name": "password_reset",
+                        "name": "password-reset",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -150,6 +150,102 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/protected/advertisement-create": {
+            "post": {
+                "description": "endpoint for advertisement creation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-create"
+                ],
+                "summary": "POST request to create advertisement",
+                "parameters": [
+                    {
+                        "description": "advertisement information",
+                        "name": "advertisement-create",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/queries.Advertisement"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/advertisement-delete": {
+            "delete": {
+                "description": "endpoint for advertisement deletion by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-delete"
+                ],
+                "summary": "PATCH request to delete advertisement",
+                "parameters": [
+                    {
+                        "description": "advertisement id",
+                        "name": "advertisement-delete",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/protected/advertisement-patch": {
+            "patch": {
+                "description": "endpoint for advertisement update",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-patch"
+                ],
+                "summary": "PATCH request to update advertisement",
+                "parameters": [
+                    {
+                        "description": "advertisement information",
+                        "name": "advertisement-patch",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/queries.Advertisement"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/user-patch": {
             "patch": {
                 "security": [
@@ -162,7 +258,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user_update"
+                    "user-patch"
                 ],
                 "summary": "PATCH request to update user",
                 "parameters": [
@@ -175,7 +271,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "user info for update",
-                        "name": "user_info",
+                        "name": "userinfo",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -206,7 +302,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user_info"
+                    "userinfo"
                 ],
                 "summary": "Get request to see user info",
                 "parameters": [
@@ -239,6 +335,17 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Id": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.InLogin": {
             "type": "object",
             "properties": {
@@ -246,6 +353,56 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "queries.Advertisement": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "mobile_phone": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "provider": {
+                    "type": "string"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }

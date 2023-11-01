@@ -70,10 +70,10 @@ func (t *UsersController) UserRegister(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, models.NewResponseSuccess(user))
 }
 
-// @User_info	godoc
+// @Userinfo	godoc
 // @Summary		Get request to see user info
 // @Description	requires valid token
-// @Tags		user_info
+// @Tags		userinfo
 // @Security	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Produce		json
@@ -106,13 +106,13 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(userResponse))
 }
 
-// @User_update godoc
+// @User-patch godoc
 // @Summary		PATCH request to update user
 // @Description	requires valid token
-// @Tags		user_update
+// @Tags		user-patch
 // @Security	JWT
 // @Param		Authorization header string true "Insert your access token"
-// @Param		user_info body queries.User true "user info for update"
+// @Param		userinfo body queries.User true "user info for update"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/user-patch [patch]
@@ -136,11 +136,11 @@ func (t *UsersController) UserPatch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 }
 
-// @Password_reset godoc
+// @Password-reset godoc
 // @Summary		POST request to update password
 // @Description	requires registred email address
-// @Tags		password_reset
-// @Param		password_reset body models.EmailRequest true "user email for update"
+// @Tags		password-reset
+// @Param		password-reset body models.EmailRequest true "user email for update"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/api/auth/password-reset [post]
@@ -174,4 +174,40 @@ func (t *UsersController) GetPassword(ctx *gin.Context) string {
 	}
 
 	return user.Password
+}
+
+// @Advertisement-create godoc
+// @Summary		POST request to create advertisement
+// @Description	endpoint for advertisement creation
+// @Tags		advertisement-create
+// @Param		advertisement-create body queries.Advertisement true "advertisement information"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/api/protected/advertisement-create [post]
+func (t *UsersController) AdvCreate(ctx *gin.Context) {
+	//
+}
+
+// @Advertisement-patch godoc
+// @Summary		PATCH request to update advertisement
+// @Description	endpoint for advertisement update
+// @Tags		advertisement-patch
+// @Param		advertisement-patch body queries.Advertisement true "advertisement information"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/api/protected/advertisement-patch [patch]
+func (t *UsersController) AdvPatch(ctx *gin.Context) {
+	//
+}
+
+// @Advertisement-delete godoc
+// @Summary		PATCH request to delete advertisement
+// @Description	endpoint for advertisement deletion by id
+// @Tags		advertisement-delete
+// @Param		advertisement-delete body models.Id true "advertisement id"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/api/protected/advertisement-delete [delete]
+func (t *UsersController) AdvDelete(ctx *gin.Context) {
+	//
 }
