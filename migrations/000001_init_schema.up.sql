@@ -18,6 +18,7 @@ CREATE TABLE "advertisements" (
     "id" BIGSERIAL NOT NULL,
     "title" VARCHAR NOT NULL,
     "provider" VARCHAR NOT NULL,
+    "provider_id" BIGSERIAL NOT NULL,
     "attachment" VARCHAR NOT NULL,
     "experience"  VARCHAR NOT NULL, 
     "category" VARCHAR NOT NULL,

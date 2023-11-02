@@ -179,7 +179,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/queries.Advertisement"
+                            "$ref": "#/definitions/models.AdvertisementInput"
                         }
                     }
                 ],
@@ -238,12 +238,19 @@ const docTemplate = `{
                 "summary": "PATCH request to update advertisement",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "advertisement information",
                         "name": "advertisement-patch",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/queries.Advertisement"
+                            "$ref": "#/definitions/models.AdvertisementUpdate"
                         }
                     }
                 ],
@@ -339,6 +346,85 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AdvertisementInput": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "mobile_phone": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdvertisementUpdate": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "mobile_phone": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.EmailRequest": {
             "type": "object",
             "properties": {
@@ -365,56 +451,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "queries.Advertisement": {
-            "type": "object",
-            "properties": {
-                "attachment": {
-                    "type": "string"
-                },
-                "category": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "experience": {
-                    "type": "string"
-                },
-                "format": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "language": {
-                    "type": "string"
-                },
-                "mobile_phone": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "integer"
-                },
-                "provider": {
-                    "type": "string"
-                },
-                "telegram": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "title": {
                     "type": "string"
                 }
             }

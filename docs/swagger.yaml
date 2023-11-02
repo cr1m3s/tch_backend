@@ -1,5 +1,57 @@
 basePath: /
 definitions:
+  models.AdvertisementInput:
+    properties:
+      attachment:
+        type: string
+      category:
+        type: string
+      description:
+        type: string
+      experience:
+        type: string
+      format:
+        type: string
+      language:
+        type: string
+      mobile_phone:
+        type: string
+      price:
+        type: integer
+      telegram:
+        type: string
+      time:
+        type: string
+      title:
+        type: string
+    type: object
+  models.AdvertisementUpdate:
+    properties:
+      attachment:
+        type: string
+      category:
+        type: string
+      description:
+        type: string
+      experience:
+        type: string
+      format:
+        type: string
+      id:
+        type: integer
+      language:
+        type: string
+      mobile_phone:
+        type: string
+      price:
+        type: integer
+      telegram:
+        type: string
+      time:
+        type: string
+      title:
+        type: string
+    type: object
   models.EmailRequest:
     properties:
       email:
@@ -17,39 +69,6 @@ definitions:
       email:
         type: string
       password:
-        type: string
-    type: object
-  queries.Advertisement:
-    properties:
-      attachment:
-        type: string
-      category:
-        type: string
-      created_at:
-        type: string
-      description:
-        type: string
-      email:
-        type: string
-      experience:
-        type: string
-      format:
-        type: string
-      id:
-        type: integer
-      language:
-        type: string
-      mobile_phone:
-        type: string
-      price:
-        type: integer
-      provider:
-        type: string
-      telegram:
-        type: string
-      time:
-        type: string
-      title:
         type: string
     type: object
   queries.User:
@@ -183,7 +202,7 @@ paths:
         name: advertisement-create
         required: true
         schema:
-          $ref: '#/definitions/queries.Advertisement'
+          $ref: '#/definitions/models.AdvertisementInput'
       produces:
       - application/json
       responses:
@@ -222,12 +241,17 @@ paths:
     patch:
       description: endpoint for advertisement update
       parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: advertisement information
         in: body
         name: advertisement-patch
         required: true
         schema:
-          $ref: '#/definitions/queries.Advertisement'
+          $ref: '#/definitions/models.AdvertisementUpdate'
       produces:
       - application/json
       responses:

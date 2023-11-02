@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/cr1m3s/tch_backend/models"
-	"github.com/cr1m3s/tch_backend/queries"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,18 +14,24 @@ import (
 // @Tags		advertisement-create 
 // @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"	 
-// @Param		advertisement-create body queries.Advertisement true "advertisement information"
+// @Param		advertisement-create body models.AdvertisementInput true "advertisement information"
 // @Produce		json              
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-create [post]
 func (t *UsersController) AdvCreate(ctx *gin.Context) {
-	var inputModel queries.Advertisement
+	userID := ctx.GetInt64("user_id")
+	if userID == 0 {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
+		return	
+	}
+
+	var inputModel models.AdvertisementInput 
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	advertisement, err := t.userService.AdvCreate(ctx, inputModel)
+	advertisement, err := t.userService.AdvCreate(ctx, inputModel, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -39,12 +44,25 @@ func (t *UsersController) AdvCreate(ctx *gin.Context) {
 // @Summary		PATCH request to update advertisement
 // @Description	endpoint for advertisement update
 // @Tags		advertisement-patch  
-// @Param		advertisement-patch body queries.Advertisement true "advertisement information"
+// @Param		Authorization header string true "Insert your access token"	 
+// @Param		advertisement-patch body models.AdvertisementUpdate true "advertisement information"
 // @Produce		json              
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-patch [patch]
 func (t *UsersController) AdvPatch(ctx *gin.Context) {
-	//                            
+	var inputModel models.AdvertisementUpdate
+	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+
+	advertisement, err := t.userService.AdvPatch(ctx, inputModel)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisement))
 }                              
                                
 // @Advertisement-delete godoc 
