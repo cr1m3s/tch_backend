@@ -65,6 +65,8 @@ func (t *UserService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdat
   		Telegram: advertisement.Telegram,
 	}
 
+	// this BS needed to transfer data only from fields with values
+	// both stucts should have same number of fields
 	advValue := reflect.ValueOf(advertisementTmp).Elem()
 	patchValue := reflect.ValueOf(patch)	
 	for i := 0; i < advValue.NumField(); i++ {
