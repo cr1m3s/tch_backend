@@ -175,39 +175,3 @@ func (t *UsersController) GetPassword(ctx *gin.Context) string {
 
 	return user.Password
 }
-
-// @Advertisement-create godoc
-// @Summary		POST request to create advertisement
-// @Description	endpoint for advertisement creation
-// @Tags		advertisement-create
-// @Param		advertisement-create body queries.Advertisement true "advertisement information"
-// @Produce		json
-// @Success		200 {object} map[string]interface{}
-// @Router		/api/protected/advertisement-create [post]
-func (t *UsersController) AdvCreate(ctx *gin.Context) {
-	//
-}
-
-// @Advertisement-patch godoc
-// @Summary		PATCH request to update advertisement
-// @Description	endpoint for advertisement update
-// @Tags		advertisement-patch
-// @Param		advertisement-patch body queries.Advertisement true "advertisement information"
-// @Produce		json
-// @Success		200 {object} map[string]interface{}
-// @Router		/api/protected/advertisement-patch [patch]
-func (t *UsersController) AdvPatch(ctx *gin.Context) {
-	//
-}
-
-// @Advertisement-delete godoc
-// @Summary		PATCH request to delete advertisement
-// @Description	endpoint for advertisement deletion by id
-// @Tags		advertisement-delete
-// @Param		advertisement-delete body models.Id true "advertisement id"
-// @Produce		json
-// @Success		200 {object} map[string]interface{}
-// @Router		/api/protected/advertisement-delete [delete]
-func (t *UsersController) AdvDelete(ctx *gin.Context) {
-	//
-}

@@ -150,8 +150,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/protected/advertisement-create": {
+        "/protected/advertisement-create": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for advertisement creation",
                 "produces": [
                     "application/json"
@@ -161,6 +166,13 @@ const docTemplate = `{
                 ],
                 "summary": "POST request to create advertisement",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "advertisement information",
                         "name": "advertisement-create",
@@ -182,7 +194,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/protected/advertisement-delete": {
+        "/protected/advertisement-delete": {
             "delete": {
                 "description": "endpoint for advertisement deletion by id",
                 "produces": [
@@ -214,7 +226,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/protected/advertisement-patch": {
+        "/protected/advertisement-patch": {
             "patch": {
                 "description": "endpoint for advertisement update",
                 "produces": [

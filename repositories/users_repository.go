@@ -7,6 +7,7 @@ import (
 )
 
 type UsersRepositoryInterface interface {
+	AdvertisementsRepositoryInterface
 	CreateUser(ctx context.Context, arg queries.CreateUserParams) (queries.User, error)
 	DeleteUser(ctx context.Context, id int64) error
 	GetUserByEmail(ctx context.Context, email string) (queries.User, error)

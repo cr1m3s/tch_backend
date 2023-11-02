@@ -169,10 +169,15 @@ paths:
       summary: POST request for registration
       tags:
       - register
-  /api/protected/advertisement-create:
+  /protected/advertisement-create:
     post:
       description: endpoint for advertisement creation
       parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: advertisement information
         in: body
         name: advertisement-create
@@ -187,10 +192,12 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: POST request to create advertisement
       tags:
       - advertisement-create
-  /api/protected/advertisement-delete:
+  /protected/advertisement-delete:
     delete:
       description: endpoint for advertisement deletion by id
       parameters:
@@ -211,7 +218,7 @@ paths:
       summary: PATCH request to delete advertisement
       tags:
       - advertisement-delete
-  /api/protected/advertisement-patch:
+  /protected/advertisement-patch:
     patch:
       description: endpoint for advertisement update
       parameters:
