@@ -206,6 +206,13 @@ const docTemplate = `{
                 "summary": "PATCH request to delete advertisement",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "advertisement id",
                         "name": "advertisement-delete",
                         "in": "body",
@@ -391,6 +398,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "category": {
+                    "type": "string"
+                },
+                "created_at": {
                     "type": "string"
                 },
                 "description": {

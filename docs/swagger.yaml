@@ -31,6 +31,8 @@ definitions:
         type: string
       category:
         type: string
+      created_at:
+        type: string
       description:
         type: string
       experience:
@@ -220,6 +222,11 @@ paths:
     delete:
       description: endpoint for advertisement deletion by id
       parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: advertisement id
         in: body
         name: advertisement-delete
