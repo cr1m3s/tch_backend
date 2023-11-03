@@ -16,3 +16,16 @@ func NewUsersRepository() repositories.UsersRepositoryInterface {
 func SetUsersRepository(u repositories.UsersRepositoryInterface) {
 	usersRepository = u
 }
+
+var advertisementsRepository repositories.AdvertisementsRepositoryInterface
+
+func NewAdvertisementsRepository() repositories.AdvertisementsRepositoryInterface {
+	if advertisementsRepository == nil {
+		advertisementsRepository = repositories.NewAdvertisementsRepository()
+	}
+	return advertisementsRepository
+}
+
+func SetAdvertisementsRepository(u repositories.AdvertisementsRepositoryInterface) {
+	advertisementsRepository = u
+}
