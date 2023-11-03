@@ -83,38 +83,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/password-reset": {
-            "post": {
-                "description": "requires registred email address",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "password-reset"
-                ],
-                "summary": "POST request to update password",
-                "parameters": [
-                    {
-                        "description": "user email for update",
-                        "name": "password-reset",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.EmailRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/api/auth/register": {
             "post": {
                 "description": "requires username and password for registration",
@@ -136,6 +104,38 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/queries.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/reset-password": {
+            "post": {
+                "description": "requires registred email address",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset-password"
+                ],
+                "summary": "POST request to update password",
+                "parameters": [
+                    {
+                        "description": "user email for update",
+                        "name": "reset-password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EmailRequest"
                         }
                     }
                 ],

@@ -136,14 +136,14 @@ func (t *UsersController) UserPatch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 }
 
-// @Password-reset godoc
+// @Reset-password godoc
 // @Summary		POST request to update password
 // @Description	requires registred email address
-// @Tags		password-reset
-// @Param		password-reset body models.EmailRequest true "user email for update"
+// @Tags		reset-password
+// @Param		reset-password	body models.EmailRequest true "user email for update"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
-// @Router		/api/auth/password-reset [post]
+// @Router		/api/auth/reset-password [post]
 func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	var userEmail models.EmailRequest
 
