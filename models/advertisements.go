@@ -19,7 +19,7 @@ type AdvertisementInput struct {
 type AdvertisementUpdate struct{
 	ID			int64	  `json:"id"`
 	Title       string    `json:"title"`
-	CreatedAt	time.Time  `json:"created_at"`
+	CreatedAt	time.Time `json:"created_at"`
 	Attachment  string    `json:"attachment"`
 	Experience  string    `json:"experience"`
 	Category    string    `json:"category"`

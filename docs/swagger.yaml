@@ -146,27 +146,6 @@ paths:
       summary: POST request for login
       tags:
       - login
-  /api/auth/password-reset:
-    post:
-      description: requires registred email address
-      parameters:
-      - description: user email for update
-        in: body
-        name: password-reset
-        required: true
-        schema:
-          $ref: '#/definitions/models.EmailRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-      summary: POST request to update password
-      tags:
-      - password-reset
   /api/auth/register:
     post:
       consumes:
@@ -190,6 +169,27 @@ paths:
       summary: POST request for registration
       tags:
       - register
+  /api/auth/reset-password:
+    post:
+      description: requires registred email address
+      parameters:
+      - description: user email for update
+        in: body
+        name: reset-password
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request to update password
+      tags:
+      - reset-password
   /protected/advertisement-create:
     post:
       description: endpoint for advertisement creation

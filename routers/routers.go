@@ -28,7 +28,7 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	api.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
 	api.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
 	api.GET("/auth/login-facebook", AuthFacebookController.LoginFacebook)
-	api.POST("/auth/password-reset", AuthController.PasswordReset)
+	api.POST("/auth/reset-password", AuthController.PasswordReset)
 
 	protected := server.Group("/protected")
 
