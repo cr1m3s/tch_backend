@@ -2,15 +2,26 @@ package services
 
 import (
 	"fmt"
-	"reflect"
 	"time"
 
+	"github.com/cr1m3s/tch_backend/di"
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/queries"
+	"github.com/cr1m3s/tch_backend/repositories"
 	"github.com/gin-gonic/gin"
 )
 
-func (t *UserService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64) (queries.Advertisement, error) {
+type AdvertisementService struct {
+	db repositories.AdvertisementsRepositoryInterface
+}
+
+func NewAdvertisementService() *AdvertisementService {
+	return &AdvertisementService{
+		db: di.NewAdvertisementsRepository(),
+	}
+}
+
+func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64) (queries.Advertisement, error) {
 
 	user, err := t.db.GetUserById(ctx, userID)
 	if err != nil {
@@ -43,7 +54,7 @@ func (t *UserService) AdvCreate(ctx *gin.Context, inputModel models.Advertisemen
 	return advertisement, nil
 }
 
-func (t *UserService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate) (queries.Advertisement, error) {
+func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate) (queries.Advertisement, error) {
 	advertisement, err := t.db.GetAdvertisementByID(ctx, patch.ID)
 
 	if err != nil {
@@ -66,19 +77,6 @@ func (t *UserService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdat
 		Telegram:    advertisement.Telegram,
 	}
 
-	// this BS needed to transfer data only from fields with values
-	// both stucts should have same number of fields
-	advValue := reflect.ValueOf(advertisementTmp).Elem()
-	patchValue := reflect.ValueOf(patch)
-	for i := 0; i < advValue.NumField(); i++ {
-		field := advValue.Field(i)
-		updateField := patchValue.Field(i)
-
-		if updateField.IsValid() && !updateField.IsZero() {
-			field.Set(updateField)
-		}
-	}
-
 	result, err := t.db.UpdateAdvertisement(ctx, *advertisementTmp)
 
 	if err != nil {
@@ -88,7 +86,7 @@ func (t *UserService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdat
 	return result, nil
 }
 
-func (t *UserService) AdvDelete(ctx *gin.Context, advId int64, userId int64) error {
+func (t *AdvertisementService) AdvDelete(ctx *gin.Context, advId int64, userId int64) error {
 	advertisement, err := t.db.GetAdvertisementByID(ctx, advId)
 
 	if err != nil {

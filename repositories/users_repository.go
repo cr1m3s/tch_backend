@@ -7,7 +7,6 @@ import (
 )
 
 type UsersRepositoryInterface interface {
-	AdvertisementsRepositoryInterface
 	CreateUser(ctx context.Context, arg queries.CreateUserParams) (queries.User, error)
 	DeleteUser(ctx context.Context, id int64) error
 	GetUserByEmail(ctx context.Context, email string) (queries.User, error)
@@ -19,6 +18,12 @@ type UsersRepositoryInterface interface {
 
 type UsersRepository struct {
 	q *queries.Queries
+}
+
+func NewUsersRepository() *UsersRepository {
+	return &UsersRepository{
+		q: NewAppRepository(),
+	}
 }
 
 func (t *UsersRepository) CreateUser(ctx context.Context, arg queries.CreateUserParams) (queries.User, error) {
@@ -47,10 +52,4 @@ func (t *UsersRepository) ListUsers(ctx context.Context, arg queries.ListUsersPa
 
 func (t *UsersRepository) UpdateUser(ctx context.Context, arg queries.UpdateUserParams) (queries.User, error) {
 	return t.q.UpdateUser(ctx, arg)
-}
-
-func NewUsersRepository() *UsersRepository {
-	return &UsersRepository{
-		q: NewAppRepository(),
-	}
 }

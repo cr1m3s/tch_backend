@@ -4,9 +4,20 @@ import (
 	"net/http"
 
 	"github.com/cr1m3s/tch_backend/models"
+	"github.com/cr1m3s/tch_backend/services"
 
 	"github.com/gin-gonic/gin"
 )
+
+type AdvertisementsController struct {
+	advertisementService *services.AdvertisementService
+}
+
+func NewAdvertisementsController() *AdvertisementsController {
+	return &AdvertisementsController{
+		advertisementService: services.NewAdvertisementService(),
+	}
+}
 
 // @Advertisement-create godoc
 // @Summary		POST request to create advertisement
@@ -18,7 +29,7 @@ import (
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-create [post]
-func (t *UsersController) AdvCreate(ctx *gin.Context) {
+func (t *AdvertisementsController) AdvCreate(ctx *gin.Context) {
 	userID := ctx.GetInt64("user_id")
 	if userID == 0 {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
@@ -31,7 +42,7 @@ func (t *UsersController) AdvCreate(ctx *gin.Context) {
 		return
 	}
 
-	advertisement, err := t.userService.AdvCreate(ctx, inputModel, userID)
+	advertisement, err := t.advertisementService.AdvCreate(ctx, inputModel, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -49,14 +60,14 @@ func (t *UsersController) AdvCreate(ctx *gin.Context) {
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-patch [patch]
-func (t *UsersController) AdvPatch(ctx *gin.Context) {
+func (t *AdvertisementsController) AdvPatch(ctx *gin.Context) {
 	var inputModel models.AdvertisementUpdate
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	advertisement, err := t.userService.AdvPatch(ctx, inputModel)
+	advertisement, err := t.advertisementService.AdvPatch(ctx, inputModel)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -74,22 +85,21 @@ func (t *UsersController) AdvPatch(ctx *gin.Context) {
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-delete [delete]
-func (t *UsersController) AdvDelete(ctx *gin.Context) {
-	var advID models.Id
+func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
+	var inputModel models.AdvertisementDelete
 
-	err := ctx.ShouldBindJSON(&advID)
+	err := ctx.ShouldBindJSON(&inputModel)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	userID := ctx.GetInt64("user_id")
-	if userID == 0 {
+	if inputModel.UserID == 0 {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
 		return
 	}
 
-	err = t.userService.AdvDelete(ctx, advID.Id, userID)
+	err = t.advertisementService.AdvDelete(ctx, inputModel.AdvID, inputModel.UserID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
