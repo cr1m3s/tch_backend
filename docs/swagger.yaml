@@ -73,6 +73,13 @@ definitions:
       password:
         type: string
     type: object
+  models.UserPassword:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
   queries.User:
     properties:
       created_at:
@@ -270,6 +277,32 @@ paths:
       summary: PATCH request to update advertisement
       tags:
       - advertisement-patch
+  /protected/create-password:
+    patch:
+      description: requires token
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: new user password
+        in: body
+        name: create-password
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: PATCH request to create new password
+      tags:
+      - create-password
   /protected/user-patch:
     patch:
       description: requires valid token

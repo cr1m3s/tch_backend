@@ -35,7 +35,7 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
-
+	protected.PATCH("/create-password", AuthController.PasswordCreate)
 	// advertisements block
 	protected.POST("/advertisement-create", AdvController.AdvCreate)
 	protected.PATCH("/advertisement-patch", AdvController.AdvPatch)

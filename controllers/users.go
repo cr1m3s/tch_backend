@@ -162,6 +162,33 @@ func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password Reset Email Has Been Sent"))
 }
 
+// @Create-password godoc
+// @Summary		PATCH request to create new password
+// @Description	requires token
+// @Tags		create-password
+// @Param		Authorization header string true "Insert your access token"
+// @Param		create-password	body models.UserPassword true "new user password"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/create-password [patch]
+func (t *UsersController) PasswordCreate(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
+	var newPassword models.UserPassword
+
+	if err := ctx.ShouldBindJSON(&newPassword); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("New password not provided."))
+	}
+
+	err := t.userService.PasswordCreate(ctx, userID, newPassword)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Failed to create new passowrd."))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password updated."))
+}
+
 // method used for password-middleware
 // won't be publick endpoint
 func (t *UsersController) GetPassword(ctx *gin.Context) string {

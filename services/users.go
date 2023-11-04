@@ -178,6 +178,37 @@ func (t *UserService) PasswordReset(ctx *gin.Context, email models.EmailRequest)
 	return validEmail, nil
 }
 
+func (t *UserService) PasswordCreate(ctx *gin.Context, userID int64, newPassword models.UserPassword) error {
+	if newPassword.Password == "" {
+		return fmt.Errorf("New password not valid.")
+	}
+	patchPassword := HashPassword(newPassword.Password)
+
+	user, err := t.db.GetUserById(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("Failed to find user.")
+	}
+
+	updateUser := queries.UpdateUserParams{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Photo:     user.Photo,
+		Verified:  user.Verified,
+		Password:  patchPassword,
+		Role:      user.Role,
+		UpdatedAt: time.Now(),
+	}
+
+	_, err = t.db.UpdateUser(ctx, updateUser)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (t *UserService) EmailSend(userEmail string, user queries.User) (bool, error) {
 	token, err := GenerateToken(user)
 	if err != nil {
