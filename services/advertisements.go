@@ -54,26 +54,26 @@ func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.Adv
 }
 
 func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate) (queries.Advertisement, error) {
-	advertisement, err := t.db.GetAdvertisementByID(ctx, patch.ID)
+	_, err := t.db.GetAdvertisementByID(ctx, patch.ID)
 
 	if err != nil {
 		return queries.Advertisement{}, err
 	}
 
 	advertisementTmp := &queries.UpdateAdvertisementParams{
-		ID:          advertisement.ID,
-		Title:       advertisement.Title,
+		ID:          patch.ID,
+		Title:       patch.Title,
 		CreatedAt:   time.Now(),
-		Attachment:  advertisement.Attachment,
-		Experience:  advertisement.Experience,
-		Category:    advertisement.Category,
-		Time:        advertisement.Time,
-		Price:       advertisement.Price,
-		Format:      advertisement.Format,
-		Language:    advertisement.Language,
-		Description: advertisement.Description,
-		MobilePhone: advertisement.MobilePhone,
-		Telegram:    advertisement.Telegram,
+		Attachment:  patch.Attachment,
+		Experience:  patch.Experience,
+		Category:    patch.Category,
+		Time:        patch.Time,
+		Price:       patch.Price,
+		Format:      patch.Format,
+		Language:    patch.Language,
+		Description: patch.Description,
+		MobilePhone: patch.MobilePhone,
+		Telegram:    patch.Telegram,
 	}
 
 	result, err := t.db.UpdateAdvertisement(ctx, *advertisementTmp)

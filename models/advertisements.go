@@ -33,6 +33,5 @@ type AdvertisementUpdate struct {
 }
 
 type AdvertisementDelete struct {
-	AdvID  int64 `json:"id"`
-	UserID int64 `json:"provider_id"`
+	AdvID int64 `json:"id"`
 }

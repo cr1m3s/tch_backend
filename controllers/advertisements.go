@@ -88,6 +88,12 @@ func (t *AdvertisementsController) AdvPatch(ctx *gin.Context) {
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-delete [delete]
 func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
+	if userID == 0 {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
+		return
+	}
+
 	var inputModel models.AdvertisementDelete
 
 	err := ctx.ShouldBindJSON(&inputModel)
@@ -96,12 +102,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 		return
 	}
 
-	if inputModel.UserID == 0 {
-		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("user id error"))
-		return
-	}
-
-	err = t.advertisementService.AdvDelete(ctx, inputModel.AdvID, inputModel.UserID)
+	err = t.advertisementService.AdvDelete(ctx, inputModel.AdvID, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
