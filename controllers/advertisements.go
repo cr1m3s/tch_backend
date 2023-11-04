@@ -11,11 +11,13 @@ import (
 
 type AdvertisementsController struct {
 	advertisementService *services.AdvertisementService
+	userService          *services.UserService
 }
 
 func NewAdvertisementsController() *AdvertisementsController {
 	return &AdvertisementsController{
 		advertisementService: services.NewAdvertisementService(),
+		userService:          services.NewUserService(),
 	}
 }
 
@@ -42,7 +44,7 @@ func (t *AdvertisementsController) AdvCreate(ctx *gin.Context) {
 		return
 	}
 
-	advertisement, err := t.advertisementService.AdvCreate(ctx, inputModel, userID)
+	advertisement, err := t.advertisementService.AdvCreate(ctx, inputModel, userID, *t.userService)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return

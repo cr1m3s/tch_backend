@@ -21,9 +21,8 @@ func NewAdvertisementService() *AdvertisementService {
 	}
 }
 
-func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64) (queries.Advertisement, error) {
-
-	user, err := t.db.GetUserById(ctx, userID)
+func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64, u UserService) (queries.Advertisement, error) {
+	user, err := u.db.GetUserById(ctx, userID)
 	if err != nil {
 		return queries.Advertisement{}, err
 	}

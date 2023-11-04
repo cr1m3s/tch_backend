@@ -11,7 +11,6 @@ type AdvertisementsRepositoryInterface interface {
 	UpdateAdvertisement(ctx context.Context, arg queries.UpdateAdvertisementParams) (queries.Advertisement, error)
 	GetAdvertisementByID(ctx context.Context, id int64) (queries.Advertisement, error)
 	DeleteAdvertisementByID(ctx context.Context, id int64) error
-	GetUserById(ctx context.Context, id int64) (queries.User, error)
 }
 
 type AdvertisementsRepository struct {
@@ -38,8 +37,4 @@ func (t *AdvertisementsRepository) GetAdvertisementByID(ctx context.Context, id 
 
 func (t *AdvertisementsRepository) DeleteAdvertisementByID(ctx context.Context, id int64) error {
 	return t.q.DeleteAdvertisementByID(ctx, id)
-}
-
-func (t *AdvertisementsRepository) GetUserById(ctx context.Context, id int64) (queries.User, error) {
-	return t.q.GetUserById(ctx, id)
 }
