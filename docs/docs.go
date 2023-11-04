@@ -439,9 +439,6 @@ const docTemplate = `{
                 "category": {
                     "type": "string"
                 },
-                "created_at": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },

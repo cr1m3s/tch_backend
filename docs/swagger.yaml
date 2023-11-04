@@ -31,8 +31,6 @@ definitions:
         type: string
       category:
         type: string
-      created_at:
-        type: string
       description:
         type: string
       experience:
