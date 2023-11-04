@@ -16,3 +16,7 @@ type EmailRequest struct {
 type Id struct {
 	Id int64 `json:"id" binding:"required"`
 }
+
+type UserPassword struct {
+	Password string `json:"password" form:"password" binding:"required"`
+}

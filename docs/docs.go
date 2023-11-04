@@ -272,6 +272,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/protected/create-password": {
+            "patch": {
+                "description": "requires token",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "create-password"
+                ],
+                "summary": "PATCH request to create new password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "new user password",
+                        "name": "create-password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/user-patch": {
             "patch": {
                 "security": [
@@ -460,6 +499,17 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserPassword": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
                 "password": {
                     "type": "string"
                 }
