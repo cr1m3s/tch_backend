@@ -83,38 +83,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/auth/password-reset": {
-            "post": {
-                "description": "requires registred email address",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "password_reset"
-                ],
-                "summary": "POST request to update password",
-                "parameters": [
-                    {
-                        "description": "user email for update",
-                        "name": "password_reset",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.EmailRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/api/auth/register": {
             "post": {
                 "description": "requires username and password for registration",
@@ -150,6 +118,160 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/auth/reset-password": {
+            "post": {
+                "description": "requires registred email address",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset-password"
+                ],
+                "summary": "POST request to update password",
+                "parameters": [
+                    {
+                        "description": "user email for update",
+                        "name": "reset-password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-create": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint for advertisement creation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-create"
+                ],
+                "summary": "POST request to create advertisement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement information",
+                        "name": "advertisement-create",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-delete": {
+            "delete": {
+                "description": "endpoint for advertisement deletion by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-delete"
+                ],
+                "summary": "PATCH request to delete advertisement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement id",
+                        "name": "advertisement-delete",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-patch": {
+            "patch": {
+                "description": "endpoint for advertisement update",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-patch"
+                ],
+                "summary": "PATCH request to update advertisement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement information",
+                        "name": "advertisement-patch",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/user-patch": {
             "patch": {
                 "security": [
@@ -162,7 +284,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user_update"
+                    "user-patch"
                 ],
                 "summary": "PATCH request to update user",
                 "parameters": [
@@ -175,7 +297,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "user info for update",
-                        "name": "user_info",
+                        "name": "userinfo",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -206,7 +328,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "user_info"
+                    "userinfo"
                 ],
                 "summary": "Get request to see user info",
                 "parameters": [
@@ -231,11 +353,104 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AdvertisementInput": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "mobile_phone": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdvertisementUpdate": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "mobile_phone": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.EmailRequest": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Id": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },

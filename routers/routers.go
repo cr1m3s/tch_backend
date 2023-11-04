@@ -14,6 +14,7 @@ import (
 func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	AuthController := controllers.NewUsersController()
+	AdvController := controllers.NewAdvertisementsController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
 	AuthFacebookController := controllers.NewAuthFacebookController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
@@ -28,12 +29,17 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	api.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
 	api.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
 	api.GET("/auth/login-facebook", AuthFacebookController.LoginFacebook)
-	api.POST("/auth/password-reset", AuthController.PasswordReset)
+	api.POST("/auth/reset-password", AuthController.PasswordReset)
 
 	protected := server.Group("/protected")
 
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
+
+	// advertisements block
+	protected.POST("/advertisement-create", AdvController.AdvCreate)
+	protected.PATCH("/advertisement-patch", AdvController.AdvPatch)
+	protected.DELETE("/advertisement-delete", AdvController.AdvDelete)
 
 	protected.Use(middleware.PasswordMiddleware(AuthController))
 	protected.PATCH("/user-patch", AuthController.UserPatch)

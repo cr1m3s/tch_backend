@@ -151,7 +151,7 @@ func (t *UserService) UserPatch(ctx *gin.Context, patch queries.User) (queries.U
 
 	patchedUser, err := t.db.UpdateUser(ctx, *userTmp)
 	if err != nil {
-		fmt.Println("Faield to create user")
+		fmt.Println("Faield to update user")
 	}
 
 	return patchedUser, nil
