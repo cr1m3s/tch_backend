@@ -22,7 +22,7 @@ func NewAdvertisementService() *AdvertisementService {
 }
 
 func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64, u UserService) (queries.Advertisement, error) {
-	user, err := u.db.GetUserById(ctx, userID)
+	user, err := u.UserInfo(ctx, userID)
 	if err != nil {
 		return queries.Advertisement{}, err
 	}
