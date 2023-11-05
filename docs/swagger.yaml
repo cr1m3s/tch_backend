@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  models.AdvertisementFilter:
+    properties:
+      category:
+        type: string
+      format:
+        type: string
+      language:
+        type: string
+      maxExp:
+        type: integer
+      minExp:
+        type: integer
+      time:
+        type: string
+    type: object
   models.AdvertisementInput:
     properties:
       attachment:
@@ -249,6 +264,52 @@ paths:
       summary: PATCH request to delete advertisement
       tags:
       - advertisement-delete
+  /protected/advertisement-filter:
+    post:
+      description: endpoint for getting specific advertisements
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: advertisement filter
+        in: body
+        name: advertisement-filter
+        required: true
+        schema:
+          $ref: '#/definitions/models.AdvertisementFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request to get advertisement based on params in filter
+      tags:
+      - advertisement-filter
+  /protected/advertisement-getall:
+    get:
+      description: endpoint for getting all advertisements
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GET request to get all advertisement
+      tags:
+      - advertisement-getall
   /protected/advertisement-patch:
     patch:
       description: endpoint for advertisement update

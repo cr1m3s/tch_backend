@@ -32,3 +32,12 @@ type AdvertisementUpdate struct {
 type AdvertisementDelete struct {
 	AdvID int64 `json:"id"`
 }
+
+type AdvertisementFilter struct {
+	Category string `json:"category"`
+	Time     string `json:"time"`
+	Format   string `json:"format"`
+	MinExp   uint8  `json:"min_exp"`
+	MaxExp   uint8  `json:"max_exp"`
+	Language string `json:"language"`
+}

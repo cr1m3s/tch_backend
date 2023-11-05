@@ -110,3 +110,47 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("advertisement deleted"))
 }
+
+// @Advertisement-getall godoc
+// @Summary		GET request to get all advertisement
+// @Description	endpoint for getting all advertisements
+// @Tags		advertisement-getall
+// @Param		Authorization header string true "Insert your access token"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/advertisement-getall [get]
+func (t *AdvertisementsController) AdvGetAll(ctx *gin.Context) {
+	advertisements, err := t.advertisementService.AdvGetAll(ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))
+}
+
+// @Advertisement-filter godoc
+// @Summary		POST request to get advertisement based on params in filter
+// @Description	endpoint for getting specific advertisements
+// @Tags		advertisement-filter
+// @Param		Authorization header string true "Insert your access token"
+// @Param		advertisement-filter body models.AdvertisementFilter true "advertisement filter"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/advertisement-filter [post]
+func (t *AdvertisementsController) AdvGetFiltered(ctx *gin.Context) {
+	var filter models.AdvertisementFilter
+	err := ctx.ShouldBindJSON(&filter)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Filter params not provided."))
+		return
+	}
+
+	advertisements, err := t.advertisementService.AdvGetFiltered(ctx, filter)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))
+}

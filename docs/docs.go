@@ -233,6 +233,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/protected/advertisement-filter": {
+            "post": {
+                "description": "endpoint for getting specific advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-filter"
+                ],
+                "summary": "POST request to get advertisement based on params in filter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement filter",
+                        "name": "advertisement-filter",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-getall": {
+            "get": {
+                "description": "endpoint for getting all advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-getall"
+                ],
+                "summary": "GET request to get all advertisement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/advertisement-patch": {
             "patch": {
                 "description": "endpoint for advertisement update",
@@ -392,6 +461,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AdvertisementFilter": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "maxExp": {
+                    "type": "integer"
+                },
+                "minExp": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
         "models.AdvertisementInput": {
             "type": "object",
             "properties": {

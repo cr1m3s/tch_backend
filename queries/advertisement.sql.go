@@ -117,17 +117,17 @@ WHERE
     ($1 IS NULL OR (category = $1))
     AND ($2 IS NULL OR (time <= $2))
     AND ($3 IS NULL OR (format = $3))
-    AND ($4 IS NULL OR (experience >= $4 AND experience <= $5))
+    AND (($4 IS NULL AND $5 IS NULL) OR (experience >= $4 AND experience <= $5))
     AND ($6 IS NULL OR (language = $6))
 `
 
 type FilterAdvertisementsParams struct {
-	Column1    interface{} `json:"column_1"`
-	Column2    interface{} `json:"column_2"`
-	Column3    interface{} `json:"column_3"`
-	Column4    interface{} `json:"column_4"`
-	Experience string      `json:"experience"`
-	Column6    interface{} `json:"column_6"`
+	Column1 interface{} `json:"column_1"`
+	Column2 interface{} `json:"column_2"`
+	Column3 interface{} `json:"column_3"`
+	Column4 interface{} `json:"column_4"`
+	Column5 interface{} `json:"column_5"`
+	Column6 interface{} `json:"column_6"`
 }
 
 func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisementsParams) ([]Advertisement, error) {
@@ -136,9 +136,50 @@ func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisem
 		arg.Column2,
 		arg.Column3,
 		arg.Column4,
-		arg.Experience,
+		arg.Column5,
 		arg.Column6,
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Advertisement
+	for rows.Next() {
+		var i Advertisement
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Provider,
+			&i.ProviderID,
+			&i.Attachment,
+			&i.Experience,
+			&i.Category,
+			&i.Time,
+			&i.Price,
+			&i.Format,
+			&i.Language,
+			&i.Description,
+			&i.MobilePhone,
+			&i.Email,
+			&i.Telegram,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAdvertisementAll = `-- name: GetAdvertisementAll :many
+SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+`
+
+func (q *Queries) GetAdvertisementAll(ctx context.Context) ([]Advertisement, error) {
+	rows, err := q.db.Query(ctx, getAdvertisementAll)
 	if err != nil {
 		return nil, err
 	}
