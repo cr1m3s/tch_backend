@@ -37,7 +37,7 @@ type AdvertisementFilter struct {
 	Category string `json:"category"`
 	Time     string `json:"time"`
 	Format   string `json:"format"`
-	MinExp   uint8  `json:"min_exp"`
-	MaxExp   uint8  `json:"max_exp"`
+	MinExp   string  `json:"minexp"`
+	MaxExp   string  `json:"maxexp"`
 	Language string `json:"language"`
 }

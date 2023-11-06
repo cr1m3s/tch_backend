@@ -473,11 +473,11 @@ const docTemplate = `{
                 "language": {
                     "type": "string"
                 },
-                "maxExp": {
-                    "type": "integer"
+                "max_exp": {
+                    "type": "string"
                 },
-                "minExp": {
-                    "type": "integer"
+                "min_exp": {
+                    "type": "string"
                 },
                 "time": {
                     "type": "string"

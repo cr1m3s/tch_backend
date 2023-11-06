@@ -112,32 +112,32 @@ func (q *Queries) DeleteAdvertisementByUserID(ctx context.Context, providerID in
 }
 
 const filterAdvertisements = `-- name: FilterAdvertisements :many
-SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
-WHERE
-    ($1 IS NULL OR (category = $1))
-    AND ($2 IS NULL OR (time <= $2))
-    AND ($3 IS NULL OR (format = $3))
-    AND (($4 IS NULL AND $5 IS NULL) OR (experience >= $4 AND experience <= $5))
-    AND ($6 IS NULL OR (language = $6))
+ SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+        WHERE
+        (NULLIF($1, '')::text IS NULL OR category = $1::text)
+        AND (NULLIF($2::text, '') IS NULL OR time <= $1::text)
+        AND (NULLIF($3::text, '') IS NULL OR format = $3::text)
+        AND ((NULLIF($4::text, '') IS NULL AND NULLIF($5::text, '') IS NULL) OR (experience >= $4::text AND experience <= $5::text))
+        AND (NULLIF($6::text, '') IS NULL OR language = $6::text)
 `
 
 type FilterAdvertisementsParams struct {
-	Column1 interface{} `json:"column_1"`
-	Column2 interface{} `json:"column_2"`
-	Column3 interface{} `json:"column_3"`
-	Column4 interface{} `json:"column_4"`
-	Column5 interface{} `json:"column_5"`
-	Column6 interface{} `json:"column_6"`
+	Category interface{} `json:"category"`
+	Time     string      `json:"time"`
+	Format   string      `json:"format"`
+	Minexp   string      `json:"minexp"`
+	Maxexp   string      `json:"maxexp"`
+	Language string      `json:"language"`
 }
 
 func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisementsParams) ([]Advertisement, error) {
 	rows, err := q.db.Query(ctx, filterAdvertisements,
-		arg.Column1,
-		arg.Column2,
-		arg.Column3,
-		arg.Column4,
-		arg.Column5,
-		arg.Column6,
+		arg.Category,
+		arg.Time,
+		arg.Format,
+		arg.Minexp,
+		arg.Maxexp,
+		arg.Language,
 	)
 	if err != nil {
 		return nil, err

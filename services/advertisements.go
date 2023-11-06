@@ -117,17 +117,16 @@ func (t *AdvertisementService) AdvGetAll(ctx *gin.Context) ([]queries.Advertisem
 
 func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.Advertisement, error) {
 
-	filterParams := queries.FilterAdvertisementsParams{
-		Column1: filter.Category,
-		Column2: filter.Time,
-		Column3: filter.Format,
-		Column4: filter.MinExp,
-		Column5: filter.MaxExp,
-		Column6: filter.Language,
+	argFilter := queries.FilterAdvertisementsParams{
+		Category: filter.Category,
+		Time: filter.Time,
+		Format: filter.Format,
+		Minexp: filter.MinExp,
+		Maxexp: filter.MaxExp,
+		Language: filter.Language,
 	}
-
-	advertisements, err := t.db.FilterAdvertisements(ctx, filterParams)
-
+	
+	advertisements, err := t.db.FilterAdvertisements(ctx, argFilter)
 	if err != nil {
 		return nil, err
 	}

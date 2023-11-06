@@ -78,10 +78,10 @@ DELETE FROM advertisements
 WHERE provider_id = $1;
 
 -- name: FilterAdvertisements :many
-SELECT * FROM advertisements
-WHERE
-    (category IS NULL OR (table.category = category))
-    AND ($time IS NULL OR (table.time <= $tme))
-    AND ($format IS NULL OR (table.format = $format))
-    AND (($4 IS NULL AND $5 IS NULL) OR (experience >= $4 AND table.experience <= $5))
-    AND ($language IS NULL OR (table.language = $language));
+ SELECT * FROM advertisements
+        WHERE
+        (NULLIF(sqlc.arg(category), '')::text IS NULL OR category = sqlc.arg(category)::text)
+        AND (NULLIF(sqlc.arg(time)::text, '') IS NULL OR time <= sqlc.arg(category)::text)
+        AND (NULLIF(sqlc.arg(format)::text, '') IS NULL OR format = sqlc.arg(format)::text)
+        AND ((NULLIF(sqlc.arg(minExp)::text, '') IS NULL AND NULLIF(sqlc.arg(maxExp)::text, '') IS NULL) OR (experience >= sqlc.arg(minExp)::text AND experience <= sqlc.arg(maxExp)::text))
+        AND (NULLIF(sqlc.arg(language)::text, '') IS NULL OR language = sqlc.arg(language)::text);
