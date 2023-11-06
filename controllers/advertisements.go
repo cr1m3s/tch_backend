@@ -94,7 +94,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 		return
 	}
 
-	var inputModel models.AdvertisementDelete
+	var inputModel models.AdvertisementID
 
 	err := ctx.ShouldBindJSON(&inputModel)
 	if err != nil {
@@ -102,7 +102,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 		return
 	}
 
-	err = t.advertisementService.AdvDelete(ctx, inputModel.AdvID, userID)
+	err = t.advertisementService.AdvDelete(ctx, inputModel.ID, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -112,7 +112,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 }
 
 // @Advertisement-getall godoc
-// @Summary		GET request to get all advertisement
+// @Summary		GET request to get all advertisements
 // @Description	endpoint for getting all advertisements
 // @Tags		advertisement-getall
 // @Param		Authorization header string true "Insert your access token"
@@ -124,9 +124,37 @@ func (t *AdvertisementsController) AdvGetAll(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
 	}
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))
+}
+
+// @Advertisement-getbyid godoc
+// @Summary		POST request to get advertisement by id
+// @Description	endpoint to get advertisement based on it's id
+// @Tags		advertisement-getbyid
+// @Param		Authorization header string true "Insert your access token"
+// @Param		advertisement-getbyid body models.AdvertisementID true "advertisement ID"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/advertisement-getbyid [post]
+func (t *AdvertisementsController) AdvGetByID(ctx *gin.Context) {
+	var advID models.AdvertisementID
+
+	err := ctx.ShouldBindJSON(&advID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Faield to get advertisement ID"))
+		return
+	}
+	advertisement, err := t.advertisementService.AdvGetByID(ctx, advID.ID)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisement))
 }
 
 // @Advertisement-filter godoc
@@ -150,6 +178,7 @@ func (t *AdvertisementsController) AdvGetFiltered(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
 	}
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))

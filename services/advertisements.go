@@ -115,6 +115,16 @@ func (t *AdvertisementService) AdvGetAll(ctx *gin.Context) ([]queries.Advertisem
 	return advertisements, nil
 }
 
+func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64) (queries.Advertisement, error) {
+
+	advertisement, err := t.db.GetAdvertisementByID(ctx, id)
+
+	if err != nil {
+		return queries.Advertisement{}, err
+	}
+	return advertisement, nil
+}
+
 func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.Advertisement, error) {
 
 	argFilter := queries.FilterAdvertisementsParams{

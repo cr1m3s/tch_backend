@@ -8,12 +8,17 @@ definitions:
         type: string
       language:
         type: string
-      max_exp:
+      maxexp:
         type: string
-      min_exp:
+      minexp:
         type: string
       time:
         type: string
+    type: object
+  models.AdvertisementID:
+    properties:
+      id:
+        type: integer
     type: object
   models.AdvertisementInput:
     properties:
@@ -307,9 +312,35 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: GET request to get all advertisement
+      summary: GET request to get all advertisements
       tags:
       - advertisement-getall
+  /protected/advertisement-getbyid:
+    post:
+      description: endpoint to get advertisement based on it's id
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: advertisement ID
+        in: body
+        name: advertisement-getbyid
+        required: true
+        schema:
+          $ref: '#/definitions/models.AdvertisementID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: POST request to get advertisement by id
+      tags:
+      - advertisement-getbyid
   /protected/advertisement-patch:
     patch:
       description: endpoint for advertisement update

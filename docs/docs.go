@@ -281,7 +281,7 @@ const docTemplate = `{
                 "tags": [
                     "advertisement-getall"
                 ],
-                "summary": "GET request to get all advertisement",
+                "summary": "GET request to get all advertisements",
                 "parameters": [
                     {
                         "type": "string",
@@ -289,6 +289,45 @@ const docTemplate = `{
                         "name": "Authorization",
                         "in": "header",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-getbyid": {
+            "post": {
+                "description": "endpoint to get advertisement based on it's id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-getbyid"
+                ],
+                "summary": "POST request to get advertisement by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement ID",
+                        "name": "advertisement-getbyid",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementID"
+                        }
                     }
                 ],
                 "responses": {
@@ -473,14 +512,22 @@ const docTemplate = `{
                 "language": {
                     "type": "string"
                 },
-                "max_exp": {
+                "maxexp": {
                     "type": "string"
                 },
-                "min_exp": {
+                "minexp": {
                     "type": "string"
                 },
                 "time": {
                     "type": "string"
+                }
+            }
+        },
+        "models.AdvertisementID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
