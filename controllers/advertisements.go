@@ -57,6 +57,7 @@ func (t *AdvertisementsController) AdvCreate(ctx *gin.Context) {
 // @Summary		PATCH request to update advertisement
 // @Description	endpoint for advertisement update
 // @Tags		advertisement-patch
+// @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Param		advertisement-patch body models.AdvertisementUpdate true "advertisement information"
 // @Produce		json
@@ -82,6 +83,7 @@ func (t *AdvertisementsController) AdvPatch(ctx *gin.Context) {
 // @Summary		PATCH request to delete advertisement
 // @Description	endpoint for advertisement deletion by id
 // @Tags		advertisement-delete
+// @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Param		advertisement-delete body models.Id true "advertisement id"
 // @Produce		json
@@ -115,6 +117,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 // @Summary		GET request to get all advertisements
 // @Description	endpoint for getting all advertisements
 // @Tags		advertisement-getall
+// @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
@@ -134,6 +137,7 @@ func (t *AdvertisementsController) AdvGetAll(ctx *gin.Context) {
 // @Summary		POST request to get advertisement by id
 // @Description	endpoint to get advertisement based on it's id
 // @Tags		advertisement-getbyid
+// @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Param		advertisement-getbyid body models.AdvertisementID true "advertisement ID"
 // @Produce		json
@@ -161,6 +165,7 @@ func (t *AdvertisementsController) AdvGetByID(ctx *gin.Context) {
 // @Summary		POST request to get advertisement based on params in filter
 // @Description	endpoint for getting specific advertisements
 // @Tags		advertisement-filter
+// @Security 	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Param		advertisement-filter body models.AdvertisementFilter true "advertisement filter"
 // @Produce		json

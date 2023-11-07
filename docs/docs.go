@@ -196,6 +196,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-delete": {
             "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for advertisement deletion by id",
                 "produces": [
                     "application/json"
@@ -235,6 +240,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-filter": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for getting specific advertisements",
                 "produces": [
                     "application/json"
@@ -274,6 +284,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-getall": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for getting all advertisements",
                 "produces": [
                     "application/json"
@@ -304,6 +319,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-getbyid": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint to get advertisement based on it's id",
                 "produces": [
                     "application/json"
@@ -343,6 +363,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-patch": {
             "patch": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for advertisement update",
                 "produces": [
                     "application/json"

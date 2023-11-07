@@ -266,6 +266,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: PATCH request to delete advertisement
       tags:
       - advertisement-delete
@@ -292,6 +294,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: POST request to get advertisement based on params in filter
       tags:
       - advertisement-filter
@@ -312,6 +316,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: GET request to get all advertisements
       tags:
       - advertisement-getall
@@ -338,6 +344,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: POST request to get advertisement by id
       tags:
       - advertisement-getbyid
@@ -364,6 +372,8 @@ paths:
           schema:
             additionalProperties: true
             type: object
+      security:
+      - JWT: []
       summary: PATCH request to update advertisement
       tags:
       - advertisement-patch
