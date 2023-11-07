@@ -109,18 +109,18 @@ swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -
 
 ## DB code generation
 
-For code generation from SQL to golang we use **sqlc**. Documentation https://docs.sqlc.dev/en/latest/
+For code generation from SQL to golang we use **sqlc**. Documentation https://docs.sqlc.dev/en/v1.23.0/
 
 Install sqlc
 
 ```bash
-go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.23.0
 ```
 
 Create SQL queries in:
 
 ```bash
-./queries/{entity_name}.sql`
+./queries/{entity_name}.sql
 ```
 
 In root folder with present `sqlc.yaml` file run:
