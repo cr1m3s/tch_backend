@@ -103,3 +103,43 @@ func (t *AdvertisementService) AdvDelete(ctx *gin.Context, advId int64, userId i
 
 	return nil
 }
+
+func (t *AdvertisementService) AdvGetAll(ctx *gin.Context) ([]queries.Advertisement, error) {
+
+	advertisements, err := t.db.GetAdvertisementAll(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return advertisements, nil
+}
+
+func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64) (queries.Advertisement, error) {
+
+	advertisement, err := t.db.GetAdvertisementByID(ctx, id)
+
+	if err != nil {
+		return queries.Advertisement{}, err
+	}
+	return advertisement, nil
+}
+
+func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.Advertisement, error) {
+
+	argFilter := queries.FilterAdvertisementsParams{
+		Category: filter.Category,
+		Time: filter.Time,
+		Format: filter.Format,
+		Minexp: filter.MinExp,
+		Maxexp: filter.MaxExp,
+		Language: filter.Language,
+	}
+	
+	advertisements, err := t.db.FilterAdvertisements(ctx, argFilter)
+	if err != nil {
+		return nil, err
+	}
+
+	return advertisements, nil
+}

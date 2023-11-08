@@ -20,6 +20,9 @@ INSERT INTO advertisements (
 )
 RETURNING *;
 
+-- name: GetAdvertisementAll :many
+SELECT * FROM advertisements;
+
 -- name: GetAdvertisementByID :one
 SELECT * FROM advertisements
 WHERE id = $1;
@@ -49,15 +52,6 @@ AND experience <= $2;
 SELECT * FROM advertisements
 WHERE language = $1;
 
--- name: FilterAdvertisements :many
-SELECT * FROM advertisements
-WHERE
-    ($1 IS NULL OR (category = $1))
-    AND ($2 IS NULL OR (time <= $2))
-    AND ($3 IS NULL OR (format = $3))
-    AND ($4 IS NULL OR (experience >= $4 AND experience <= $5))
-    AND ($6 IS NULL OR (language = $6));
-
 -- name: UpdateAdvertisement :one
 UPDATE advertisements
 set   title = $2,
@@ -82,3 +76,12 @@ WHERE id = $1;
 -- name: DeleteAdvertisementByUserID :exec
 DELETE FROM advertisements
 WHERE provider_id = $1;
+
+-- name: FilterAdvertisements :many
+ SELECT * FROM advertisements
+        WHERE
+        (NULLIF(sqlc.arg(category), '')::text IS NULL OR category = sqlc.arg(category)::text)
+        AND (NULLIF(sqlc.arg(time)::text, '') IS NULL OR time <= sqlc.arg(category)::text)
+        AND (NULLIF(sqlc.arg(format)::text, '') IS NULL OR format = sqlc.arg(format)::text)
+        AND ((NULLIF(sqlc.arg(minExp)::text, '') IS NULL AND NULLIF(sqlc.arg(maxExp)::text, '') IS NULL) OR (experience >= sqlc.arg(minExp)::text AND experience <= sqlc.arg(maxExp)::text))
+        AND (NULLIF(sqlc.arg(language)::text, '') IS NULL OR language = sqlc.arg(language)::text);

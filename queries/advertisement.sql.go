@@ -112,33 +112,74 @@ func (q *Queries) DeleteAdvertisementByUserID(ctx context.Context, providerID in
 }
 
 const filterAdvertisements = `-- name: FilterAdvertisements :many
-SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
-WHERE
-    ($1 IS NULL OR (category = $1))
-    AND ($2 IS NULL OR (time <= $2))
-    AND ($3 IS NULL OR (format = $3))
-    AND ($4 IS NULL OR (experience >= $4 AND experience <= $5))
-    AND ($6 IS NULL OR (language = $6))
+ SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+        WHERE
+        (NULLIF($1, '')::text IS NULL OR category = $1::text)
+        AND (NULLIF($2::text, '') IS NULL OR time <= $1::text)
+        AND (NULLIF($3::text, '') IS NULL OR format = $3::text)
+        AND ((NULLIF($4::text, '') IS NULL AND NULLIF($5::text, '') IS NULL) OR (experience >= $4::text AND experience <= $5::text))
+        AND (NULLIF($6::text, '') IS NULL OR language = $6::text)
 `
 
 type FilterAdvertisementsParams struct {
-	Column1    interface{} `json:"column_1"`
-	Column2    interface{} `json:"column_2"`
-	Column3    interface{} `json:"column_3"`
-	Column4    interface{} `json:"column_4"`
-	Experience string      `json:"experience"`
-	Column6    interface{} `json:"column_6"`
+	Category interface{} `json:"category"`
+	Time     string      `json:"time"`
+	Format   string      `json:"format"`
+	Minexp   string      `json:"minexp"`
+	Maxexp   string      `json:"maxexp"`
+	Language string      `json:"language"`
 }
 
 func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisementsParams) ([]Advertisement, error) {
 	rows, err := q.db.Query(ctx, filterAdvertisements,
-		arg.Column1,
-		arg.Column2,
-		arg.Column3,
-		arg.Column4,
-		arg.Experience,
-		arg.Column6,
+		arg.Category,
+		arg.Time,
+		arg.Format,
+		arg.Minexp,
+		arg.Maxexp,
+		arg.Language,
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Advertisement
+	for rows.Next() {
+		var i Advertisement
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Provider,
+			&i.ProviderID,
+			&i.Attachment,
+			&i.Experience,
+			&i.Category,
+			&i.Time,
+			&i.Price,
+			&i.Format,
+			&i.Language,
+			&i.Description,
+			&i.MobilePhone,
+			&i.Email,
+			&i.Telegram,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAdvertisementAll = `-- name: GetAdvertisementAll :many
+SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+`
+
+func (q *Queries) GetAdvertisementAll(ctx context.Context) ([]Advertisement, error) {
+	rows, err := q.db.Query(ctx, getAdvertisementAll)
 	if err != nil {
 		return nil, err
 	}

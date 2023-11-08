@@ -29,6 +29,15 @@ type AdvertisementUpdate struct {
 	Telegram    string `json:"telegram"`
 }
 
-type AdvertisementDelete struct {
-	AdvID int64 `json:"id"`
+type AdvertisementID struct {
+	ID int64 `json:"id"`
+}
+
+type AdvertisementFilter struct {
+	Category string `json:"category"`
+	Time     string `json:"time"`
+	Format   string `json:"format"`
+	MinExp   string  `json:"minexp"`
+	MaxExp   string  `json:"maxexp"`
+	Language string `json:"language"`
 }

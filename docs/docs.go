@@ -196,6 +196,11 @@ const docTemplate = `{
         },
         "/protected/advertisement-delete": {
             "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for advertisement deletion by id",
                 "produces": [
                     "application/json"
@@ -233,8 +238,136 @@ const docTemplate = `{
                 }
             }
         },
+        "/protected/advertisement-filter": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint for getting specific advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-filter"
+                ],
+                "summary": "POST request to get advertisement based on params in filter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement filter",
+                        "name": "advertisement-filter",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-getall": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint for getting all advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-getall"
+                ],
+                "summary": "GET request to get all advertisements",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-getbyid": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint to get advertisement based on it's id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisement-getbyid"
+                ],
+                "summary": "POST request to get advertisement by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "advertisement ID",
+                        "name": "advertisement-getbyid",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AdvertisementID"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/advertisement-patch": {
             "patch": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "endpoint for advertisement update",
                 "produces": [
                     "application/json"
@@ -392,6 +525,37 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.AdvertisementFilter": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "maxexp": {
+                    "type": "string"
+                },
+                "minexp": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AdvertisementID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.AdvertisementInput": {
             "type": "object",
             "properties": {
