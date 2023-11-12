@@ -171,7 +171,7 @@ docker exec -it tch_postgres bash
 Inside of the docker container named tch_postgres, run:
 
 ```bash
-psql -U postgres golang_postgres
+psql -U postgres store
 ```
 
 ```bash

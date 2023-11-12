@@ -36,12 +36,17 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
 	protected.PATCH("/create-password", AuthController.PasswordCreate)
+
 	// advertisements block
+	// open advertisements endpoints
+	advertisements := server.Group("/open/advertisements")
+	advertisements.GET("/getall", AdvController.AdvGetAll)
+	advertisements.GET("/getbyid/:id", AdvController.AdvGetByID)
+
+	// protected advertisements endpoints
 	protected.POST("/advertisement-create", AdvController.AdvCreate)
 	protected.PATCH("/advertisement-patch", AdvController.AdvPatch)
 	protected.DELETE("/advertisement-delete", AdvController.AdvDelete)
-	protected.GET("/advertisement-getall", AdvController.AdvGetAll)
-	protected.POST("/advertisement-getbyid", AdvController.AdvGetByID)
 	protected.POST("/advertisement-filter", AdvController.AdvGetFiltered)
 
 	protected.Use(middleware.PasswordMiddleware(AuthController))
