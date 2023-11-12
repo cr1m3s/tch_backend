@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/cr1m3s/tch_backend/models"
 	"github.com/cr1m3s/tch_backend/services"
@@ -113,15 +114,12 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("advertisement deleted"))
 }
 
-// @Advertisement-getall godoc
 // @Summary		GET request to get all advertisements
 // @Description	endpoint for getting all advertisements
-// @Tags		advertisement-getall
-// @Security 	JWT
-// @Param		Authorization header string true "Insert your access token"
+// @Tags		advertisements-getall
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
-// @Router		/protected/advertisement-getall [get]
+// @Router		/open/advertisements/getall [get]
 func (t *AdvertisementsController) AdvGetAll(ctx *gin.Context) {
 	advertisements, err := t.advertisementService.AdvGetAll(ctx)
 
@@ -133,25 +131,23 @@ func (t *AdvertisementsController) AdvGetAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))
 }
 
-// @Advertisement-getbyid godoc
-// @Summary		POST request to get advertisement by id
+// @Summary		GET request to get advertisement by id
 // @Description	endpoint to get advertisement based on it's id
-// @Tags		advertisement-getbyid
+// @Tags		open/advertisements/getbyid/{id}
 // @Security 	JWT
-// @Param		Authorization header string true "Insert your access token"
-// @Param		advertisement-getbyid body models.AdvertisementID true "advertisement ID"
+// @Param		id path int true "advertisement ID"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
-// @Router		/protected/advertisement-getbyid [post]
+// @Router		/open/advertisements/getbyid/{id} [get]
 func (t *AdvertisementsController) AdvGetByID(ctx *gin.Context) {
-	var advID models.AdvertisementID
+	idParam := ctx.Param("id")
+	id, err := strconv.ParseInt(idParam, 10, 64)
 
-	err := ctx.ShouldBindJSON(&advID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Faield to get advertisement ID"))
 		return
 	}
-	advertisement, err := t.advertisementService.AdvGetByID(ctx, advID.ID)
+	advertisement, err := t.advertisementService.AdvGetByID(ctx, id)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))

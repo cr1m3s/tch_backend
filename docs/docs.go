@@ -150,6 +150,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/open/advertisements/getall": {
+            "get": {
+                "description": "endpoint for getting all advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisements-getall"
+                ],
+                "summary": "GET request to get all advertisements",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/open/advertisements/getbyid/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint to get advertisement based on it's id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "open/advertisements/getbyid/{id}"
+                ],
+                "summary": "GET request to get advertisement by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "advertisement ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/advertisement-create": {
             "post": {
                 "security": [
@@ -268,85 +324,6 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.AdvertisementFilter"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/protected/advertisement-getall": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "endpoint for getting all advertisements",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "advertisement-getall"
-                ],
-                "summary": "GET request to get all advertisements",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Insert your access token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/protected/advertisement-getbyid": {
-            "post": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "endpoint to get advertisement based on it's id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "advertisement-getbyid"
-                ],
-                "summary": "POST request to get advertisement by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Insert your access token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "advertisement ID",
-                        "name": "advertisement-getbyid",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.AdvertisementID"
                         }
                     }
                 ],
@@ -545,14 +522,6 @@ const docTemplate = `{
                 },
                 "time": {
                     "type": "string"
-                }
-            }
-        },
-        "models.AdvertisementID": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
