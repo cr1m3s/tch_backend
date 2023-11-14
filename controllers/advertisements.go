@@ -65,13 +65,14 @@ func (t *AdvertisementsController) AdvCreate(ctx *gin.Context) {
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/advertisement-patch [patch]
 func (t *AdvertisementsController) AdvPatch(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
 	var inputModel models.AdvertisementUpdate
 	if err := ctx.ShouldBindJSON(&inputModel); err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	advertisement, err := t.advertisementService.AdvPatch(ctx, inputModel)
+	advertisement, err := t.advertisementService.AdvPatch(ctx, inputModel, userID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return

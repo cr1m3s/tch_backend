@@ -53,11 +53,15 @@ func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.Adv
 	return advertisement, nil
 }
 
-func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate) (queries.Advertisement, error) {
-	_, err := t.db.GetAdvertisementByID(ctx, patch.ID)
+func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate, userID int64) (queries.Advertisement, error) {
+	adv, err := t.db.GetAdvertisementByID(ctx, patch.ID)
 
 	if err != nil {
 		return queries.Advertisement{}, err
+	}
+
+	if adv.ProviderID != userID {
+		return queries.Advertisement{}, fmt.Errorf("Unauthorized")
 	}
 
 	advertisementTmp := &queries.UpdateAdvertisementParams{
