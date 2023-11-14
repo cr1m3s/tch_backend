@@ -38,9 +38,9 @@ type CreateAdvertisementParams struct {
 	Provider    string    `json:"provider"`
 	ProviderID  int64     `json:"provider_id"`
 	Attachment  string    `json:"attachment"`
-	Experience  string    `json:"experience"`
+	Experience  int32     `json:"experience"`
 	Category    string    `json:"category"`
-	Time        string    `json:"time"`
+	Time        int32     `json:"time"`
 	Price       int32     `json:"price"`
 	Format      string    `json:"format"`
 	Language    string    `json:"language"`
@@ -112,40 +112,91 @@ func (q *Queries) DeleteAdvertisementByUserID(ctx context.Context, providerID in
 }
 
 const filterAdvertisements = `-- name: FilterAdvertisements :many
- SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
-        WHERE
-        (NULLIF($1, '')::text IS NULL OR category = $1::text)
-        AND (NULLIF($2::text, '') IS NULL OR time <= $1::text)
-        AND (NULLIF($3::text, '') IS NULL OR format = $3::text)
-        AND ((NULLIF($4::text, '') IS NULL AND NULLIF($5::text, '') IS NULL) OR (experience >= $4::text AND experience <= $5::text))
-        AND (NULLIF($6::text, '') IS NULL OR language = $6::text)
+WITH filtered_ads AS (
+SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+  WHERE
+        (NULLIF($5::text, '')::text IS NULL OR category = $5::text)
+        AND (NULLIF($6::int, 0) IS NULL OR time <= $6::int)
+        AND (NULLIF($7::text, '') IS NULL OR format = $8::text)
+        AND ((NULLIF($9::int, 0) IS NULL AND NULLIF($10::int, 0) IS NULL) OR (experience >= $9::int AND experience <= $10::int))
+        AND ((NULLIF($11::int, 0) IS NULL AND NULLIF($12::int, 0) IS NULL) OR (price >= $11::int AND price <= $12::int))
+        AND (NULLIF($13::text, '') IS NULL OR language = $13::text)
+)
+SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at,
+    COUNT(*) OVER () AS total_items
+FROM filtered_ads
+ORDER BY
+  ( CASE
+    WHEN $1::text = 'price' AND $2::text = 'desc' THEN CAST(price AS TEXT)
+    WHEN $1::text = 'experience' AND $2::text = 'desc' THEN CAST(experience AS TEXT)
+    WHEN $1::text = 'date' AND $2::text = 'desc' THEN CAST(created_at AS TEXT) END) DESC,
+  ( CASE
+    WHEN $1::text = 'price' THEN CAST(price AS TEXT)
+    WHEN $1::text = 'experience' THEN CAST(experience AS TEXT)  
+    ELSE CAST(created_at AS TEXT) END) ASC                                     
+LIMIT $4::integer    
+OFFSET $3::integer
 `
 
 type FilterAdvertisementsParams struct {
-	Category interface{} `json:"category"`
-	Time     string      `json:"time"`
-	Format   string      `json:"format"`
-	Minexp   string      `json:"minexp"`
-	Maxexp   string      `json:"maxexp"`
-	Language string      `json:"language"`
+	Orderby     string `json:"orderby"`
+	Sortorder   string `json:"sortorder"`
+	Offsetadv   int32  `json:"offsetadv"`
+	Limitadv    int32  `json:"limitadv"`
+	Advcategory string `json:"advcategory"`
+	Timelength  int32  `json:"timelength"`
+	Advfformat  string `json:"advfformat"`
+	Advformat   string `json:"advformat"`
+	Minexp      int32  `json:"minexp"`
+	Maxexp      int32  `json:"maxexp"`
+	Minprice    int32  `json:"minprice"`
+	Maxprice    int32  `json:"maxprice"`
+	Advlanguage string `json:"advlanguage"`
 }
 
-func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisementsParams) ([]Advertisement, error) {
+type FilterAdvertisementsRow struct {
+	ID          int64     `json:"id"`
+	Title       string    `json:"title"`
+	Provider    string    `json:"provider"`
+	ProviderID  int64     `json:"provider_id"`
+	Attachment  string    `json:"attachment"`
+	Experience  int32     `json:"experience"`
+	Category    string    `json:"category"`
+	Time        int32     `json:"time"`
+	Price       int32     `json:"price"`
+	Format      string    `json:"format"`
+	Language    string    `json:"language"`
+	Description string    `json:"description"`
+	MobilePhone string    `json:"mobile_phone"`
+	Email       string    `json:"email"`
+	Telegram    string    `json:"telegram"`
+	CreatedAt   time.Time `json:"created_at"`
+	TotalItems  int64     `json:"total_items"`
+}
+
+func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisementsParams) ([]FilterAdvertisementsRow, error) {
 	rows, err := q.db.Query(ctx, filterAdvertisements,
-		arg.Category,
-		arg.Time,
-		arg.Format,
+		arg.Orderby,
+		arg.Sortorder,
+		arg.Offsetadv,
+		arg.Limitadv,
+		arg.Advcategory,
+		arg.Timelength,
+		arg.Advfformat,
+		arg.Advformat,
 		arg.Minexp,
 		arg.Maxexp,
-		arg.Language,
+		arg.Minprice,
+		arg.Maxprice,
+		arg.Advlanguage,
 	)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Advertisement
+	var items []FilterAdvertisementsRow
 	for rows.Next() {
-		var i Advertisement
+		var i FilterAdvertisementsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Title,
@@ -163,6 +214,7 @@ func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisem
 			&i.Email,
 			&i.Telegram,
 			&i.CreatedAt,
+			&i.TotalItems,
 		); err != nil {
 			return nil, err
 		}
@@ -393,9 +445,9 @@ type UpdateAdvertisementParams struct {
 	Title       string    `json:"title"`
 	CreatedAt   time.Time `json:"created_at"`
 	Attachment  string    `json:"attachment"`
-	Experience  string    `json:"experience"`
+	Experience  int32     `json:"experience"`
 	Category    string    `json:"category"`
-	Time        string    `json:"time"`
+	Time        int32     `json:"time"`
 	Price       int32     `json:"price"`
 	Format      string    `json:"format"`
 	Language    string    `json:"language"`

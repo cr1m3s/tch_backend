@@ -8,12 +8,24 @@ definitions:
         type: string
       language:
         type: string
+      limitadv:
+        type: integer
       maxexp:
-        type: string
+        type: integer
+      maxprice:
+        type: integer
       minexp:
+        type: integer
+      minprice:
+        type: integer
+      offsetadv:
+        type: integer
+      orderby:
         type: string
-      time:
+      sortorder:
         type: string
+      timelength:
+        type: integer
     type: object
   models.AdvertisementInput:
     properties:
@@ -24,7 +36,7 @@ definitions:
       description:
         type: string
       experience:
-        type: string
+        type: integer
       format:
         type: string
       language:
@@ -36,7 +48,7 @@ definitions:
       telegram:
         type: string
       time:
-        type: string
+        type: integer
       title:
         type: string
     type: object
@@ -49,7 +61,7 @@ definitions:
       description:
         type: string
       experience:
-        type: string
+        type: integer
       format:
         type: string
       id:
@@ -63,7 +75,7 @@ definitions:
       telegram:
         type: string
       time:
-        type: string
+        type: integer
       title:
         type: string
     type: object

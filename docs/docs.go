@@ -514,14 +514,32 @@ const docTemplate = `{
                 "language": {
                     "type": "string"
                 },
+                "limitadv": {
+                    "type": "integer"
+                },
                 "maxexp": {
-                    "type": "string"
+                    "type": "integer"
+                },
+                "maxprice": {
+                    "type": "integer"
                 },
                 "minexp": {
+                    "type": "integer"
+                },
+                "minprice": {
+                    "type": "integer"
+                },
+                "offsetadv": {
+                    "type": "integer"
+                },
+                "orderby": {
                     "type": "string"
                 },
-                "time": {
+                "sortorder": {
                     "type": "string"
+                },
+                "timelength": {
+                    "type": "integer"
                 }
             }
         },
@@ -538,7 +556,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "experience": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "format": {
                     "type": "string"
@@ -556,7 +574,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
@@ -576,7 +594,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "experience": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "format": {
                     "type": "string"
@@ -597,7 +615,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "time": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"

@@ -128,17 +128,22 @@ func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64) (queries.A
 	return advertisement, nil
 }
 
-func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.Advertisement, error) {
+func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.FilterAdvertisementsRow, error) {
 
 	argFilter := queries.FilterAdvertisementsParams{
-		Category: filter.Category,
-		Time:     filter.Time,
-		Format:   filter.Format,
-		Minexp:   filter.MinExp,
-		Maxexp:   filter.MaxExp,
-		Language: filter.Language,
+		Orderby:     filter.Orderby,
+		Sortorder:   filter.Sortorder,
+		Offsetadv:   filter.Offsetadv,
+		Limitadv:    filter.Limitadv,
+		Advcategory: filter.Category,
+		Timelength:  filter.Timelength,
+		Advformat:   filter.Format,
+		Minexp:      filter.Minexp,
+		Maxexp:      filter.Maxexp,
+		Minprice:    filter.Minprice,
+		Maxprice:    filter.Maxprice,
+		Advlanguage: filter.Language,
 	}
-
 	advertisements, err := t.db.FilterAdvertisements(ctx, argFilter)
 	if err != nil {
 		return nil, err

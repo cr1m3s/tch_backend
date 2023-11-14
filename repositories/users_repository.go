@@ -16,6 +16,11 @@ type UsersRepositoryInterface interface {
 	UpdateUser(ctx context.Context, arg queries.UpdateUserParams) (queries.User, error)
 }
 
+type DatabaseReposituryInterface interface {
+	UsersRepositoryInterface
+	AdvertisementsRepositoryInterface
+}
+
 type UsersRepository struct {
 	q *queries.Queries
 }

@@ -14,9 +14,9 @@ type Advertisement struct {
 	Provider    string    `json:"provider"`
 	ProviderID  int64     `json:"provider_id"`
 	Attachment  string    `json:"attachment"`
-	Experience  string    `json:"experience"`
+	Experience  int32     `json:"experience"`
 	Category    string    `json:"category"`
-	Time        string    `json:"time"`
+	Time        int32     `json:"time"`
 	Price       int32     `json:"price"`
 	Format      string    `json:"format"`
 	Language    string    `json:"language"`
