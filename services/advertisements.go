@@ -131,20 +131,31 @@ func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64) (queries.A
 func (t *AdvertisementService) AdvGetFiltered(ctx *gin.Context, filter models.AdvertisementFilter) ([]queries.FilterAdvertisementsRow, error) {
 
 	argFilter := queries.FilterAdvertisementsParams{
-		Orderby:     filter.Orderby,
-		Sortorder:   filter.Sortorder,
-		Offsetadv:   filter.Offsetadv,
-		Limitadv:    filter.Limitadv,
-		Advcategory: filter.Category,
-		Timelength:  filter.Timelength,
-		Advformat:   filter.Format,
-		Minexp:      filter.Minexp,
-		Maxexp:      filter.Maxexp,
-		Minprice:    filter.Minprice,
-		Maxprice:    filter.Maxprice,
-		Advlanguage: filter.Language,
+		Orderby:      filter.Orderby,
+		Sortorder:    filter.Sortorder,
+		Offsetadv:    filter.Offsetadv,
+		Limitadv:     filter.Limitadv,
+		Advcategory:  filter.Category,
+		Timelength:   filter.Timelength,
+		Advformat:    filter.Format,
+		Minexp:       filter.Minexp,
+		Maxexp:       filter.Maxexp,
+		Minprice:     filter.Minprice,
+		Maxprice:     filter.Maxprice,
+		Advlanguage:  filter.Language,
+		Titlekeyword: filter.Titlekeyword,
 	}
 	advertisements, err := t.db.FilterAdvertisements(ctx, argFilter)
+	if err != nil {
+		return nil, err
+	}
+
+	return advertisements, nil
+}
+
+func (t *AdvertisementService) AdvGetMy(ctx *gin.Context, userID int64) ([]queries.Advertisement, error) {
+	advertisements, err := t.db.GetAdvertisementMy(ctx, userID)
+
 	if err != nil {
 		return nil, err
 	}

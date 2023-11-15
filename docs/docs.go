@@ -159,7 +159,7 @@ const docTemplate = `{
                 "tags": [
                     "advertisements-getall"
                 ],
-                "summary": "GET request to get all advertisements",
+                "summary": "GET request to get 10 items sorted by creation date in desc order",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -325,6 +325,41 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.AdvertisementFilter"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/protected/advertisement-getmy": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "endpoint for getting user advertisements",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advertisements-getmy"
+                ],
+                "summary": "GET request to get user created advertisements",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -540,6 +575,9 @@ const docTemplate = `{
                 },
                 "timelength": {
                     "type": "integer"
+                },
+                "titlekeyword": {
+                    "type": "string"
                 }
             }
         },

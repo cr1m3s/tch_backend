@@ -21,7 +21,13 @@ INSERT INTO advertisements (
 RETURNING *;
 
 -- name: GetAdvertisementAll :many
-SELECT * FROM advertisements;
+SELECT * FROM advertisements
+ORDER BY created_at DESC
+LIMIT 10;
+
+-- name: GetAdvertisementMy :many
+SELECT * FROM advertisements 
+WHERE provider_id = $1;
 
 -- name: GetAdvertisementByID :one
 SELECT * FROM advertisements
@@ -87,6 +93,7 @@ SELECT * FROM advertisements
         AND ((NULLIF(sqlc.arg(minExp)::int, 0) IS NULL AND NULLIF(sqlc.arg(maxExp)::int, 0) IS NULL) OR (experience >= sqlc.arg(minExp)::int AND experience <= sqlc.arg(maxExp)::int))
         AND ((NULLIF(sqlc.arg(minPrice)::int, 0) IS NULL AND NULLIF(sqlc.arg(maxPrice)::int, 0) IS NULL) OR (price >= sqlc.arg(minPrice)::int AND price <= sqlc.arg(maxPrice)::int))
         AND (NULLIF(sqlc.arg(advLanguage)::text, '') IS NULL OR language = sqlc.arg(advLanguage)::text)
+        AND (NULLIF(sqlc.arg(titleKeyword)::text, '') IS NULL OR title ILIKE '%' || sqlc.arg(titleKeyword)::text || '%')
 )
 SELECT *,
     COUNT(*) OVER () AS total_items

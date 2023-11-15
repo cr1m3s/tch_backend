@@ -34,16 +34,17 @@ type AdvertisementID struct {
 }
 
 type AdvertisementFilter struct {
-	Orderby    string `json:"orderby"`
-	Sortorder  string `json:"sortorder"`
-	Offsetadv  int32  `json:"offsetadv"`
-	Limitadv   int32  `json:"limitadv"`
-	Category   string `json:"category"`
-	Timelength int32  `json:"timelength"`
-	Format     string `json:"format"`
-	Minexp     int32  `json:"minexp"`
-	Maxexp     int32  `json:"maxexp"`
-	Minprice   int32  `json:"minprice"`
-	Maxprice   int32  `json:"maxprice"`
-	Language   string `json:"language"`
+	Orderby      string `json:"orderby"`
+	Sortorder    string `json:"sortorder"`
+	Offsetadv    int32  `json:"offsetadv"`
+	Limitadv     int32  `json:"limitadv"`
+	Category     string `json:"category"`
+	Timelength   int32  `json:"timelength"`
+	Format       string `json:"format"`
+	Minexp       int32  `json:"minexp"`
+	Maxexp       int32  `json:"maxexp"`
+	Minprice     int32  `json:"minprice"`
+	Maxprice     int32  `json:"maxprice"`
+	Language     string `json:"language"`
+	Titlekeyword string `json:"titlekeyword"`
 }

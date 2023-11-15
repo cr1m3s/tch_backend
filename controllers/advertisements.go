@@ -115,7 +115,7 @@ func (t *AdvertisementsController) AdvDelete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("advertisement deleted"))
 }
 
-// @Summary		GET request to get all advertisements
+// @Summary		GET request to get 10 items sorted by creation date in desc order
 // @Description	endpoint for getting all advertisements
 // @Tags		advertisements-getall
 // @Produce		json
@@ -177,6 +177,32 @@ func (t *AdvertisementsController) AdvGetFiltered(ctx *gin.Context) {
 	}
 
 	advertisements, err := t.advertisementService.AdvGetFiltered(ctx, filter)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(advertisements))
+}
+
+// @Summary		GET request to get user created advertisements
+// @Description	endpoint for getting user advertisements
+// @Security 	JWT
+// @Param		Authorization header string true "Insert your access token"
+// @Tags		advertisements-getmy
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/advertisement-getmy [get]
+func (t *AdvertisementsController) AdvGetMy(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
+
+	if userID <= 0 {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Unauthorized."))
+		return
+	}
+
+	advertisements, err := t.advertisementService.AdvGetMy(ctx, userID)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))

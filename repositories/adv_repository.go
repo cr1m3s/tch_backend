@@ -13,6 +13,7 @@ type AdvertisementsRepositoryInterface interface {
 	DeleteAdvertisementByID(ctx context.Context, id int64) error
 	GetAdvertisementAll(ctx context.Context) ([]queries.Advertisement, error)
 	FilterAdvertisements(ctx context.Context, arg queries.FilterAdvertisementsParams) ([]queries.FilterAdvertisementsRow, error)
+	GetAdvertisementMy(ctx context.Context, userID int64) ([]queries.Advertisement, error)
 }
 
 type AdvertisementsRepository struct {
@@ -47,4 +48,8 @@ func (t *AdvertisementsRepository) GetAdvertisementAll(ctx context.Context) ([]q
 
 func (t *AdvertisementsRepository) FilterAdvertisements(ctx context.Context, arg queries.FilterAdvertisementsParams) ([]queries.FilterAdvertisementsRow, error) {
 	return t.q.FilterAdvertisements(ctx, arg)
+}
+
+func (t *AdvertisementsRepository) GetAdvertisementMy(ctx context.Context, userID int64) ([]queries.Advertisement, error) {
+	return t.q.GetAdvertisementMy(ctx, userID)
 }

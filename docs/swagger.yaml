@@ -26,6 +26,8 @@ definitions:
         type: string
       timelength:
         type: integer
+      titlekeyword:
+        type: string
     type: object
   models.AdvertisementInput:
     properties:
@@ -233,7 +235,7 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: GET request to get all advertisements
+      summary: GET request to get 10 items sorted by creation date in desc order
       tags:
       - advertisements-getall
   /open/advertisements/getbyid/{id}:
@@ -342,6 +344,28 @@ paths:
       summary: POST request to get advertisement based on params in filter
       tags:
       - advertisement-filter
+  /protected/advertisement-getmy:
+    get:
+      description: endpoint for getting user advertisements
+      parameters:
+      - description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - JWT: []
+      summary: GET request to get user created advertisements
+      tags:
+      - advertisements-getmy
   /protected/advertisement-patch:
     patch:
       description: endpoint for advertisement update

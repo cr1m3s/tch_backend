@@ -121,6 +121,7 @@ SELECT id, title, provider, provider_id, attachment, experience, category, time,
         AND ((NULLIF($9::int, 0) IS NULL AND NULLIF($10::int, 0) IS NULL) OR (experience >= $9::int AND experience <= $10::int))
         AND ((NULLIF($11::int, 0) IS NULL AND NULLIF($12::int, 0) IS NULL) OR (price >= $11::int AND price <= $12::int))
         AND (NULLIF($13::text, '') IS NULL OR language = $13::text)
+        AND (NULLIF($14::text, '') IS NULL OR title ILIKE '%' || $14::text || '%')
 )
 SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at,
     COUNT(*) OVER () AS total_items
@@ -139,19 +140,20 @@ OFFSET $3::integer
 `
 
 type FilterAdvertisementsParams struct {
-	Orderby     string `json:"orderby"`
-	Sortorder   string `json:"sortorder"`
-	Offsetadv   int32  `json:"offsetadv"`
-	Limitadv    int32  `json:"limitadv"`
-	Advcategory string `json:"advcategory"`
-	Timelength  int32  `json:"timelength"`
-	Advfformat  string `json:"advfformat"`
-	Advformat   string `json:"advformat"`
-	Minexp      int32  `json:"minexp"`
-	Maxexp      int32  `json:"maxexp"`
-	Minprice    int32  `json:"minprice"`
-	Maxprice    int32  `json:"maxprice"`
-	Advlanguage string `json:"advlanguage"`
+	Orderby      string `json:"orderby"`
+	Sortorder    string `json:"sortorder"`
+	Offsetadv    int32  `json:"offsetadv"`
+	Limitadv     int32  `json:"limitadv"`
+	Advcategory  string `json:"advcategory"`
+	Timelength   int32  `json:"timelength"`
+	Advfformat   string `json:"advfformat"`
+	Advformat    string `json:"advformat"`
+	Minexp       int32  `json:"minexp"`
+	Maxexp       int32  `json:"maxexp"`
+	Minprice     int32  `json:"minprice"`
+	Maxprice     int32  `json:"maxprice"`
+	Advlanguage  string `json:"advlanguage"`
+	Titlekeyword string `json:"titlekeyword"`
 }
 
 type FilterAdvertisementsRow struct {
@@ -189,6 +191,7 @@ func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisem
 		arg.Minprice,
 		arg.Maxprice,
 		arg.Advlanguage,
+		arg.Titlekeyword,
 	)
 	if err != nil {
 		return nil, err
@@ -228,6 +231,8 @@ func (q *Queries) FilterAdvertisements(ctx context.Context, arg FilterAdvertisem
 
 const getAdvertisementAll = `-- name: GetAdvertisementAll :many
 SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements
+ORDER BY created_at DESC
+LIMIT 10
 `
 
 func (q *Queries) GetAdvertisementAll(ctx context.Context) ([]Advertisement, error) {
@@ -387,6 +392,48 @@ WHERE provider = $1
 
 func (q *Queries) GetAdvertisementByUsername(ctx context.Context, provider string) ([]Advertisement, error) {
 	rows, err := q.db.Query(ctx, getAdvertisementByUsername, provider)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Advertisement
+	for rows.Next() {
+		var i Advertisement
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Provider,
+			&i.ProviderID,
+			&i.Attachment,
+			&i.Experience,
+			&i.Category,
+			&i.Time,
+			&i.Price,
+			&i.Format,
+			&i.Language,
+			&i.Description,
+			&i.MobilePhone,
+			&i.Email,
+			&i.Telegram,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getAdvertisementMy = `-- name: GetAdvertisementMy :many
+SELECT id, title, provider, provider_id, attachment, experience, category, time, price, format, language, description, mobile_phone, email, telegram, created_at FROM advertisements 
+WHERE provider_id = $1
+`
+
+func (q *Queries) GetAdvertisementMy(ctx context.Context, providerID int64) ([]Advertisement, error) {
+	rows, err := q.db.Query(ctx, getAdvertisementMy, providerID)
 	if err != nil {
 		return nil, err
 	}
