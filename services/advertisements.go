@@ -29,8 +29,8 @@ func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.Adv
 
 	category, err := c.CatGetByName(ctx, inputModel.Category)
 
-	if err != nil {
-		return queries.Advertisement{}, err
+	if err != nil || category.ParentID.Int32 == 0 {
+		return queries.Advertisement{}, fmt.Errorf("failed to get category")
 	}
 
 	args := &queries.CreateAdvertisementParams{
@@ -68,8 +68,8 @@ func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.Advertise
 
 	cat, err := c.CatGetByName(ctx, patch.Category)
 
-	if err != nil {
-		return queries.Advertisement{}, err
+	if err != nil || cat.ParentID.Int32 == 0 {
+		return queries.Advertisement{}, fmt.Errorf("failed to get category")
 	}
 
 	if adv.ProviderID != userID {
