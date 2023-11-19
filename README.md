@@ -141,10 +141,16 @@ Use it as CLI:
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.16.2
 ```
 
+For migration file creation use:
+
+```bash
+migrate create -ext sql -dir migrations -seq {action_name}
+```
+
 Run migrations:
 
 ```bash
-migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
+migrate -path migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
 ```
 
 Migration using files from:
