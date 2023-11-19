@@ -206,6 +206,27 @@ const docTemplate = `{
                 }
             }
         },
+        "/open/categories/getall": {
+            "get": {
+                "description": "endpoint for getting all categories",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories/getall"
+                ],
+                "summary": "GET all categories parents with children in array",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/protected/advertisement-create": {
             "post": {
                 "security": [

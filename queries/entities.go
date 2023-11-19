@@ -6,6 +6,8 @@ package queries
 
 import (
 	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Advertisement struct {
@@ -25,6 +27,12 @@ type Advertisement struct {
 	Email       string    `json:"email"`
 	Telegram    string    `json:"telegram"`
 	CreatedAt   time.Time `json:"created_at"`
+}
+
+type Category struct {
+	ID       int32       `json:"id"`
+	Name     string      `json:"name"`
+	ParentID pgtype.Int4 `json:"parent_id"`
 }
 
 type User struct {

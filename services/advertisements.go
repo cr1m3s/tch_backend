@@ -21,8 +21,14 @@ func NewAdvertisementService() *AdvertisementService {
 	}
 }
 
-func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64, u UserService) (queries.Advertisement, error) {
+func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.AdvertisementInput, userID int64, u UserService, c CategoriesService) (queries.Advertisement, error) {
 	user, err := u.UserInfo(ctx, userID)
+	if err != nil {
+		return queries.Advertisement{}, err
+	}
+
+	category, err := c.CatGetByName(ctx, inputModel.Category)
+
 	if err != nil {
 		return queries.Advertisement{}, err
 	}
@@ -33,7 +39,7 @@ func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.Adv
 		ProviderID:  user.ID,
 		Attachment:  inputModel.Attachment,
 		Experience:  inputModel.Experience,
-		Category:    inputModel.Category,
+		Category:    category.Name,
 		Time:        inputModel.Time,
 		Price:       inputModel.Price,
 		Format:      inputModel.Format,
@@ -53,8 +59,14 @@ func (t *AdvertisementService) AdvCreate(ctx *gin.Context, inputModel models.Adv
 	return advertisement, nil
 }
 
-func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate, userID int64) (queries.Advertisement, error) {
+func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.AdvertisementUpdate, userID int64, c *CategoriesService) (queries.Advertisement, error) {
 	adv, err := t.db.GetAdvertisementByID(ctx, patch.ID)
+
+	if err != nil {
+		return queries.Advertisement{}, err
+	}
+
+	cat, err := c.CatGetByName(ctx, patch.Category)
 
 	if err != nil {
 		return queries.Advertisement{}, err
@@ -70,7 +82,7 @@ func (t *AdvertisementService) AdvPatch(ctx *gin.Context, patch models.Advertise
 		CreatedAt:   time.Now(),
 		Attachment:  patch.Attachment,
 		Experience:  patch.Experience,
-		Category:    patch.Category,
+		Category:    cat.Name,
 		Time:        patch.Time,
 		Price:       patch.Price,
 		Format:      patch.Format,
@@ -119,12 +131,19 @@ func (t *AdvertisementService) AdvGetAll(ctx *gin.Context) ([]queries.Advertisem
 	return advertisements, nil
 }
 
-func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64) (queries.Advertisement, error) {
+func (t *AdvertisementService) AdvGetByID(ctx *gin.Context, id int64, c *CategoriesService) (queries.Advertisement, error) {
 	advertisement, err := t.db.GetAdvertisementByID(ctx, id)
 
 	if err != nil {
 		return queries.Advertisement{}, err
 	}
+
+	catFull, err := c.CatGetFullName(ctx, advertisement.Category)
+
+	if err != nil {
+		return queries.Advertisement{}, err
+	}
+	advertisement.Category = fmt.Sprintf("%s: %s", catFull.ParentName.String, catFull.CategoryName)
 	return advertisement, nil
 }
 

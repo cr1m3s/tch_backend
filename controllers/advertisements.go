@@ -13,12 +13,14 @@ import (
 type AdvertisementsController struct {
 	advertisementService *services.AdvertisementService
 	userService          *services.UserService
+	categoriesService    *services.CategoriesService
 }
 
 func NewAdvertisementsController() *AdvertisementsController {
 	return &AdvertisementsController{
 		advertisementService: services.NewAdvertisementService(),
 		userService:          services.NewUserService(),
+		categoriesService:    services.NewCategoriesService(),
 	}
 }
 
@@ -45,7 +47,7 @@ func (t *AdvertisementsController) AdvCreate(ctx *gin.Context) {
 		return
 	}
 
-	advertisement, err := t.advertisementService.AdvCreate(ctx, inputModel, userID, *t.userService)
+	advertisement, err := t.advertisementService.AdvCreate(ctx, inputModel, userID, *t.userService, *t.categoriesService)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -72,7 +74,7 @@ func (t *AdvertisementsController) AdvPatch(ctx *gin.Context) {
 		return
 	}
 
-	advertisement, err := t.advertisementService.AdvPatch(ctx, inputModel, userID)
+	advertisement, err := t.advertisementService.AdvPatch(ctx, inputModel, userID, *&t.categoriesService)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))
 		return
@@ -148,7 +150,7 @@ func (t *AdvertisementsController) AdvGetByID(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Faield to get advertisement ID"))
 		return
 	}
-	advertisement, err := t.advertisementService.AdvGetByID(ctx, id)
+	advertisement, err := t.advertisementService.AdvGetByID(ctx, id, *&t.categoriesService)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed(err.Error()))

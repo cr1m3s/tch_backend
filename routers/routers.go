@@ -15,6 +15,7 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	AuthController := controllers.NewUsersController()
 	AdvController := controllers.NewAdvertisementsController()
+	CatController := controllers.NewCatController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
 	AuthFacebookController := controllers.NewAuthFacebookController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
@@ -36,6 +37,10 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
 	protected.PATCH("/create-password", AuthController.PasswordCreate)
+
+	// categories block
+	categories := server.Group("/open/categories")
+	categories.GET("/getall", CatController.CatGetAll)
 
 	// advertisements block
 	// open advertisements endpoints

@@ -260,6 +260,20 @@ paths:
       summary: GET request to get advertisement by id
       tags:
       - open/advertisements/getbyid/{id}
+  /open/categories/getall:
+    get:
+      description: endpoint for getting all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GET all categories parents with children in array
+      tags:
+      - categories/getall
   /protected/advertisement-create:
     post:
       description: endpoint for advertisement creation

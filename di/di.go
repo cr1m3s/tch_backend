@@ -29,3 +29,16 @@ func NewAdvertisementsRepository() repositories.AdvertisementsRepositoryInterfac
 func SetAdvertisementsRepository(u repositories.AdvertisementsRepositoryInterface) {
 	advertisementsRepository = u
 }
+
+var categoriesRepository repositories.CategoriesRepositoryInterface
+
+func NewCategoriesRepository() repositories.CategoriesRepositoryInterface {
+	if categoriesRepository == nil {
+		categoriesRepository = repositories.NewCategoriesRepository()
+	}
+	return categoriesRepository
+}
+
+func SetCategoriesRepository(u repositories.CategoriesRepositoryInterface) {
+	categoriesRepository = u
+}

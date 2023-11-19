@@ -103,7 +103,7 @@ go install github.com/swaggo/swag/cmd/swag@latest`
 2. Generate docs:
 
 ```bash
-swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
+swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
    !! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
 ```
 
