@@ -14,7 +14,10 @@ import (
 func SetupRouter(server *gin.Engine) *gin.Engine {
 
 	AuthController := controllers.NewUsersController()
+	AdvController := controllers.NewAdvertisementsController()
+	CatController := controllers.NewCatController()
 	AuthGoogleController := controllers.NewAuthGoogleController()
+	AuthFacebookController := controllers.NewAuthFacebookController()
 	docs_url := ginSwagger.URL(configs.DOCS_HOSTNAME + "/api/docs/doc.json")
 
 	api := server.Group("/api")
@@ -26,12 +29,33 @@ func SetupRouter(server *gin.Engine) *gin.Engine {
 	api.POST("/auth/login", AuthController.UserLogin)
 	api.GET("/auth/login-google", AuthGoogleController.LoginGoogle)
 	api.GET("/auth/login-google-callback", AuthGoogleController.LoginGoogleCallback)
-	api.POST("/auth/password-reset", AuthController.PasswordReset)
+	api.GET("/auth/login-facebook", AuthFacebookController.LoginFacebook)
+	api.POST("/auth/reset-password", AuthController.PasswordReset)
 
 	protected := server.Group("/protected")
 
 	protected.Use(middleware.AuthMiddleware())
 	protected.GET("/userinfo", AuthController.UserInfo)
+	protected.PATCH("/create-password", AuthController.PasswordCreate)
+
+	// categories block
+	categories := server.Group("/open/categories")
+	categories.GET("/getall", CatController.CatGetAll)
+
+	// advertisements block
+	// open advertisements endpoints
+	advertisements := server.Group("/open/advertisements")
+	advertisements.GET("/getall", AdvController.AdvGetAll)
+	advertisements.GET("/getbyid/:id", AdvController.AdvGetByID)
+
+	// protected advertisements endpoints
+	protected.POST("/advertisement-create", AdvController.AdvCreate)
+	protected.PATCH("/advertisement-patch", AdvController.AdvPatch)
+	protected.DELETE("/advertisement-delete", AdvController.AdvDelete)
+	protected.POST("/advertisement-filter", AdvController.AdvGetFiltered)
+	protected.GET("/advertisement-getmy", AdvController.AdvGetMy)
+
+	protected.Use(middleware.PasswordMiddleware(AuthController))
 	protected.PATCH("/user-patch", AuthController.UserPatch)
 
 	return server

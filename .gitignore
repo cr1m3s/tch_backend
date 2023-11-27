@@ -1,3 +1,4 @@
+dev_local/.env
 .env
 # Binaries for programs and plugins
 *.exe
@@ -18,3 +19,6 @@ vendor/
 # Go workspace file
 go.work
 /bin/sqlc
+
+# IntelliJ
+.idea/

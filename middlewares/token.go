@@ -12,15 +12,16 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
+		authString := c.GetHeader("Authorization")
+		if authString == "" {
 			c.JSON(http.StatusUnauthorized, models.NewResponseFailed("Unauthorized"))
 			c.Abort()
 			return
 		}
+		authArray := strings.Split(authString, ":")
+		authJWT := authArray[0]
 
-		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		token, err := jwt.ParseWithClaims(tokenString, &models.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(authJWT, &models.Claims{}, func(token *jwt.Token) (interface{}, error) {
 			return services.SecretKey, nil
 		})
 

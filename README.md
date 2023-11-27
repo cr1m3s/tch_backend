@@ -77,6 +77,7 @@ Run the application inside the container.
 
 ```bash
 go mod download
+go mod vendor
 go run main.go
 ```
 
@@ -102,24 +103,24 @@ go install github.com/swaggo/swag/cmd/swag@latest`
 2. Generate docs:
 
 ```bash
-swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs`
+swag init --parseDependency --parseInternal --parseDepth 1 -md ./documentation -o ./docs
    !! path to docs used in main.go: `_ "github.com/cr1m3s/tch_backend/app/docs"` !!
 ```
 
 ## DB code generation
 
-For code generation from SQL to golang we use **sqlc**. Documentation https://docs.sqlc.dev/en/latest/
+For code generation from SQL to golang we use **sqlc**. Documentation https://docs.sqlc.dev/en/v1.23.0/
 
 Install sqlc
 
 ```bash
-go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.23.0
 ```
 
 Create SQL queries in:
 
 ```bash
-./queries/{entity_name}.sql`
+./queries/{entity_name}.sql
 ```
 
 In root folder with present `sqlc.yaml` file run:
@@ -140,10 +141,16 @@ Use it as CLI:
 go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.16.2
 ```
 
+For migration file creation use:
+
+```bash
+migrate create -ext sql -dir migrations -seq {action_name}
+```
+
 Run migrations:
 
 ```bash
-migrate -path db/migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
+migrate -path migrations -database "postgresql://postgres:postgres@tch_postgres:5432/store?sslmode=disable" -verbose up
 ```
 
 Migration using files from:
@@ -170,7 +177,7 @@ docker exec -it tch_postgres bash
 Inside of the docker container named tch_postgres, run:
 
 ```bash
-psql -U postgres golang_postgres
+psql -U postgres store
 ```
 
 ```bash

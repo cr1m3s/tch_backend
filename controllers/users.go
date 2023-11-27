@@ -38,7 +38,7 @@ func (t *UsersController) UserLogin(ctx *gin.Context) {
 
 	token, err := t.userService.UserLogin(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed(err.Error()))
 		return
 	}
 
@@ -63,17 +63,17 @@ func (t *UsersController) UserRegister(ctx *gin.Context) {
 
 	user, err := t.userService.UserRegister(ctx, inputModel)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed(err.Error()))
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, models.NewResponseSuccess(user))
 }
 
-// @User_info	godoc
+// @Userinfo	godoc
 // @Summary		Get request to see user info
 // @Description	requires valid token
-// @Tags		user_info
+// @Tags		userinfo
 // @Security	JWT
 // @Param		Authorization header string true "Insert your access token"
 // @Produce		json
@@ -88,21 +88,31 @@ func (t *UsersController) UserInfo(ctx *gin.Context) {
 
 	user, err := t.userService.UserInfo(ctx, userID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, models.NewResponseFailed(err.Error()))
+		ctx.JSON(http.StatusNotFound, models.NewResponseFailed(err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
+	userResponse := models.UserResponse{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Photo:     user.Photo,
+		Verified:  user.Verified,
+		Role:      user.Role,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
 
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess(userResponse))
 }
 
-// @User_update godoc
-// @Summary		POST request to update user
+// @User-patch godoc
+// @Summary		PATCH request to update user
 // @Description	requires valid token
-// @Tags		user_update
+// @Tags		user-patch
 // @Security	JWT
 // @Param		Authorization header string true "Insert your access token"
-// @Param		user_info body queries.User true "user info for update"
+// @Param		userinfo body queries.User true "user info for update"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
 // @Router		/protected/user-patch [patch]
@@ -126,14 +136,14 @@ func (t *UsersController) UserPatch(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess(user))
 }
 
-// @Password_reset godoc
+// @Reset-password godoc
 // @Summary		POST request to update password
 // @Description	requires registred email address
-// @Tags		password_reset
-// @Param		password_reset body models.EmailRequest true "user email for update"
+// @Tags		reset-password
+// @Param		reset-password	body models.EmailRequest true "user email for update"
 // @Produce		json
 // @Success		200 {object} map[string]interface{}
-// @Router		/api/auth/password-reset [post]
+// @Router		/api/auth/reset-password [post]
 func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	var userEmail models.EmailRequest
 
@@ -150,4 +160,45 @@ func (t *UsersController) PasswordReset(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password Reset Email Has Been Sent"))
+}
+
+// @Create-password godoc
+// @Summary		PATCH request to create new password
+// @Description	requires token
+// @Tags		create-password
+// @Param		Authorization header string true "Insert your access token"
+// @Param		create-password	body models.UserPassword true "new user password"
+// @Produce		json
+// @Success		200 {object} map[string]interface{}
+// @Router		/protected/create-password [patch]
+func (t *UsersController) PasswordCreate(ctx *gin.Context) {
+	userID := ctx.GetInt64("user_id")
+	var newPassword models.UserPassword
+
+	if err := ctx.ShouldBindJSON(&newPassword); err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("New password not provided."))
+	}
+
+	err := t.userService.PasswordCreate(ctx, userID, newPassword)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, models.NewResponseFailed("Failed to create new passowrd."))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, models.NewResponseSuccess("Password updated."))
+}
+
+// method used for password-middleware
+// won't be publick endpoint
+func (t *UsersController) GetPassword(ctx *gin.Context) string {
+	userID := ctx.GetInt64("user_id")
+	user, err := t.userService.UserInfo(ctx, userID)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, models.NewResponseFailed("No user found."))
+		return ""
+	}
+
+	return user.Password
 }
